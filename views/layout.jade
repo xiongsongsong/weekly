@@ -1,5 +1,30 @@
 !!!
 html
-  head
-    title= title
-  body!= body
+    head
+        meta(charset="utf-8")
+        title= title
+        link(rel="stylesheet",href="/global/reset.css")
+        link(rel="stylesheet",href="/global/global.css")
+    body
+        #header
+            h1 前端 de 周报
+        #main-wrapper
+            #main-container
+                #calendar-header
+                    h2#date 2012-02-02
+                #calendar-wrapper
+                    #calendar-container
+                        #calendar-content
+                !{body}
+        #sidebar-wrapper
+            #sidebar-container
+                #sidebar-group
+                    h2 报表
+                        ul
+                            li 最近一周
+                            li 最近一月
+                            li 最近三十天
+                    h2 控制台
+                        ul
+                            li 记录工作量
+        script(src="/sea.js",data-main="./home/home.js")
