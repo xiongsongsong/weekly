@@ -1,7 +1,11 @@
 /**
  * Module dependencies.
  test
+<<<<<<< HEAD
 0846
+=======
+0848
+>>>>>>> c/master
 2012-07-11
  */
 
