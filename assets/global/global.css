@@ -37,50 +37,65 @@ body {
     right: 0;
 }
 
+#calendar-wrapper {
+    position: absolute;
+    width: 100%;
+    top: 76px;
+    bottom: 0;
+}
+
+#calendar-container {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    bottom: 12px;
+    left: 12px;
+}
+
+#calendar-header {
+    height: 76px;
+    background: #eee;
+}
+
 #calendar-header h2 {
+    padding: 6px 0 0 .6em;
     font-size: 38px;
     color: #444;
-    margin: .2em 0 16px 12px;
     font-weight: normal;
     font-family: verdana, sans-serif;
 }
 
 /*日历容器*/
 #calendar-content {
-    position: absolute;
-    top: 80px;
-    left: 11px;
-    right: 11px;
-    bottom: 11px;
-    border: solid 1px red;
-    height: 600px;
+    height: 100%;
+    width: 100%;
 }
 
 #calendar-content table {
     width: 100%;
     height: 100%;
     text-align: center;
-    border: solid 1px red;
 }
 
 #calendar-content tr.th th {
     background: #fafafa;
     font-size: 14px;
     font-weight: bold;
-    height: 40px
+    line-height: normal;
 }
 
-#calendar-content tr td {
-    padding: 1em 0;
-    height: 80px;
+#calendar-content tr.th th.weekend {
+    color: #aaa;
 }
 
+#calendar-content table th,
 #calendar-content table td {
     border: solid 1px #eee;
 }
 
 #calendar-content table td div.wrapper {
     position: relative;
+    height: 12px;
 }
 
 #calendar-content table td div.wrapper b.day {

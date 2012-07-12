@@ -20,13 +20,13 @@ define(function (require, exports, module) {
         var table = '<table>' +
             '<thead>' +
             '<tr class="th">' +
-            '<th>日</th>' +
-            '<th>一</th>' +
-            '<th>二</th>' +
-            '<th>三</th>' +
-            '<th>四</th>' +
-            '<th>五</th>' +
-            '<th>六</th>' +
+            '<th class="weekend">日</th>' +
+            '<th height="40">一</th>' +
+            '<th height="40">二</th>' +
+            '<th height="40">三</th>' +
+            '<th height="40">四</th>' +
+            '<th height="40">五</th>' +
+            '<th height="40" class="weekend">六</th>' +
             '</tr>' +
             '</thead>' +
             '<tbody>';
