@@ -81,6 +81,7 @@ body {
     background: #fafafa;
     font-size: 14px;
     font-weight: bold;
+    height: 40px;
     line-height: normal;
 }
 
@@ -95,13 +96,13 @@ body {
 
 #calendar-content table td div.wrapper {
     position: relative;
-    height: 12px;
+    border-left: solid 1px red;
 }
 
 #calendar-content table td div.wrapper b.day {
     position: absolute;
     right: 10%;
-    bottom: 6%;
+    bottom: 0;
     font-size: 20px;
     color: #f5f5f5;
 }

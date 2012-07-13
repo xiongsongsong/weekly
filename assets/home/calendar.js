@@ -16,17 +16,16 @@ define(function (require, exports, module) {
     var $ = require('jquery');
     exports.createTableView = function () {
         var currentDate = new Date();
-        currentDate.setMonth(4)
-        var table = '<table>' +
+        var table = '<table id="">' +
             '<thead>' +
             '<tr class="th">' +
             '<th class="weekend">日</th>' +
-            '<th height="40">一</th>' +
-            '<th height="40">二</th>' +
-            '<th height="40">三</th>' +
-            '<th height="40">四</th>' +
-            '<th height="40">五</th>' +
-            '<th height="40" class="weekend">六</th>' +
+            '<th>一</th>' +
+            '<th>二</th>' +
+            '<th>三</th>' +
+            '<th>四</th>' +
+            '<th>五</th>' +
+            '<th class="weekend">六</th>' +
             '</tr>' +
             '</thead>' +
             '<tbody>';
@@ -68,7 +67,7 @@ define(function (require, exports, module) {
         }
 
         //补足月末的天数
-        var calendarStr = [], _current;
+        var calendarStr = [], _current = '';
         for (var j = 0; j < dateArr.length; j++) {
             switch (dateArr[j].type) {
                 case "prev":
@@ -89,8 +88,10 @@ define(function (require, exports, module) {
             _current = '';
         }
 
-        $('#date').html(currentDate.getFullYear() + '-' + currentDate.getMonth() + '-' + currentDate.getDate());
+        $('#date').html(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
         $('#calendar-content').html(table + calendarStr.join(''));
+
+        exports.autoResetTrOffset();
     };
 
     /*
@@ -102,5 +103,15 @@ define(function (require, exports, module) {
         } else {
             return month == 1 ? date.getFullYear() % 4 == 0 ? 29 : 28 : 30;
         }
-    }
+    };
+
+    exports.autoResetTrOffset = function () {
+        var tdObj = $('#J-CalendarContainer td');
+        var a = $('#calendar-content').width();
+    };
+
+    $(window).on('resize', function () {
+        exports.autoResetTrOffset();
+    });
+
 });
