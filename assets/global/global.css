@@ -47,12 +47,24 @@ body {
 }
 
 #calendar-header h2 {
-    padding: 6px 0 0 .6em;
+    padding: 6px 0 0 .2em;
     font-size: 38px;
-    color: #444;
     font-weight: normal;
     font-family: verdana, sans-serif;
     white-space: nowrap;
+}
+
+#calendar-header h2 b {
+    color: #444;
+    display: inline-block;
+    padding: 0 .2em;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+#calendar-header h2 b:hover,
+#calendar-header h2 b.hover {
+    background: #ccc;
 }
 
 /*日历容器*/
@@ -61,7 +73,7 @@ body {
     position: absolute;
     left: 12px;
     top: 12px;
-    border: solid 1px #f2f2f2;
+    border: solid 1px #e2e2e2;
     text-align: center;
 }
 
@@ -81,7 +93,7 @@ body {
 
 #calendar-container th,
 #calendar-container td {
-    border: solid 1px #eee;
+    border: solid 1px #e2e2e2;
 }
 
 #calendar-container td {

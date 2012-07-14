@@ -23,9 +23,7 @@ define('home', ['jquery', 'calendar', 'record-log'], function (require) {
     /*写工作日志*/
     require('record-log');
 
-
-
-    if (!window.console) {
+    if (!typeof console) {
         window.console = {
             log:function (str) {
                 document.status = str;

@@ -11,10 +11,10 @@ html
             h1 前端 de 周报
         #main-wrapper
             #calendar-header
-                h2
-                    a#date(href="#")
-                    a(class="J-prev-month") <<
-                    a(class="J-next-month") >>
+                h2#date
+                    b#year-trigger(title="用鼠标滚轮设定 年份",data-type="year")
+                    | -
+                    b#month-trigger(title="用鼠标滚轮设定 月份",data-type="month")
             #calendar-wrapper
             form#add-record-log(action="/record-log",method="post")
                 table
@@ -92,4 +92,5 @@ html
                             li 最近一周
                             li 最近一月
                             li 最近三十天
+        script(src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js")
         script(src="/sea.js",data-main="./home/home.js")

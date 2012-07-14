@@ -14,8 +14,50 @@ seajs.config({
 
 define(function (require, exports, module) {
     var $ = require('jquery');
-
     var currentDate;
+    var S = KISSY, DOM = S.DOM, Event = S.Event,
+        $yearNode = $('#year-trigger'),
+        $monthNode = $('#month-trigger');
+
+    /*通过鼠标滚轮修改时间*/
+    Event.on([$yearNode[0], $monthNode[0]], "mousewheel", function (ev) {
+        var year = parseInt($yearNode.html(), 10);
+        var month = parseInt($monthNode.html(), 10);
+
+        switch (ev.currentTarget.id) {
+            case  "year-trigger":
+                year = ev.deltaY > 0 ? year + 1 : year - 1;
+                $yearNode.html(year);
+                break;
+            case "month-trigger":
+                if (ev.deltaY > 0) {
+                    month += 1;
+                    if (month > 12) {
+                        month = 1;
+                        year += 1;
+                    }
+                } else {
+                    month -= 1;
+                    if (month < 1) {
+                        month = 12;
+                        year -= 1;
+                    }
+                }
+                $yearNode.html(year);
+                $monthNode.html(month);
+                break;
+        }
+        //更新日历界面
+        var _tempDate = new Date();
+        _tempDate.setDate(1);
+        _tempDate.setFullYear(year);
+        _tempDate.setMonth(month - 1);
+        currentDate = _tempDate;
+        exports.createTableView();
+        ev.preventDefault();
+    });
+
+    /*初始化日历界面*/
     exports.init = function (date) {
         currentDate = date;
         exports.createTableView();
@@ -24,25 +66,30 @@ define(function (require, exports, module) {
             ev.preventDefault();
         });
 
-        $('.J-prev-month').click(function (ev) {
-            exports.prev();
+        $('.J-scroll-date').click(function (ev) {
+            ev.preventDefault();
         });
 
-        $('.J-next-month').click(function (ev) {
-            exports.next();
-        });
+        if ($.browser.msie && parseInt($.browser.version, 10) < 7) {
+            $yearNode.add($monthNode).hover(function () {
+                $(this).addClass('hover');
+            }, function () {
+                $(this).removeClass('hover');
+            })
+        }
     };
 
+    /*构造日历界面*/
     exports.createTableView = function () {
         var table = '<table id="calendar-container">' +
             '<thead>' +
             '<tr class="th">' +
             '<th class="weekend">日</th>' +
-            '<th><div>一</div></th>' +
-            '<th><div>二</div></th>' +
-            '<th><div>三</div></th>' +
-            '<th><div>四</div></th>' +
-            '<th><div>五</div></th>' +
+            '<th>一</th>' +
+            '<th>二</th>' +
+            '<th>三</th>' +
+            '<th>四</th>' +
+            '<th>五</th>' +
             '<th class="weekend">六</th>' +
             '</tr>' +
             '</thead>' +
@@ -106,7 +153,8 @@ define(function (require, exports, module) {
             _current = '';
         }
 
-        $('#date').html(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1));
+        $yearNode.html(currentDate.getFullYear());
+        $monthNode.html(currentDate.getMonth() + 1);
         $('#calendar-wrapper').html(table + calendarStr.join(''));
 
         exports.autoResetOffset();
@@ -123,6 +171,7 @@ define(function (require, exports, module) {
         }
     };
 
+    /*上一月*/
     exports.prev = function () {
         currentDate.setDate(1);
         if (currentDate.getMonth() == 0) {
@@ -134,6 +183,7 @@ define(function (require, exports, module) {
         exports.createTableView();
     };
 
+    /*下一月*/
     exports.next = function () {
         currentDate.setDate(1);
         if (currentDate.getMonth() == 11) {
@@ -145,6 +195,7 @@ define(function (require, exports, module) {
         exports.createTableView();
     };
 
+    /*调优日历界面*/
     exports.autoResetOffset = function () {
         var tdObj = $('#calendar-container td');
         var trObj = $('#calendar-container tr');
