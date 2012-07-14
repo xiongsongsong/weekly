@@ -29,7 +29,23 @@ define(function (require, exports, module) {
             $addRecordLog.animate({left:left + 'px'}, 500, function () {
                 $('.J-record-log').removeClass('current')
             });
-        })
+        });
+
+        $addRecordLog.submit(function (ev) {
+            var formData = $addRecordLog.serialize();
+            $.ajax('/save-log', {
+                type:'post',
+                dataType:'json',
+                data:formData,
+                cache:false,
+                success:function (data) {
+
+                }
+            });
+            ev.preventDefault();
+        });
+
+
     };
     exports.init();
 });

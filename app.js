@@ -1,12 +1,12 @@
 /**
  * Module dependencies.
  test
-<<<<<<< HEAD
-0846
-=======
-0848
->>>>>>> c/master
-2012-07-11
+ <<<<<<< HEAD
+ 0846
+ =======
+ 0848
+ >>>>>>> c/master
+ 2012-07-11
  */
 
 var express = require('express')
@@ -36,6 +36,10 @@ app.configure('production', function () {
 // Routes
 
 app.get('/', routes.index);
+
+app.post('/save-log', routes.save_log);
+
+app.get('/record-log', routes.record_log);
 
 app.listen(80, function () {
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

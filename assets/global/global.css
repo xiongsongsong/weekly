@@ -159,6 +159,7 @@ body {
 #add-record-log td textarea {
     height: 80px;
     overflow: auto;
+    resize: none;
 }
 
 #add-record-log td input.year,
