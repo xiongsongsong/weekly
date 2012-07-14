@@ -2,6 +2,7 @@
 html
     head
         meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible",content="IE=8")
         title= title
         link(rel="stylesheet",href="/global/reset.css")
         link(rel="stylesheet",href="/global/global.css")
@@ -10,18 +11,86 @@ html
             h1 前端 de 周报
         #main-wrapper
             #calendar-header
-                h2#date
+                h2
+                    a#date(href="#")
+                    a(class="J-prev-month") <<
+                    a(class="J-next-month") >>
             #calendar-wrapper
-            !{body}
+            form#add-record-log(action="/record-log",method="post")
+                table
+                    tr
+                        th 页面名称
+                        td
+                            input.text(type="text",name="page-name")
+                    tr
+                        th 前端
+                        td
+                            input(type="hidden",name="front")
+                            select
+                                option(value="") 请选择
+                                option(value="yuanchang") 伯仁
+                                option(value="yuanchang") 元茗
+                                option(value="yuanchang") 伯瑜
+                                option(value="yuanchang") 元泰
+                                option(value="yuanchang") 元让
+                                option(value="yuanchang") 伯和
+                                option(value="yuanchang") 仲直
+                                option(value="yuanchang") 仲权
+                                option(value="yuanchang") 元常
+                                option(value="yuanchang") 元瑾
+                                option(value="yuanchang") 伯阳
+                                option(value="yuanchang") 元节
+                                option(value="yuanchang") 伯宁
+                            |  页面等级
+                            select
+                                option(value="") 请选择
+                                option(value="0") 简单
+                                option(value="1") 普通
+                                option(value="2") 一般
+                                option(value="3") 复杂
+                    tr
+                        th 设计师
+                        td
+                            input.text(type="text",name="design")
+                    tr
+                        th 需求方
+                        td
+                            input.text(type="text",name="customer")
+                    tr
+                        th 线上地址
+                        td
+                            input.text(type="text",name="online-url")
+                    tr
+                       th TMS地址
+                       td
+                           input.text(type="text",name="tms-url")
+                    tr
+                        th 备注
+                        td
+                            textarea(name="note",resize="no")
+                    tr
+                        th 完成时间
+                        td
+                            input.year(name='year',value='#{date.getFullYear()}')
+                            |-
+                            input.month(name='month',value='#{date.getMonth()+1}')
+                            |-
+                            input.date(name='date',value='#{date.getDate()}')
+                    tr.control
+                        th
+                        td
+                            input.cal#hidden-form(type="button",value="<<隐藏")
+                            input.smt(type="submit",value="保存")
         #sidebar-wrapper
             #sidebar-container
                 #sidebar-group
+                    h2 控制台
+                        ul
+                            li.J-record-log
+                                b 记录工作
                     h2 报表
                         ul
                             li 最近一周
                             li 最近一月
                             li 最近三十天
-                    h2 控制台
-                        ul
-                            li 记录工作量
         script(src="/sea.js",data-main="./home/home.js")

@@ -52,6 +52,7 @@ body {
     color: #444;
     font-weight: normal;
     font-family: verdana, sans-serif;
+    white-space: nowrap;
 }
 
 /*日历容器*/
@@ -71,10 +72,11 @@ body {
     line-height: normal;
     overflow: hidden;
     background: #fcfcfc;
+    width: 14.285%;
 }
 
 #calendar-container tr.th th.weekend {
-    color: #aaa;
+    color: #ccc;
 }
 
 #calendar-container th,
@@ -94,13 +96,97 @@ body {
     position: absolute;
     right: 10%;
     bottom: 0;
-    font-size: 20px;
+    font-size: 40px;
     color: #f5f5f5;
 }
 
 #calendar-container td.prev,
 #calendar-container td.next {
     color: #aaa;
+}
+
+/*record-log*/
+#add-record-log {
+    position: absolute;
+    left: -480px;
+    top: 0;
+    z-index: 2;
+    background: #f5f0f5;
+    padding: 12px;
+    border: solid 1px #aaa;
+    border-top: none;
+    box-shadow: 12px 12px 12px #aaa;
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength = 10, Direction = 145, color = #aaaaaa);
+}
+
+#add-record-log th,
+#add-record-log td {
+    padding: .5em 1em;
+}
+
+#add-record-log th {
+    width: 80px;
+    text-align: right;
+}
+
+#add-record-log tr.control {
+    text-align: right;
+}
+
+#add-record-log tr.control input.smt,
+#add-record-log tr.control input.cal {
+    padding: .5em;
+    margin-left: 1em;
+}
+
+#add-record-log tr.control input.smt {
+    padding: .5em 1em;
+    font-weight: bold;
+}
+
+#add-record-log td input:focus,
+#add-record-log td textarea:focus {
+    background-color: #efe;
+}
+
+#add-record-log td input.text,
+#add-record-log td textarea {
+    padding: .5em;
+    width: 240px;
+    border: solid 1px #cacaca;
+}
+
+#add-record-log td textarea {
+    height: 80px;
+    overflow: auto;
+}
+
+#add-record-log td input.year,
+#add-record-log td input.month,
+#add-record-log td input.date {
+    padding: .5em;
+}
+
+#add-record-log td input.year {
+    width: 30px;
+    margin-right: 8px;
+}
+
+#add-record-log td input.month,
+#add-record-log td input.date {
+    width: 20px;
+    text-align: center;
+    margin: 0 8px;
+}
+
+#calendar-container p {
+    background: #468847;
+    color: #fff;
+    font-size: 12px;
+    text-shadow: 0 0 1px #000;
+    border-radius: 2px;
+    font-family: simsun, simhei, sans-serif;
+    margin: 0 3px;
 }
 
 #sidebar-wrapper {
@@ -110,6 +196,7 @@ body {
     top: 98px;
     bottom: 0;
     width: 180px;
+    z-index: 3;
 }
 
 #sidebar-group h2 {
@@ -121,7 +208,17 @@ body {
 #sidebar-group ul {
     font-size: 12px;
     font-weight: normal;
-    margin: .5em 0 2em 1.5em;
+    margin: .5em 0 2em 0;
+}
+
+#sidebar-group ul li {
+    padding-left: 1.5em;
+    cursor: pointer;
+}
+
+#sidebar-group ul li.current {
+    background: #f60;
+    color: #fff;
 }
 
 #sidebar-group ul {

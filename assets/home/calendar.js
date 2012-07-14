@@ -14,17 +14,35 @@ seajs.config({
 
 define(function (require, exports, module) {
     var $ = require('jquery');
+
+    var currentDate;
+    exports.init = function (date) {
+        currentDate = date;
+        exports.createTableView();
+        $('#calendar-header').bind('selectstart', function (ev) {
+            document.selection.clear();
+            ev.preventDefault();
+        });
+
+        $('.J-prev-month').click(function (ev) {
+            exports.prev();
+        });
+
+        $('.J-next-month').click(function (ev) {
+            exports.next();
+        });
+    };
+
     exports.createTableView = function () {
-        var currentDate = new Date();
         var table = '<table id="calendar-container">' +
             '<thead>' +
             '<tr class="th">' +
             '<th class="weekend">日</th>' +
-            '<th>一</th>' +
-            '<th>二</th>' +
-            '<th>三</th>' +
-            '<th>四</th>' +
-            '<th>五</th>' +
+            '<th><div>一</div></th>' +
+            '<th><div>二</div></th>' +
+            '<th><div>三</div></th>' +
+            '<th><div>四</div></th>' +
+            '<th><div>五</div></th>' +
             '<th class="weekend">六</th>' +
             '</tr>' +
             '</thead>' +
@@ -81,14 +99,14 @@ define(function (require, exports, module) {
                 calendarStr.push('<tr>')
             }
             if ((j + 1) % 7 == 0 && j > 0) {
-                calendarStr.push('<td' + _current + '><div class="wrapper"><b class="day">' + dateArr[j].date + '</b></div></td></tr>')
+                calendarStr.push('<td' + _current + '><div class="wrapper"><div class="work-diary"></div><b class="day">' + dateArr[j].date + '</b></div></td></tr>')
             } else {
-                calendarStr.push('<td' + _current + '><div class="wrapper"><b class="day">' + dateArr[j].date + '</b></div></td>');
+                calendarStr.push('<td' + _current + '><div class="wrapper"><div class="work-diary"></div><b class="day">' + dateArr[j].date + '</b></div></td>');
             }
             _current = '';
         }
 
-        $('#date').html(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
+        $('#date').html(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1));
         $('#calendar-wrapper').html(table + calendarStr.join(''));
 
         exports.autoResetOffset();
@@ -103,6 +121,28 @@ define(function (require, exports, module) {
         } else {
             return month == 1 ? date.getFullYear() % 4 == 0 ? 29 : 28 : 30;
         }
+    };
+
+    exports.prev = function () {
+        currentDate.setDate(1);
+        if (currentDate.getMonth() == 0) {
+            currentDate.setMonth(11);
+            currentDate.setFullYear(currentDate.getFullYear() - 1);
+        } else {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+        }
+        exports.createTableView();
+    };
+
+    exports.next = function () {
+        currentDate.setDate(1);
+        if (currentDate.getMonth() == 11) {
+            currentDate.setMonth(0);
+            currentDate.setFullYear(currentDate.getFullYear() + 1);
+        } else {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+        }
+        exports.createTableView();
     };
 
     exports.autoResetOffset = function () {

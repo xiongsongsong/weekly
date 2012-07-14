@@ -8,17 +8,29 @@
 seajs.config({
     alias:{
         'jquery':'/global/jquery.js',
-        'calendar':'/home/calendar.js'
+        'calendar':'/home/calendar.js',
+        'record-log':'/home/record-log.js'
     }
 });
-define('home', ['jquery', 'calendar'], function (require) {
+define('home', ['jquery', 'calendar', 'record-log'], function (require) {
+
     var $ = require('jquery');
-    require('calendar').createTableView();
+
+    /*日历控件*/
+    var calendar = require('calendar');
+    calendar.init(new Date());
+
+    /*写工作日志*/
+    require('record-log');
+
+
 
     if (!window.console) {
-        window.console = function () {
-
-        };
+        window.console = {
+            log:function (str) {
+                document.status = str;
+            }
+        }
     }
 });
 
