@@ -27,6 +27,35 @@ exports.save_log = function (req, res) {
     data['year'] = parseInt(req.body['year'], 10);
     data['month'] = parseInt(req.body['month'], 10);
     data['date'] = parseInt(req.body['date'], 10);
+
+    var errorMSG = Object.create(null);
+    Object.keys(data).forEach(function (k) {
+        switch (k) {
+            case 'page-name':
+                break;
+            case 'front':
+                break;
+            case 'level':
+                break;
+            case 'design':
+                break;
+            case 'customer':
+                break;
+            case 'online-url':
+                break;
+            case 'tms-url':
+                break;
+            case 'year':
+                break;
+            case 'month':
+                break;
+            case 'date':
+                break;
+
+
+        }
+    });
+
     $("fed.log").save(data);
     $("fed.log").find({_id:data._id}, function (result) {
         res.end(JSON.stringify(result, undefined, '\t'));
