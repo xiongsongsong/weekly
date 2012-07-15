@@ -39,7 +39,17 @@ define(function (require, exports, module) {
                 data:formData,
                 cache:false,
                 success:function (data) {
-
+                    var errorList = '';
+                    if (data.documents) {
+                        alert('保存成功');
+                    } else {
+                        for (var i = 0; i < data.errorList.length; i++) {
+                            $($addRecordLog[0].elements[data.errorList[i].name]).addClass('error');
+                            setTimeout(function () {
+                                $($addRecordLog[0].elements[data.errorList[i].name]).removeClass('error');
+                            }, 3000)
+                        }
+                    }
                 }
             });
             ev.preventDefault();

@@ -41,6 +41,10 @@ app.post('/save-log', routes.save_log);
 
 app.get('/record-log', routes.record_log);
 
-app.listen(80, function () {
+app.get('/show_log/:date', routes.show_log);
+
+app.get('/helper/add', routes.helper);
+
+app.listen(3000, function () {
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
