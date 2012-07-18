@@ -13,19 +13,26 @@ seajs.config({
         'show-log':'/home/show-log.js'
     }
 });
-define('home', ['jquery', 'calendar', 'record-log', 'show-log'], function (require) {
+
+
+define(['jquery', 'calendar', 'record-log', 'show-log'], function (require) {
 
     var $ = require('jquery');
 
     /*日历控件*/
     var calendar = require('calendar');
-    calendar.init(new Date());
+    var showLog = require('show-log');
+
+    calendar.init(new Date(), {
+        onSwitch:showLog.init
+    });
 
     /*写工作日志*/
-    require('record-log');
+    require('record-log').init({
+        onUpdate:showLog.init
+    });
 
-    //显示工作日志
-    require('show-log');
+    /*显示工作日志*/
 
     if (!typeof console) {
         window.console = {

@@ -17,7 +17,7 @@ define(function (require, exports, module) {
     var currentDate;
     var S = KISSY, DOM = S.DOM, Event = S.Event,
         $yearNode = $('#year-trigger'),
-        $monthNode = $('#month-trigger');
+        $monthNode = $('#month-trigger'), Param;
 
     /*通过鼠标滚轮修改时间*/
     Event.on([$yearNode[0], $monthNode[0]], "mousewheel", function (ev) {
@@ -58,8 +58,9 @@ define(function (require, exports, module) {
     });
 
     /*初始化日历界面*/
-    exports.init = function (date) {
+    exports.init = function (date, _config) {
         currentDate = date;
+        Param = _config;
         exports.createTableView();
         $('#calendar-header').bind('selectstart', function (ev) {
             document.selection.clear();
@@ -95,15 +96,27 @@ define(function (require, exports, module) {
             '</thead>' +
             '<tbody>';
 
-        var prevMonthOfDate = (new Date());
+        var lastMonth = (new Date());
         (function () {
-            prevMonthOfDate.setTime(currentDate.getTime());
-            prevMonthOfDate.setDate(1);
+            lastMonth.setTime(currentDate.getTime());
+            lastMonth.setDate(1);
             if (currentDate.getMonth() == 0) {
-                prevMonthOfDate.setMonth(11);
-                prevMonthOfDate.setFullYear(currentDate.getFullYear() - 1);
+                lastMonth.setMonth(11);
+                lastMonth.setFullYear(currentDate.getFullYear() - 1);
             } else {
-                prevMonthOfDate.setMonth(currentDate.getMonth() - 1);
+                lastMonth.setMonth(currentDate.getMonth() - 1);
+            }
+        })();
+
+        var nextMonth = (new Date());
+        (function () {
+            nextMonth.setTime(currentDate.getTime());
+            nextMonth.setDate(1);
+            if (currentDate.getMonth() == 11) {
+                nextMonth.setMonth(0);
+                nextMonth.setFullYear(currentDate.getFullYear() + 1);
+            } else {
+                nextMonth.setMonth(currentDate.getMonth() + 1);
             }
         })();
 
@@ -114,7 +127,7 @@ define(function (require, exports, module) {
         var leftDate = _tempDate.getDay();
 
         var currentMaxDays = exports.getMaxDays(currentDate, currentDate.getMonth());
-        var prevMaxDays = exports.getMaxDays(prevMonthOfDate, prevMonthOfDate.getMonth());
+        var prevMaxDays = exports.getMaxDays(lastMonth, lastMonth.getMonth());
 
         for (var i = 0; i < leftDate; i++) {
             dateArr.push({type:'prev', date:prevMaxDays - i});
@@ -136,10 +149,13 @@ define(function (require, exports, module) {
         for (var j = 0; j < dateArr.length; j++) {
             switch (dateArr[j].type) {
                 case "prev":
-                    _current = ' class="prev"';
+                    _current = ' class="prev" id="date-' + lastMonth.getFullYear() + (lastMonth.getMonth() + 1) + dateArr[j].date + '"';
                     break;
                 case "next":
-                    _current = ' class="next"';
+                    _current = ' class="next" id="date-' + nextMonth.getFullYear() + (nextMonth.getMonth() + 1) + dateArr[j].date + '"';
+                    break;
+                case "current":
+                    _current = ' class="current" id="date-' + currentDate.getFullYear() + (currentDate.getMonth() + 1) + dateArr[j].date + '"';
                     break;
             }
             if (j == 0 || (j + 1) % 7 == 1) {
@@ -158,6 +174,10 @@ define(function (require, exports, module) {
         $('#calendar-wrapper').html(table + calendarStr.join(''));
 
         exports.autoResetOffset();
+
+        if (Param !== undefined && Param.onSwitch) {
+            Param.onSwitch();
+        }
     };
 
     /*

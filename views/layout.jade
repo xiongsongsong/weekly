@@ -16,77 +16,84 @@ html
                     | -
                     b#month-trigger(title="用鼠标滚轮设定 月份",data-type="month")
             #calendar-wrapper
-            form#add-record-log(action="/record-log",method="post")
-                table
-                    tr
-                        th 页面名称
-                        td
-                            input.text(type="text",name="page-name")
-                    tr
-                        th 前端
-                        td
-                            select(name="front")
-                                option(value="") 请选择
-                                option(value="1") 伯仁
-                                option(value="2") 元茗
-                                option(value="3") 伯瑜
-                                option(value="4") 元泰
-                                option(value="5") 元让
-                                option(value="6") 伯和
-                                option(value="7") 仲直
-                                option(value="8") 仲权
-                                option(value="9") 元常
-                                option(value="10") 元瑾
-                                option(value="11") 伯阳
-                                option(value="12") 元节
-                                option(value="13") 伯宁
-                            |  页面等级
-                            select(name="level")
-                                option(value="") 请选择
-                                option(value="1") 简单
-                                option(value="2") 普通
-                                option(value="3") 一般
-                                option(value="4") 复杂
-                    tr
-                        th 设计师
-                        td
-                            input.text(type="text",name="design")
-                    tr
-                        th 需求方
-                        td
-                            input.text(type="text",name="customer")
-                    tr
-                        th 线上地址
-                        td
-                            input.text(type="text",name="online-url")
-                    tr
-                       th TMS地址
-                       td
-                           input.text(type="text",name="tms-url")
-                    tr
-                        th 备注
-                        td
-                            textarea(name="note")
-                    tr
-                        th 完成时间
-                        td
-                            input.year(name='year',value='#{date.getFullYear()}')
-                            |-
-                            input.month(name='month',value='#{date.getMonth()+1}')
-                            |-
-                            input.date(name='date',value='#{date.getDate()}')
-                    tr.control
-                        th
-                        td
-                            input.cal#hidden-form(type="button",value="<<隐藏")
-                            input.smt(type="submit",value="保存")
+            #add-record-log
+                if(!isLogin)
+                    form.login(name="login",action="/login",method="post")
+                        table
+                            tr
+                                th 用户名
+                                td
+                                    input.text(type="text",name="user")
+                            tr
+                                th 密码
+                                td
+                                    input.text(type="password",name="pwd")
+                            tr.control
+                                th
+                                td
+                                    input.cal.hidden-form(type="button",value="取消")
+                                    input.login(type="submit",value="登陆",id="Login")
+                -if(!isLogin)
+                    style
+                        form.add-record-log{display:none;}
+                form.add-record-log(name="add-record-log",action="/record-log",method="post")
+                    table
+                        tr
+                            th 页面名称
+                            td
+                                input.text(type="text",name="page-name")
+                        tr
+                            th  页面等级
+                            td
+                                select(name="level")
+                                    option(value="") 请选择
+                                    option(value="1") 简单
+                                    option(value="2") 普通
+                                    option(value="3") 一般
+                                    option(value="4") 复杂
+                        tr
+                            th 设计师
+                            td
+                                input.text(type="text",name="design")
+                        tr
+                            th 需求方
+                            td
+                                input.text(type="text",name="customer")
+                        tr
+                            th 线上地址
+                            td
+                                input.text(type="text",name="online-url")
+                        tr
+                           th TMS地址
+                           td
+                               input.text(type="text",name="tms-url")
+                        tr
+                            th 备注
+                            td
+                                textarea(name="note")
+                        tr
+                            th 完成时间
+                            td
+                                input.year(name='year',value='#{date.getFullYear()}')
+                                |-
+                                input.month(name='month',value='#{date.getMonth()+1}')
+                                |-
+                                input.date(name='date',value='#{date.getDate()}')
+                        tr.control
+                            th
+                            td
+                                input.cal.hidden-form(type="button",value="<<隐藏")
+                                input.smt(type="submit",value="保存")
         #sidebar-wrapper
             #sidebar-container
                 #sidebar-group
                     h2 控制台
                         ul
                             li.J-record-log
-                                b 记录工作
+                                b#record-log 记录工作
+                                    if(isLogin)
+                                        span （!{username}）
+
                     h2 报表
                         ul
                             li 最近一周

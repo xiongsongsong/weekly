@@ -1,7 +1,10 @@
 html, body {
     height: 100%;
     overflow: hidden;
+}
 
+.hidden {
+    display: none;
 }
 
 body {
@@ -75,6 +78,7 @@ body {
     top: 12px;
     border: solid 1px #e2e2e2;
     text-align: center;
+    min-width: 740px;
 }
 
 #calendar-container tr.th th {
@@ -106,10 +110,12 @@ body {
 
 #calendar-container td div.wrapper b.day {
     position: absolute;
-    right: 10%;
+    right: .3em;
     bottom: 0;
-    font-size: 40px;
-    color: #f5f5f5;
+    font-size: 22px;
+    color: #f2f2f2;
+    text-shadow: 1px 1px 0 #ccc;
+    font-family: Arial, simsun, sans-serif;
 }
 
 #calendar-container td.prev,
@@ -146,6 +152,7 @@ body {
 }
 
 #add-record-log tr.control input.smt,
+#add-record-log tr.control input.login,
 #add-record-log tr.control input.cal {
     padding: .5em;
     margin-left: 1em;
@@ -165,7 +172,12 @@ body {
 #add-record-log td textarea {
     padding: .5em;
     width: 240px;
-    border: solid 1px #cacaca;
+    border: solid 1px #A0C9C9;
+    background: #fff;
+}
+
+#add-record-log form.login td input.text {
+    width: 120px;
 }
 
 #add-record-log td textarea {
@@ -192,14 +204,78 @@ body {
     margin: 0 8px;
 }
 
-#calendar-container p {
-    background: #468847;
-    color: #fff;
+#calendar-container div.work-diary {
+    zoom: 1;
+    text-align: left;
+}
+
+#calendar-container span {
+    background: #500;
     font-size: 12px;
-    text-shadow: 0 0 1px #000;
-    border-radius: 2px;
-    font-family: simsun, simhei, sans-serif;
-    margin: 0 3px;
+    font-family: "宋体", simhei, sans-serif;
+    white-space: nowrap;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    vertical-align: top;
+    overflow: hidden;
+    color: #fff;
+    box-shadow: 1px 1px 3px #000;
+    margin: 2px;
+    text-align: center;
+    line-height: 20px;
+}
+
+#calendar-container span.front1 {
+    background: #AC725E;
+}
+
+#calendar-container span.front2 {
+    background: #D06B64;
+}
+
+#calendar-container span.front3 {
+    background: #F83A22;
+}
+
+#calendar-container span.front4 {
+    background: #FA573C;
+}
+
+#calendar-container span.front5 {
+    background: #FF7537;
+}
+
+#calendar-container span.front6 {
+    background: #FFAD46;
+}
+
+#calendar-container span.front7 {
+    background: #42D692;
+}
+
+#calendar-container span.front8 {
+    background: #16A765;
+}
+
+#calendar-container span.front9 {
+    background: #7BD148;
+}
+
+#calendar-container span.front10 {
+    background: #B3DC6C;
+}
+
+#calendar-container span.front11 {
+    background: #FBE983;
+}
+
+#calendar-container span.front12 {
+    background: #92E1C0;
+}
+
+#calendar-container span.front13 {
+    background: #9FC6E7;
 }
 
 #sidebar-wrapper {
@@ -210,6 +286,10 @@ body {
     bottom: 0;
     width: 180px;
     z-index: 3;
+}
+
+#record-log span {
+    font-weight: normal;
 }
 
 #sidebar-group h2 {

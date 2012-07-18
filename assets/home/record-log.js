@@ -14,48 +14,66 @@ define(function (require, exports, module) {
 
     var $ = require('jquery');
     var $addRecordLog = $('#add-record-log');
-    var left = parseInt($addRecordLog.css('left'), 10);
+    var $formObj = $(document.forms['add-record-log']);
+    var $loginFormObj = $(document.forms['login']);
+    var left = -480;
 
-    exports.init = function () {
+    exports.init = function (param) {
         $('.J-record-log').live('click', function (ev) {
             $addRecordLog.stop();
-            $addRecordLog.animate({left:'0px'}, 500, function () {
-                $addRecordLog[0].elements[0].focus();
-            });
+            $addRecordLog.animate({left:'0px'}, 500);
             $(ev.currentTarget).addClass('current');
+            $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
         });
-        $('#hidden-form').click(function () {
+
+        $('input.hidden-form').live('click', function () {
             $addRecordLog.stop();
             $addRecordLog.animate({left:left + 'px'}, 500, function () {
                 $('.J-record-log').removeClass('current')
             });
         });
 
-        $addRecordLog.submit(function (ev) {
-            var formData = $addRecordLog.serialize();
+        $formObj.submit(function (ev) {
+            var formData = $formObj.serialize();
             $.ajax('/save-log', {
                 type:'post',
                 dataType:'json',
                 data:formData,
                 cache:false,
                 success:function (data) {
-                    var errorList = '';
-                    if (data.documents) {
-                        alert('保存成功');
+                    if (data.status && param.onUpdate) {
+                        param.onUpdate();
+                        $formObj[0].reset();
+                        $addRecordLog.animate({left:left + 'px'}, 500, function () {
+                            $('.J-record-log').removeClass('current')
+                        });
                     } else {
-                        for (var i = 0; i < data.errorList.length; i++) {
-                            $($addRecordLog[0].elements[data.errorList[i].name]).addClass('error');
-                            setTimeout(function () {
-                                $($addRecordLog[0].elements[data.errorList[i].name]).removeClass('error');
-                            }, 3000)
-                        }
+                        alert('有错误！\r\n' + KISSY.JSON.stringify(data,undefined,'\t'));
+                    }
+                }
+            });
+
+            ev.preventDefault();
+        });
+
+        $loginFormObj.submit(function (ev) {
+            $.ajax('/login', {
+                type:'post',
+                dataType:'json',
+                data:$loginFormObj.serialize(),
+                cache:false,
+                success:function (data) {
+                    if (data.status) {
+                        $loginFormObj.hide();
+                        $formObj.show();
+                        $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
+                        $('#record-log').append('<span>（' + data.user + '）</span>')
+                    } else {
+                        alert('啊哦，登陆遇到错误\r\n' + KISSY.JSON.stringify(data))
                     }
                 }
             });
             ev.preventDefault();
-        });
-
-
+        })
     };
-    exports.init();
 });

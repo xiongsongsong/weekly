@@ -9,14 +9,36 @@ var $ = require("mongous").Mongous;
  console.log(r);
  });*/
 
+exports.isLogin = function (req) {
+    var rememberme = req.cookies['rememberme'];
+    return rememberme !== undefined && rememberme !== '' && req.session.userid !== undefined && req.session.userid !== '';
+};
+
+/*将用户列表缓存起来*/
+
+var user = Object.create(null);
+exports.getUser = function () {
+    $("fed.user").find({}, function (result) {
+        result.documents.forEach(function (item, index) {
+            user['id_' + item._id] = item.name;
+        });
+    });
+};
+
+exports.getUser();
+
 exports.index = function (req, res) {
-    res.render('index', { title:'Express', date:new Date() })
+    res.render('index', {
+        title:'前端业务日志',
+        isLogin:exports.isLogin(req),
+        date:new Date(),
+        username:req.session.username
+    });
 };
 
 exports.save_log = function (req, res) {
     var data = Object.create(null), body = req.body;
     data['page-name'] = body['page-name'];
-    data['front'] = parseInt(body['front'], 10);
     data['level'] = parseInt(body['level'], 10);
     data['design'] = body['design']
     data['customer'] = body['customer'];
@@ -26,16 +48,13 @@ exports.save_log = function (req, res) {
     data['year'] = parseInt(body['year'], 10);
     data['month'] = parseInt(body['month'], 10);
     data['date'] = parseInt(body['date'], 10);
+    data['front'] = req.session.userid;
 
     var errorMSG = Object.create(null);
     errorMSG.errorList = [];
 
     if (data['page-name'] == undefined || data['page-name'].length < 1) {
         errorMSG.errorList.push({name:'page-name', msg:'页面名称不能为空'});
-    }
-
-    if (isNaN(data['front'])) {
-        errorMSG.errorList.push({name:'front', msg:'需要页面对应的前端'});
     }
 
     if (isNaN(data['level'])) {
@@ -80,65 +99,82 @@ exports.save_log = function (req, res) {
     if (errorMSG.errorList.length > 0) {
         res.end(JSON.stringify(errorMSG), undefined, '\t');
     } else {
-        data._id = parseInt(Date.now().toString() + data['front'].toString() + data['level'].toString() +
-            Math.random() * 1000, 10);
         $("fed.log").save(data);
-        $("fed.log").find({_id:data._id}, function (result) {
-            res.end(JSON.stringify(result, undefined, '\t'));
-        });
+        res.end(JSON.stringify({'status':true}, undefined, '\t'));
     }
 };
 
-exports.record_log = function (req, res) {
-
-};
-
-
 exports.show_log = function (req, res) {
-    $("fed.log").find(10, {month:7}, function (result) {
+    res.header('Content-Type', 'application/json; charset=utf-8');
+    var year = parseInt(req.query.year, 10);
+    var month = parseInt(req.query.month, 10);
+    if (isNaN(year)) {
+        year = new Date().getFullYear()
+    }
+    if (isNaN(month)) {
+        month = new Date().getMonth() + 1;
+    }
+    $("fed.log").find({year:year, month:month}, function (result) {
+        result.user = user;
         res.end(JSON.stringify(result, undefined, '\t'));
     });
 };
 
+exports.login = function (req, res) {
 
-exports.helper = function (req, res) {
+    var md5 = require('md5');
+    var user = req.body.user;
+    var pwd = req.body.pwd;
+    var msg = Object.create(null);
+    msg.list = [];
 
-    for (var i = 0; i < 40; i++) {
-        $("fed.log").save({
-                "page-name":"12",
-                "front":(function () {
-                    var i = parseInt(Math.random() * 13);
-                    while (i < 1 || i > 13) {
-                        i = parseInt(Math.random() * 13);
-                    }
-                    return i;
-                })(),
-                "level":(function () {
-                    var i = parseInt(Math.random() * 4);
-                    while (i < 1 || i > 4) {
-                        i = parseInt(Math.random() * 4);
-                    }
-                    return i;
-                })(),
-                "design":parseInt(Math.random() * 100000000000, 10).toString(),
-                "customer":parseInt(Math.random() * 100000000000, 10).toString(),
-                "online-url":"http://" + parseInt(Math.random() * 100000000000, 10).toString(),
-                "tms-url":"http://" + parseInt(Math.random() * 100000000000, 10).toString(),
-                "note":parseInt(Math.random() * 100000000000, 10).toString(),
-                "year":2012,
-                "month":7,
-                "date":(function () {
-                    var i = parseInt(Math.random() * 31);
-                    while (i < 1 || i > 31) {
-                        i = parseInt(Math.random() * 31);
-                    }
-                    return i;
-                })(),
-                "_id":parseInt(Date.now() + Math.random() * 1000000, 10)
-            }
-        );
+    if (user == undefined) {
+        msg.list.push("用户名不能为空");
+        res.end(JSON.stringify(msg, undefined, '\t'));
+        return;
     }
 
-    res.end('保存了假数据')
+    user = user.trim();
+
+    if (pwd == undefined) {
+        msg.list.push("密码不能为空");
+        res.end(JSON.stringify(msg, undefined, '\t'));
+        return;
+    }
+    pwd = pwd.trim();
+
+    console.log('准备查询用户');
+    $("fed.user").find({name:user}, 1, function (result) {
+        console.log('查询结果');
+        if (result.documents.length === 0) {
+            msg.list.push('无法找到该用户');
+        } else {
+            msg.status = md5.digest_s(pwd) === result.documents[0].pwd;
+            if (msg.status) {
+                res.cookie('rememberme', 'yes', { httpOnly:true});
+                req.session.username = user;
+                req.session.userid = result.documents[0]._id;
+            }
+        }
+        msg.user = user;
+        res.end(JSON.stringify(msg, undefined, '\t'));
+    });
 };
 
+
+exports.helperAddUser = function () {
+    var userList = [ 'user_a' ];
+    var user = [];
+    var md5 = require('md5');
+    userList.forEach(function (item, index) {
+        $("fed.user").save({
+            _id:index + 1,
+            name:item,
+            pwd:md5.digest_s(item)
+        });
+    });
+
+};
+
+/*
+ exports.helperAddUser();*/
