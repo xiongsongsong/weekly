@@ -155,6 +155,10 @@ body {
     font-size: 14px;
 }
 
+#add-record-log td a.level {
+    margin-left:1em;
+}
+
 #add-record-log tr.control {
     text-align: right;
 }
