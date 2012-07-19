@@ -40,10 +40,12 @@ html
                     table
                         tr
                             th 页面名称
+                                b *
                             td
                                 input.text(type="text",name="page-name")
                         tr
                             th  页面等级
+                                b *
                             td
                                 select(name="level")
                                     option(value="") 请选择
@@ -72,7 +74,8 @@ html
                             td
                                 textarea(name="note")
                         tr
-                            th 完成时间
+                            th 页面完成时间
+                                b *
                             td
                                 input.year(name='year',value='#{date.getFullYear()}')
                                 |-

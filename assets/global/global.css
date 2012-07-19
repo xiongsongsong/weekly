@@ -143,8 +143,15 @@ body {
 }
 
 #add-record-log th {
-    width: 80px;
+    width: 100px;
     text-align: right;
+}
+
+#add-record-log th b {
+    font-weight: bold;
+    font-family: verdana, sans-serif;
+    color: #a00;
+    font-size: 14px;
 }
 
 #add-record-log tr.control {
