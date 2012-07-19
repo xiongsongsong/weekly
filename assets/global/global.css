@@ -79,6 +79,7 @@ body {
     border: solid 1px #e2e2e2;
     text-align: center;
     min-width: 740px;
+    background: #fff;
 }
 
 #calendar-container tr.th th {
