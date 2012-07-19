@@ -48,7 +48,7 @@ define(function (require, exports, module) {
                             $('.J-record-log').removeClass('current')
                         });
                     } else {
-                        alert('有错误！\r\n' + KISSY.JSON.stringify(data,undefined,'\t'));
+                        alert('有错误！\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '    '));
                     }
                 }
             });
@@ -69,7 +69,7 @@ define(function (require, exports, module) {
                         $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
                         $('#record-log').append('<span>（' + data.user + '）</span>')
                     } else {
-                        alert('啊哦，登陆遇到错误\r\n' + KISSY.JSON.stringify(data))
+                        alert('啊哦，登陆遇到错误\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '    '))
                     }
                 }
             });

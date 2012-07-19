@@ -10,7 +10,7 @@ var $ = require("mongous").Mongous;
  });*/
 
 exports.isLogin = function (req) {
-    var rememberme = req.cookies['rememberme'];
+    var rememberme = req.cookies && req.cookies['rememberme'] !== undefined;
     return rememberme !== undefined && rememberme !== '' && req.session.userid !== undefined && req.session.userid !== '';
 };
 
@@ -18,9 +18,14 @@ exports.isLogin = function (req) {
 
 var user = Object.create(null);
 exports.getUser = function () {
+    user.result = [];
     $("fed.user").find({}, function (result) {
         result.documents.forEach(function (item, index) {
             user['id_' + item._id] = item.name;
+            user.result.push({
+                id:item._id,
+                name:item.name
+            })
         });
     });
 };
@@ -32,7 +37,8 @@ exports.index = function (req, res) {
         title:'前端业务日志',
         isLogin:exports.isLogin(req),
         date:new Date(),
-        username:req.session.username
+        username:req.session.username,
+        user:user
     });
 };
 
@@ -40,7 +46,7 @@ exports.save_log = function (req, res) {
     var data = Object.create(null), body = req.body;
     data['page-name'] = body['page-name'];
     data['level'] = parseInt(body['level'], 10);
-    data['design'] = body['design']
+    data['design'] = body['design'];
     data['customer'] = body['customer'];
     data['online-url'] = body['online-url'];
     data['tms-url'] = body['tms-url'];
@@ -52,6 +58,10 @@ exports.save_log = function (req, res) {
 
     var errorMSG = Object.create(null);
     errorMSG.errorList = [];
+
+    if (!exports.isLogin(req)) {
+        errorMSG.errorList.push({name:'login', msg:'登陆过期，请刷新页面重新登陆'});
+    }
 
     if (data['page-name'] == undefined || data['page-name'].length < 1) {
         errorMSG.errorList.push({name:'page-name', msg:'页面名称不能为空'});
@@ -143,9 +153,7 @@ exports.login = function (req, res) {
     }
     pwd = pwd.trim();
 
-    console.log('准备查询用户');
     $("fed.user").find({name:user}, 1, function (result) {
-        console.log('查询结果');
         if (result.documents.length === 0) {
             msg.list.push('无法找到该用户');
         } else {

@@ -40,6 +40,7 @@ body {
 
 #calendar-wrapper {
     position: absolute;
+    background: #fff;
     width: 100%;
     top: 76px;
 }
@@ -79,12 +80,10 @@ body {
     border: solid 1px #e2e2e2;
     text-align: center;
     min-width: 740px;
-    background: #fff;
 }
 
 #calendar-container tr.th th {
-    font-size: 14px;
-    font-weight: bold;
+    font-weight: normal;
     height: 40px;
     line-height: normal;
     overflow: hidden;
@@ -156,7 +155,7 @@ body {
 }
 
 #add-record-log td a.level {
-    margin-left:1em;
+    margin-left: 1em;
 }
 
 #add-record-log tr.control {
@@ -221,7 +220,7 @@ body {
     text-align: left;
 }
 
-#calendar-container span {
+span.front {
     background: #500;
     font-size: 12px;
     font-family: "宋体", simhei, sans-serif;
@@ -232,62 +231,71 @@ body {
     vertical-align: top;
     overflow: hidden;
     color: #fff;
-    box-shadow: 1px 1px 3px #000;
-    margin: 2px;
+    box-shadow: 1px 1px 0 #888;
+    margin: 1px;
     text-align: center;
     line-height: 20px;
 }
 
-#calendar-container span.front1 {
+span.front1 {
     background: #AC725E;
 }
 
-#calendar-container span.front2 {
+span.front2 {
     background: #D06B64;
 }
 
-#calendar-container span.front3 {
+span.front3 {
     background: #F83A22;
 }
 
-#calendar-container span.front4 {
+span.front4 {
     background: #FA573C;
 }
 
-#calendar-container span.front5 {
+span.front5 {
     background: #FF7537;
 }
 
-#calendar-container span.front6 {
+span.front6 {
     background: #FFAD46;
 }
 
-#calendar-container span.front7 {
+span.front7 {
     background: #42D692;
 }
 
-#calendar-container span.front8 {
+span.front8 {
     background: #16A765;
 }
 
-#calendar-container span.front9 {
+span.front9 {
     background: #7BD148;
 }
 
-#calendar-container span.front10 {
+span.front10 {
     background: #B3DC6C;
 }
 
-#calendar-container span.front11 {
-    background: #FBE983;
+span.front11 {
+    background: #9acd32;
 }
 
-#calendar-container span.front12 {
+span.front12 {
     background: #92E1C0;
 }
 
-#calendar-container span.front13 {
+span.front13 {
     background: #9FC6E7;
+}
+
+#sidebar-wrapper span.front {
+    margin: 2px;
+}
+
+body #sidebar-wrapper span.show-all {
+    width: auto;
+    padding: 0 3px;
 }
 
 #sidebar-wrapper {
@@ -321,11 +329,23 @@ body {
     cursor: pointer;
 }
 
+#sidebar-group ul li #record-log {
+    color: blue;
+    font-weight: normal;
+}
+
 #sidebar-group ul li.current {
     background: #f60;
     color: #fff;
 }
 
+#sidebar-group ul li.current #record-log {
+    color: #fff;
+    font-weight: bold;
+}
+
 #sidebar-group ul {
     line-height: 180%;
+    margin: 0 1em 2em 1em;
 }
+

@@ -238,8 +238,6 @@ define(function (require, exports, module) {
             trObj.each(function (index, item) {
                 if (index > 0) {
                     $(item).find('div.wrapper').height(parseInt(calendarContainerHeight / (trObj.size() - 1), 10) + 'px');
-                } else {
-                    $(item).height('60px')
                 }
             });
         }

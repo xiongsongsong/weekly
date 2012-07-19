@@ -92,15 +92,16 @@ html
             #sidebar-container
                 #sidebar-group
                     h2 控制台
-                        ul
-                            li.J-record-log
-                                b#record-log 记录工作
-                                    if(isLogin)
-                                        span （!{username}）
-                    //h2 在线用户
-                        ul
-                            li 最近一周
-                            li 最近一月
-                            li 最近三十天
+                    ul
+                        li.J-record-log
+                            b#record-log 记录工作 >>
+                                if(isLogin)
+                                    span （!{username}）
+                    //h2 过滤器
+                    //ul
+                        li
+                            each item in user.result
+                                span.front(class="front#{item.id}")=item.name
+                            span.front.show-all 显示全部
         script(src="/kissy-min.js")
         script(src="/sea.js",data-main="/home/home.js")

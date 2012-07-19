@@ -1,14 +1,8 @@
-/**
- * Module dependencies.
- test
- <<<<<<< HEAD
- 0846
- =======
- 0848
- >>>>>>> c/master
- 2012-07-11
- */
-
+/*
+ *
+ * 记录业务日志
+ *
+ * */
 var express = require('express')
     , routes = require('./routes');
 var app = module.exports = express.createServer();
