@@ -179,6 +179,7 @@ exports.log_out = function (req, res) {
     res.redirect('/');
 };
 
+/* 辅助函数，用来初始化用户Collection */
 exports.helperAddUser = function () {
     var userList = [ 'user_a' ];
     var user = [];
@@ -192,6 +193,3 @@ exports.helperAddUser = function () {
     });
 
 };
-
-/*
- exports.helperAddUser();*/

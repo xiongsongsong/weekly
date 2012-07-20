@@ -2,7 +2,7 @@
  * 记录业务日志
  * */
 
- var express = require('express')
+var express = require('express')
     , routes = require('./routes');
 var app = module.exports = express.createServer();
 
@@ -29,18 +29,19 @@ app.configure('production', function () {
 
 // Routes
 
+//首页
 app.get('/', routes.index);
 
+//保存日志
 app.post('/save-log', routes.save_log);
 
-app.get('/record-log', routes.record_log);
-
+//拉取日志信息
 app.get('/show_log/:date', routes.show_log);
 
-app.get('/helper/add', routes.helper);
-
+//登陆
 app.post(/login(\/)?.*/, routes.login);
 
+//登出
 app.get('/log-out', routes.log_out);
 
 app.listen(80, function () {
