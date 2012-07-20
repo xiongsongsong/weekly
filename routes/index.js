@@ -10,8 +10,13 @@ var $ = require("mongous").Mongous;
  });*/
 
 exports.isLogin = function (req) {
-    var rememberme = req.cookies && req.cookies['rememberme'] !== undefined;
-    return rememberme !== undefined && rememberme !== '' && req.session.userid !== undefined && req.session.userid !== '';
+    var remember;
+    if (req.cookies) {
+        remember = req.cookies['remember'];
+        return remember !== undefined && remember !== '' && req.session.userid !== undefined && req.session.userid !== '';
+    } else {
+        return false;
+    }
 };
 
 /*将用户列表缓存起来*/
@@ -33,6 +38,7 @@ exports.getUser = function () {
 exports.getUser();
 
 exports.index = function (req, res) {
+    console.log(exports.isLogin(req))
     res.render('index', {
         title:'前端业务日志',
         isLogin:exports.isLogin(req),
@@ -159,7 +165,7 @@ exports.login = function (req, res) {
         } else {
             msg.status = md5.digest_s(pwd) === result.documents[0].pwd;
             if (msg.status) {
-                res.cookie('rememberme', 'yes', { httpOnly:true});
+                res.cookie('remember', 'yes', { httpOnly:true});
                 req.session.username = user;
                 req.session.userid = result.documents[0]._id;
             }
@@ -169,6 +175,10 @@ exports.login = function (req, res) {
     });
 };
 
+exports.log_out = function (req, res) {
+    res.clearCookie('remember');
+    res.redirect('/');
+};
 
 exports.helperAddUser = function () {
     var userList = [ 'user_a' ];

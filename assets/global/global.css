@@ -113,14 +113,13 @@ body {
     right: .3em;
     bottom: 0;
     font-size: 22px;
-    color: #f2f2f2;
-    text-shadow: 1px 1px 0 #ccc;
-    font-family: Arial, simsun, sans-serif;
+    color: #bbb;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-#calendar-container td.prev,
-#calendar-container td.next {
-    color: #aaa;
+#calendar-container td.prev div.wrapper b.day,
+#calendar-container td.next div.wrapper b.day {
+    color: #ddd;
 }
 
 /*record-log*/
@@ -174,7 +173,7 @@ body {
     font-weight: bold;
 }
 
-#add-record-log td input:focus,
+#add-record-log td input.text:focus,
 #add-record-log td textarea:focus {
     background-color: #efe;
 }
@@ -333,7 +332,8 @@ body #sidebar-wrapper span.show-all {
 #sidebar-group ul {
     font-size: 12px;
     font-weight: normal;
-    margin: .5em 0 2em 0;
+    line-height: 180%;
+    margin: 0 1em 2em 1em;
 }
 
 #sidebar-group ul li {
@@ -341,8 +341,23 @@ body #sidebar-wrapper span.show-all {
     cursor: pointer;
 }
 
+#sidebar-group ul li.separator {
+    border-top: solid 1px #ccc;
+    margin: 6px auto;
+    height: 0;
+    line-height: 0;
+    width: 77%;
+    font-size: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+#sidebar-group ul li a,
 #sidebar-group ul li #record-log {
     color: blue;
+}
+
+#sidebar-group ul li #record-log {
     font-weight: normal;
 }
 
@@ -355,9 +370,3 @@ body #sidebar-wrapper span.show-all {
     color: #fff;
     font-weight: bold;
 }
-
-#sidebar-group ul {
-    line-height: 180%;
-    margin: 0 1em 2em 1em;
-}
-

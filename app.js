@@ -40,7 +40,9 @@ app.get('/show_log/:date', routes.show_log);
 
 app.get('/helper/add', routes.helper);
 
-app.post('/login', routes.login);
+app.post(/login(\/)?.*/, routes.login);
+
+app.get('/log-out', routes.log_out);
 
 app.listen(80, function () {
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

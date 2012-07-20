@@ -33,11 +33,16 @@ define(['jquery'], function (require, exports, module) {
         var $frontObj = $('ul.user-filter span.front');
         var $calendarWrapper = $('#calendar-wrapper');
         var $target = $frontObj.filter('.highlight');
-        $calendarWrapper.find('span.front').show();
         if ($target.size() > 0) {
             var front = $target.attr('front');
             $calendarWrapper.find('span.front').hide();
-            $calendarWrapper.find('.front' + front).show();
+            $calendarWrapper.find('.front' + front).each(function (index, item) {
+                setTimeout(function () {
+                    $(item).fadeIn(300)
+                }, index * 42)
+            });
+        } else {
+            $calendarWrapper.find('span.front').show();
         }
     };
 

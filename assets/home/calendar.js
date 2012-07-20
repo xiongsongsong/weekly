@@ -8,9 +8,11 @@
 
 seajs.config({
     alias:{
-        'jquery':'/global/jquery.js'
+        'jquery':'/global/jquery.js',
+        'show-log':'/home/show-log.js'
     }
 });
+
 
 define(function (require, exports, module) {
     var $ = require('jquery');
@@ -20,7 +22,11 @@ define(function (require, exports, module) {
         $monthNode = $('#month-trigger'), Param;
 
     /*通过鼠标滚轮修改时间*/
+    var cl;
     Event.on([$yearNode[0], $monthNode[0]], "mousewheel", function (ev) {
+        if (cl !== undefined) {
+            clearTimeout(cl);
+        }
         var year = parseInt($yearNode.html(), 10);
         var month = parseInt($monthNode.html(), 10);
 
@@ -53,14 +59,15 @@ define(function (require, exports, module) {
         _tempDate.setFullYear(year);
         _tempDate.setMonth(month - 1);
         currentDate = _tempDate;
-        exports.createTableView();
         ev.preventDefault();
+
+        cl = setTimeout(exports.createTableView, 320);
+
     });
 
     /*初始化日历界面*/
-    exports.init = function (date, _config) {
+    exports.init = function (date) {
         currentDate = date;
-        Param = _config;
         exports.createTableView();
         $('#calendar-header').bind('selectstart', function (ev) {
             document.selection.clear();
@@ -174,12 +181,7 @@ define(function (require, exports, module) {
         $('#calendar-wrapper').html(table + calendarStr.join(''));
 
         exports.autoResetOffset();
-
-        if (Param !== undefined && Param.onSwitch) {
-            for (var _i = 0; _i < Param.onSwitch.length; _i++) {
-                Param.onSwitch[_i]();
-            }
-        }
+        require('show-log').init();
     };
 
     /*

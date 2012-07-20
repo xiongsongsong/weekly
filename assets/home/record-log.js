@@ -7,7 +7,8 @@
  */
 seajs.config({
     alias:{
-        'jquery':'/global/jquery.js'
+        'jquery':'/global/jquery.js',
+        'show-log':'/home/show-log.js'
     }
 });
 define(function (require, exports, module) {
@@ -17,9 +18,10 @@ define(function (require, exports, module) {
     var $formObj = $(document.forms['add-record-log']);
     var $loginFormObj = $(document.forms['login']);
     var left = -480;
+    var JRecordLog = $('.J-record-log');
 
-    exports.init = function (param) {
-        $('.J-record-log').live('click', function (ev) {
+    exports.init = function () {
+        JRecordLog.live('click', function (ev) {
             $addRecordLog.stop();
             $addRecordLog.animate({left:'0px'}, 500);
             $(ev.currentTarget).addClass('current');
@@ -29,7 +31,7 @@ define(function (require, exports, module) {
         $('input.hidden-form').live('click', function () {
             $addRecordLog.stop();
             $addRecordLog.animate({left:left + 'px'}, 500, function () {
-                $('.J-record-log').removeClass('current')
+                JRecordLog.removeClass('current')
             });
         });
 
@@ -44,11 +46,9 @@ define(function (require, exports, module) {
                     if (data.status) {
                         $formObj[0].reset();
                         $addRecordLog.animate({left:left + 'px'}, 500, function () {
-                            $('.J-record-log').removeClass('current')
+                            JRecordLog.removeClass('current')
                         });
-                        for (var _i = 0; _i < param.onUpdate.length; _i++) {
-                            param.onUpdate[_i]();
-                        }
+                        require('show-log').init();
                     } else {
                         alert('有错误！\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '    '));
                     }
@@ -70,6 +70,8 @@ define(function (require, exports, module) {
                         $formObj.show();
                         $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
                         $('#record-log').append('<span>（' + data.user + '）</span>')
+                        JRecordLog.after('<li class="separator"></li><li><a href="log-out">退出登陆</a></li>')
+
                     } else {
                         alert('啊哦，登陆遇到错误\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '    '))
                     }
