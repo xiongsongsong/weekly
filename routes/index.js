@@ -38,7 +38,6 @@ exports.getUser = function () {
 exports.getUser();
 
 exports.index = function (req, res) {
-    console.log(exports.isLogin(req))
     res.render('index', {
         title:'前端业务日志',
         isLogin:exports.isLogin(req),
