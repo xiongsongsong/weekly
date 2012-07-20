@@ -1,9 +1,8 @@
 /*
- *
  * 记录业务日志
- *
  * */
-var express = require('express')
+
+ var express = require('express')
     , routes = require('./routes');
 var app = module.exports = express.createServer();
 
