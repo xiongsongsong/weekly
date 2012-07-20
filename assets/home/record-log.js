@@ -41,12 +41,14 @@ define(function (require, exports, module) {
                 data:formData,
                 cache:false,
                 success:function (data) {
-                    if (data.status && param.onUpdate) {
-                        param.onUpdate();
+                    if (data.status) {
                         $formObj[0].reset();
                         $addRecordLog.animate({left:left + 'px'}, 500, function () {
                             $('.J-record-log').removeClass('current')
                         });
+                        for (var _i = 0; _i < param.onUpdate.length; _i++) {
+                            param.onUpdate[_i]();
+                        }
                     } else {
                         alert('有错误！\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '    '));
                     }

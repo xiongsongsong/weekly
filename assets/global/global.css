@@ -296,8 +296,8 @@ span.front13 {
 }
 
 body #sidebar-wrapper span.weak {
-    opacity: .5;
-    filter: alpha(opacity = 50);
+    opacity: .4;
+    filter: alpha(opacity = 40);
 }
 
 body #sidebar-wrapper span.highlight {

@@ -14,7 +14,7 @@ seajs.config({
 define(function (require, exports, module) {
     var $ = require('jquery');
 
-    exports.init = function () {
+    exports.init = function (funcArr) {
 
         $.ajax('/show_log/json', {
             type:'get',
@@ -30,9 +30,15 @@ define(function (require, exports, module) {
                     var id = '#date-' + item.year.toString() + item.month.toString() + item.date.toString();
                     var $content = $(id);
                     $content.find('.work-diary').append($('<span class="front front' + item.front + '" front="' + item.front + '">' + data.user['id_' + item.front] + '</span>'));
-                })
+                });
+                if (funcArr && funcArr.length > 0) exports.onSuccess(funcArr);
             }
         })
+    };
+    exports.onSuccess = function (funcArr) {
+        for (var _i = 0; _i < funcArr.length; _i++) {
+            funcArr[_i]();
+        }
     };
 });
 

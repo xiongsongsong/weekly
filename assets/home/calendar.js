@@ -176,7 +176,9 @@ define(function (require, exports, module) {
         exports.autoResetOffset();
 
         if (Param !== undefined && Param.onSwitch) {
-            Param.onSwitch();
+            for (var _i = 0; _i < Param.onSwitch.length; _i++) {
+                Param.onSwitch[_i]();
+            }
         }
     };
 
