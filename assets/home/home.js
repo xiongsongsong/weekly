@@ -10,12 +10,13 @@ seajs.config({
         'jquery':'/global/jquery.js',
         'calendar':'/home/calendar.js',
         'record-log':'/home/record-log.js',
-        'show-log':'/home/show-log.js'
+        'show-log':'/home/show-log.js',
+        'user-filter':'/home/user-filter'
     }
 });
 
 
-define(['jquery', 'calendar', 'record-log', 'show-log'], function (require) {
+define(['jquery', 'calendar', 'record-log', 'show-log','user-filter'], function (require) {
 
     var $ = require('jquery');
 
@@ -32,8 +33,10 @@ define(['jquery', 'calendar', 'record-log', 'show-log'], function (require) {
         onUpdate:showLog.init
     });
 
-    /*显示工作日志*/
+    require('user-filter');
 
+    /**/
+    require('user-filter');
     if (!typeof console) {
         window.console = {
             log:function (str) {

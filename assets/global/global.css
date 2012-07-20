@@ -291,11 +291,23 @@ span.front13 {
 
 #sidebar-wrapper span.front {
     margin: 2px;
+    padding: 3px 1px;
+    width: 45%;
+}
+
+body #sidebar-wrapper span.weak {
+    opacity: .5;
+    filter: alpha(opacity = 50);
+}
+
+body #sidebar-wrapper span.highlight {
+    box-shadow: 3px 3px 3px #444;
+    font-weight: bold;
 }
 
 body #sidebar-wrapper span.show-all {
     width: auto;
-    padding: 0 3px;
+    padding: 3px 7px;
 }
 
 #sidebar-wrapper {

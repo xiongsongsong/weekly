@@ -97,11 +97,11 @@ html
                             b#record-log 记录工作 >>
                                 if(isLogin)
                                     span （!{username}）
-                    //h2 过滤器
-                    //ul
+                    h2 过滤器
+                    ul.user-filter
                         li
                             each item in user.result
-                                span.front(class="front#{item.id}")=item.name
+                                span.front(class="front#{item.id}",front="#{item.id}")=item.name
                             span.front.show-all 显示全部
         script(src="/kissy-min.js")
-        script(src="/sea.js",data-main="/home/home.js")
+        script(src="/sea.js",data-main="/home/home.js?time=20120720")
