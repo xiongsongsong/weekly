@@ -16,19 +16,23 @@ seajs.config({
 
 define(function (require, exports, module) {
     var $ = require('jquery');
-    var currentDate;
-    var S = KISSY, DOM = S.DOM, Event = S.Event,
-        $yearNode = $('#year-trigger'),
-        $monthNode = $('#month-trigger'), Param;
+    var $yearNode = $('#year-trigger'),
+        $monthNode = $('#month-trigger');
+    var header = $('#header');
+    var year = parseInt($yearNode.html(), 10);
+    var month = parseInt($monthNode.html(), 10);
+    var currentDate = new Date();
+    currentDate.setDate(1);
+    currentDate.setFullYear(year);
+    currentDate.setMonth(month - 1);
+    var calendarWrapper = $('#calendar-wrapper');
 
     /*通过鼠标滚轮修改时间*/
     var cl;
-    Event.on([$yearNode[0], $monthNode[0]], "mousewheel", function (ev) {
+    KISSY.Event.on([$yearNode[0], $monthNode[0]], "mousewheel", function (ev) {
         if (cl !== undefined) {
             clearTimeout(cl);
         }
-        var year = parseInt($yearNode.html(), 10);
-        var month = parseInt($monthNode.html(), 10);
 
         switch (ev.currentTarget.id) {
             case  "year-trigger":
@@ -66,8 +70,7 @@ define(function (require, exports, module) {
     });
 
     /*初始化日历界面*/
-    exports.init = function (date) {
-        currentDate = date;
+    exports.init = function () {
         exports.createTableView();
         $('#calendar-header').bind('selectstart', function (ev) {
             document.selection.clear();
@@ -178,7 +181,7 @@ define(function (require, exports, module) {
 
         $yearNode.html(currentDate.getFullYear());
         $monthNode.html(currentDate.getMonth() + 1);
-        $('#calendar-wrapper').html(table + calendarStr.join(''));
+        calendarWrapper.html(table + calendarStr.join(''));
 
         exports.autoResetOffset();
         require('show-log').init();
@@ -222,23 +225,24 @@ define(function (require, exports, module) {
     /*调优日历界面*/
     exports.autoResetOffset = function () {
         var tdObj = $('#calendar-container td');
-        var trObj = $('#calendar-container tr');
+        var trObj = $('#calendar-container tr')
+        var calendarContainer = $('#calendar-container');
+        var calendarHeader = $('#calendar-header');
+        var sidebarObj = $('#sidebar-wrapper');
+        var mainWrapper = $('#main-wrapper');
         if (tdObj.size() > 0) {
-            var sidebarObj = $('#sidebar-wrapper');
-            var mainWrapper = $('#main-wrapper');
-
-            $([sidebarObj, mainWrapper]).height(document.body.offsetHeight - $('#header').height() + 'px');
+            $([sidebarObj, mainWrapper]).height(document.body.offsetHeight - header.height() + 'px');
             mainWrapper.width(document.body.offsetWidth - sidebarObj[0].offsetWidth + 'px');
 
-            var calendarWrapperHeight = mainWrapper[0].offsetHeight - $('#calendar-header').height();
+            var calendarWrapperHeight = mainWrapper[0].offsetHeight - calendarHeader.height();
             var calendarWrapperWidth = mainWrapper[0].offsetWidth;
             $('#calendar-wrapper').height(calendarWrapperHeight + 'px');
 
-            $('#calendar-container').height(calendarWrapperHeight - 24 + 'px');
-            $('#calendar-container').width(calendarWrapperWidth - 24 + 'px');
+            calendarContainer.height(calendarWrapperHeight - 24 + 'px');
+            calendarContainer.width(calendarWrapperWidth - 24 + 'px');
 
 
-            var calendarContainerHeight = document.body.offsetHeight - $('#header').height() - $('#calendar-header').height() - 60 - 28;
+            var calendarContainerHeight = document.body.offsetHeight - header.height() - calendarHeader.height() - 60 - 28;
             trObj.each(function (index, item) {
                 if (index > 0) {
                     $(item).find('div.wrapper').height(parseInt(calendarContainerHeight / (trObj.size() - 1), 10) + 'px');

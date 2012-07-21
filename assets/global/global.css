@@ -128,12 +128,13 @@ body {
     left: -480px;
     top: 0;
     z-index: 2;
-    background: #f5f0f5;
     padding: 12px;
     border: solid 1px #aaa;
     border-top: none;
-    box-shadow: 12px 12px 12px #aaa;
+    box-shadow: 5px 1px 30px #aaa;
     filter: progid:DXImageTransform.Microsoft.Shadow(Strength = 10, Direction = 145, color = #aaaaaa);
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0.11, rgb(219, 219, 219)), color-stop(0.21, rgb(217, 217, 217)), color-stop(0.99, rgb(255, 255, 255)));
+    background: -moz-linear-gradient(center bottom, rgb(219, 219, 219) 11%, rgb(217, 217, 217) 21%, rgb(255, 255, 255) 99%);
 }
 
 #add-record-log th,
@@ -222,7 +223,7 @@ body {
 span.front {
     background: #500;
     font-size: 12px;
-    font-family: "宋体", simhei, sans-serif;
+    font-family: simsun, simhei, sans-serif;
     white-space: nowrap;
     display: inline-block;
     width: 40px;

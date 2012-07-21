@@ -14,8 +14,8 @@ seajs.config({
 
 define([ 'calendar', 'record-log'], function (require) {
 
-    /*TODO：使用本地时间是否合理*/
-    require('calendar').init(new Date());
+    /*构造日历界面*/
+    require('calendar').init();
 
     /*写工作日志 */
     require('record-log').init();

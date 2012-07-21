@@ -12,9 +12,9 @@ html
         #main-wrapper
             #calendar-header
                 h2#date
-                    b#year-trigger(title="用鼠标滚轮设定 年份",data-type="year")
+                    b#year-trigger(title="用鼠标滚轮设定 年份",data-type="year") !{date.getFullYear()}
                     | -
-                    b#month-trigger(title="用鼠标滚轮设定 月份",data-type="month")
+                    b#month-trigger(title="用鼠标滚轮设定 月份",data-type="month") !{date.getMonth()+1}
             #calendar-wrapper
             #add-record-log
                 if(!isLogin)
