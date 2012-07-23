@@ -18,7 +18,7 @@ body {
     left: 0;
     top: 0;
     width: 100%;
-    z-index: 3;
+    z-index: 6;
 }
 
 #header h1 {
@@ -48,14 +48,17 @@ body {
 #calendar-header {
     height: 76px;
     background: #eee;
+    position: relative;
+    z-index: 3;
 }
 
 #calendar-header h2 {
     padding: 6px 0 0 .2em;
-    font-size: 38px;
     font-weight: normal;
     font-family: verdana, sans-serif;
     white-space: nowrap;
+    float: left;
+    font-size: 38px;
 }
 
 #calendar-header h2 b {
@@ -69,6 +72,23 @@ body {
 #calendar-header h2 b:hover,
 #calendar-header h2 b.hover {
     background: #ccc;
+}
+
+#log-list-control span {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 28px;
+    margin: 14px 0 0 12px;
+}
+
+#log-list-control b.close {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 34px;
+    background: #fff;
+    padding: 5px 2em;
+    cursor: pointer;
 }
 
 /*日历容器*/
@@ -122,19 +142,50 @@ body {
     color: #ddd;
 }
 
+/*显示详情*/
+#more-detail-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    overflow: auto;
+    z-index: 2;
+}
+
+#more-detail {
+    margin: 0 1em 0 0;
+    font-family: verdana, sans-serif;
+}
+
+#more-detail h2 {
+    padding: 1em 0 0 1em;
+    font-size: 16px;
+    margin: 0
+}
+
+#more-detail h2 {
+}
+
+#more-detail ul {
+    line-height: 180%;
+    margin: 1em 0 2em 2em;
+    font-size: 14px;
+}
+
 /*record-log*/
 #add-record-log {
     position: absolute;
     left: -480px;
     top: 0;
-    z-index: 2;
     padding: 12px;
     border: solid 1px #aaa;
     border-top: none;
     box-shadow: 5px 1px 30px #aaa;
-    filter: progid:DXImageTransform.Microsoft.Shadow(Strength = 10, Direction = 145, color = #aaaaaa);
+    z-index: 4;
+    background: #EEE;
     background: -webkit-gradient(linear, left bottom, left top, color-stop(0.11, rgb(219, 219, 219)), color-stop(0.21, rgb(217, 217, 217)), color-stop(0.99, rgb(255, 255, 255)));
     background: -moz-linear-gradient(center bottom, rgb(219, 219, 219) 11%, rgb(217, 217, 217) 21%, rgb(255, 255, 255) 99%);
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength = 10, Direction = 145, color = #CCCCCC);
 }
 
 #add-record-log th,
@@ -231,8 +282,7 @@ span.front {
     vertical-align: top;
     overflow: hidden;
     color: #fff;
-    box-shadow: 1px 1px 0 #888;
-    margin: 1px;
+    margin: 1px 2px 1px 0;
     text-align: center;
     line-height: 20px;
 }
@@ -292,22 +342,19 @@ span.front13 {
 #sidebar-wrapper span.front {
     margin: 2px;
     padding: 3px 1px;
-    width: 45%;
+    width: 60px;
+    cursor: default;
 }
 
 body #sidebar-wrapper span.weak {
-    opacity: .4;
-    filter: alpha(opacity = 40);
+    opacity: .7;
+    filter: alpha(opacity = 70);
 }
 
 body #sidebar-wrapper span.highlight {
     box-shadow: 3px 3px 3px #444;
     font-weight: bold;
-}
-
-body #sidebar-wrapper span.show-all {
-    width: auto;
-    padding: 3px 7px;
+    color: #fff;
 }
 
 #sidebar-wrapper {
@@ -317,7 +364,7 @@ body #sidebar-wrapper span.show-all {
     top: 98px;
     bottom: 0;
     width: 180px;
-    z-index: 3;
+    z-index: 5;
 }
 
 #record-log span {
@@ -339,7 +386,6 @@ body #sidebar-wrapper span.show-all {
 
 #sidebar-group ul li {
     padding-left: 1.5em;
-    cursor: pointer;
 }
 
 #sidebar-group ul li.separator {
@@ -356,6 +402,7 @@ body #sidebar-wrapper span.show-all {
 #sidebar-group ul li a,
 #sidebar-group ul li #record-log {
     color: blue;
+    cursor: pointer;
 }
 
 #sidebar-group ul li #record-log {

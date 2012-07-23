@@ -48,7 +48,7 @@ define(function (require, exports, module) {
                         $addRecordLog.animate({left:left + 'px'}, 500, function () {
                             JRecordLog.removeClass('current')
                         });
-                        require('show-log').init();
+                        require('show-log').getData();
                     } else {
                         alert('有错误！\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '    '));
                     }

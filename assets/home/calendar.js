@@ -25,7 +25,7 @@ define(function (require, exports, module) {
     currentDate.setDate(1);
     currentDate.setFullYear(year);
     currentDate.setMonth(month - 1);
-    var calendarWrapper = $('#calendar-wrapper');
+    var calendarPanel = $('#calendar-panel');
 
     /*通过鼠标滚轮修改时间*/
     var cl;
@@ -181,10 +181,8 @@ define(function (require, exports, module) {
 
         $yearNode.html(currentDate.getFullYear());
         $monthNode.html(currentDate.getMonth() + 1);
-        calendarWrapper.html(table + calendarStr.join(''));
-
-        exports.autoResetOffset();
-        require('show-log').init();
+        calendarPanel.html(table + calendarStr.join('') + '</table>');
+        require('show-log').getData();
     };
 
     /*
@@ -224,14 +222,15 @@ define(function (require, exports, module) {
 
     /*调优日历界面*/
     exports.autoResetOffset = function () {
+        var header = $('#header');
         var tdObj = $('#calendar-container td');
-        var trObj = $('#calendar-container tr')
+        var trObj = $('#calendar-container tr');
         var calendarContainer = $('#calendar-container');
         var calendarHeader = $('#calendar-header');
         var sidebarObj = $('#sidebar-wrapper');
         var mainWrapper = $('#main-wrapper');
         if (tdObj.size() > 0) {
-            $([sidebarObj, mainWrapper]).height(document.body.offsetHeight - header.height() + 'px');
+            $([sidebarObj, mainWrapper]).height($(window).height() - header.height() + 'px');
             mainWrapper.width(document.body.offsetWidth - sidebarObj[0].offsetWidth + 'px');
 
             var calendarWrapperHeight = mainWrapper[0].offsetHeight - calendarHeader.height();
@@ -242,7 +241,7 @@ define(function (require, exports, module) {
             calendarContainer.width(calendarWrapperWidth - 24 + 'px');
 
 
-            var calendarContainerHeight = document.body.offsetHeight - header.height() - calendarHeader.height() - 60 - 28;
+            var calendarContainerHeight = $(window).height() - header.height() - calendarHeader.height() - 60 - 28;
             trObj.each(function (index, item) {
                 if (index > 0) {
                     $(item).find('div.wrapper').height(parseInt(calendarContainerHeight / (trObj.size() - 1), 10) + 'px');
@@ -251,7 +250,13 @@ define(function (require, exports, module) {
         }
     };
 
+    var cl;
     $(window).on('resize', function () {
+        if (cl !== undefined) {
+            window.clearTimeout(cl);
+        } else {
+
+        }
         exports.autoResetOffset();
     });
 });

@@ -176,6 +176,7 @@ exports.login = function (req, res) {
 
 exports.log_out = function (req, res) {
     res.clearCookie('remember');
+    req.session.destroy();
     res.redirect('/');
 };
 

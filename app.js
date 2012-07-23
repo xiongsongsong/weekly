@@ -43,6 +43,6 @@ app.post(/login(\/)?.*/, routes.login);
 //登出
 app.get('/log-out', routes.log_out);
 
-app.listen(3000, function () {
+app.listen(80, function () {
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });

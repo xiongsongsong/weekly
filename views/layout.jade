@@ -15,7 +15,13 @@ html
                     b#year-trigger(title="用鼠标滚轮设定 年份",data-type="year") !{date.getFullYear()}
                     | -
                     b#month-trigger(title="用鼠标滚轮设定 月份",data-type="month") !{date.getMonth()+1}
+                #log-list-control(style="display:none;")
+                    span.J-username=username
+                    b.close.J-close &times;
             #calendar-wrapper
+                #calendar-panel
+                #more-detail-wrapper(style="display:none;")
+                    #more-detail
             #add-record-log
                 if(!isLogin)
                     form.login(name="login",action="/login",method="post")
@@ -107,6 +113,7 @@ html
                             each item in user.result
                                 span.front(class="front#{item.id}",front="#{item.id}")=item.name
                             span.front.show-all 显示全部
+                    #statistics
                     h2 一起改进
                     ul
                         li
