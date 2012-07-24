@@ -17,6 +17,7 @@ define(function (require, exports, module) {
 
     /*初始化并显示数据*/
     var jsonData;
+    var moreDetailWrapper = $('#more-detail-wrapper');
     exports.getData = function () {
         $.ajax('/show_log/json', {
             type:'get',
@@ -55,7 +56,8 @@ define(function (require, exports, module) {
         });
         $('#statistics a.J-show-more').live('click', function () {
             exports.filterLogList();
-            $('#more-detail-wrapper').show();
+            moreDetailWrapper.show();
+            moreDetailWrapper.scrollTop(0);
             $('#log-list-control').show();
         });
 
@@ -153,6 +155,7 @@ define(function (require, exports, module) {
             '<li>复杂：' + count.level4 + '</li>' +
             '<li><a class="J-show-more show-more">显示详情 &gt;&gt;</a></li>' +
             '</ul>');
+        moreDetailWrapper.scrollTop(0);
     };
 
     exports.filterEvent();
