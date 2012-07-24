@@ -7,7 +7,7 @@
  */
 seajs.config({
     alias:{
-        'jquery':'/global/jquery.js'
+        'jquery':'/global/jquery'
     }
 });
 

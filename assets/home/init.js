@@ -7,8 +7,8 @@
  */
 seajs.config({
     alias:{
-        'calendar':'/home/calendar.js',
-        'record-log':'/home/record-log.js'
+        'calendar':'/home/calendar',
+        'record-log':'/home/record-log'
     }
 });
 
