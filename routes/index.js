@@ -129,7 +129,7 @@ exports.show_log = function (req, res) {
     if (isNaN(month)) {
         month = new Date().getMonth() + 1;
     }
-    $("fed.log").find({year:year, month:month}, function (result) {
+    $("fed.log").find(300, {year:year, month:month}, function (result) {
         result.user = user;
         res.end(JSON.stringify(result, undefined, '\t'));
     });
