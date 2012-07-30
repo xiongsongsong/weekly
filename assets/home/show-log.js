@@ -115,13 +115,13 @@ define(function (require, exports, module) {
         if (html.length > 1) {
             KISSY.each(html, function (item, index) {
                 count['level' + item.level]++;
-                var str = '<h2>' + item['page-name'] + '</h2>' +
+                var str = '<h2><a href="' + $.trim(item['online-url']) + '" target="_blank">' + item['page-name'] + '</a></h2>' +
                     '<ul>' +
                     (function () {
-                        return $.trim(item['online-url']).length > 1 ? '<li>线上地址：' + item['online-url'] + '</li>' : '';
+                        return $.trim(item['online-url']).length > 1 ? '<li>线上地址：' + item['online-url'] + '</a></li>' : '';
                     })() +
                     (function () {
-                        return $.trim(item['tms-url']).length > 1 ? '<li>TMS地址：' + item['tms-url'] + '</li>' : '';
+                        return $.trim(item['tms-url']).length > 1 ? '<li>TMS地址：<a href="' + $.trim(item['tms-url']) + '" target="_blank">' + item['tms-url'] + '</a></li>' : '';
                     })() +
                     (function () {
                         return isNaN(front) ? '<li>前端：' + jsonData.user['id_' + item['front']] + '</li>' : '';
@@ -131,6 +131,9 @@ define(function (require, exports, module) {
                     })() +
                     (function () {
                         return $.trim(item['customer']).length > 1 ? '<li>需求方：' + item['customer'] + '</li>' : '';
+                    })() +
+                    (function () {
+                        return $.trim(item['customer']).length > 1 ? '<li>页面等级：' + ['简单', '一般', '常规', '复杂'][item.level-1] + '</li>' : '';
                     })() +
                     '<li>完成日期：' + item['year'] + '-' + item['month'] + '-' + item['date'] + '</li>' +
                     (function () {
