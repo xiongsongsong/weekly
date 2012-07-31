@@ -25,7 +25,9 @@ define(function (require, exports, module) {
             $addRecordLog.stop();
             $addRecordLog.animate({left:'0px'}, 500);
             $(ev.currentTarget).addClass('current');
-            $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
+            if ($formObj.size() > 1) {
+                $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
+            }
         });
 
         $('input.hidden-form').live('click', function () {

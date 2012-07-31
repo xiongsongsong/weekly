@@ -188,6 +188,11 @@ body {
     filter: progid:DXImageTransform.Microsoft.Shadow(Strength = 10, Direction = 145, color = #CCCCCC);
 }
 
+#add-record-log p {
+    margin: 1em;
+    line-height: 23px;
+}
+
 #add-record-log th,
 #add-record-log td {
     padding: .5em 1em;
