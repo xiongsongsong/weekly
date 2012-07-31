@@ -19,14 +19,30 @@ exports.isLogin = function (req) {
     }
 };
 
-/*将用户列表缓存起来*/
+exports.getMaxDays = function (date, month) {
+    if (month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11) {
+        return 31;
+    } else {
+        return month == 1 ? date.getFullYear() % 4 == 0 ? 29 : 28 : 30;
+    }
+};
 
+exports.isDisabledRecord = function () {
+    var date = new Date();
+    var maxDate = exports.getMaxDays(date, date.getMonth());
+    return date.getDate() === maxDate && date.getHours() >= 16;
+};
+
+/*将用户列表缓存起来*/
 var user = Object.create(null);
 exports.getUser = function () {
     user.result = [];
     $("fed.user").find({}, function (result) {
         result.documents.forEach(function (item, index) {
-            user['id_' + item._id] = item.name;
+            user['id_' + item._id] = {
+                name:item.name,
+                "real-name":item['real-name']
+            };
             user.result.push({
                 id:item._id,
                 name:item.name
@@ -43,11 +59,19 @@ exports.index = function (req, res) {
         isLogin:exports.isLogin(req),
         date:new Date(),
         username:req.session.username,
-        user:user
+        user:user,
+        isDisabledRecord:exports.isDisabledRecord()
     });
 };
 
 exports.save_log = function (req, res) {
+    var errorMSG = Object.create(null);
+    errorMSG.errorList = [];
+    if (exports.isDisabledRecord()) {
+        errorMSG.errorList.push({msg:'当前处于日志统计时段（每月最后一天16点后）\r\n系统暂时屏蔽此功能，请明天再来添加。'});
+        res.end(JSON.stringify(errorMSG), undefined, '\t');
+        return;
+    }
     var data = Object.create(null), body = req.body;
     data['page-name'] = body['page-name'];
     data['level'] = parseInt(body['level'], 10);
@@ -61,8 +85,6 @@ exports.save_log = function (req, res) {
     data['date'] = parseInt(body['date'], 10);
     data['front'] = req.session.userid;
 
-    var errorMSG = Object.create(null);
-    errorMSG.errorList = [];
 
     if (!exports.isLogin(req)) {
         errorMSG.errorList.push({name:'login', msg:'登陆过期，请刷新页面重新登陆'});

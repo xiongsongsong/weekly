@@ -277,14 +277,13 @@ span.front {
     font-family: simsun, simhei, sans-serif;
     white-space: nowrap;
     display: inline-block;
-    width: 40px;
-    height: 20px;
+    padding: 0 2px;
     vertical-align: top;
     overflow: hidden;
     color: #fff;
-    margin: 1px 2px 1px 0;
+    margin: 1px 1px 0 0;
     text-align: center;
-    line-height: 20px;
+    line-height: 150%;
 }
 
 span.front1 {
@@ -372,9 +371,14 @@ body #sidebar-wrapper span.highlight {
 }
 
 #sidebar-group h2 {
-    margin: 1em;
+    margin: .8em 0 .5em 1em;
     color: #333;
     font-size: 14px;
+}
+
+#sidebar-group h2 span {
+    font-size: 12px;
+    font-weight: normal;
 }
 
 #sidebar-group ul {
@@ -386,6 +390,30 @@ body #sidebar-wrapper span.highlight {
 
 #sidebar-group ul li {
     padding-left: 1.5em;
+}
+
+#statistics ul li {
+    margin: .3em 0;
+    padding-left: .8em;
+}
+
+#statistics ul li span {
+    display: inline-block;
+    width: 48%;
+}
+
+#statistics ul li span.amortization {
+    display: none;
+}
+
+body.show-amortization #statistics ul li span.amortization {
+    display: inline-block;
+    color: #fff;
+    font-weight: bold;
+    background: red;
+    width: auto;
+    margin-right: 5px;
+    padding: 0 5px;
 }
 
 #sidebar-group ul li.separator {

@@ -8,8 +8,8 @@
 
 seajs.config({
     alias:{
-        'jquery':'/global/jquery.js',
-        'show-log':'/home/show-log.js'
+        'jquery':'/global/jquery',
+        'show-log':'/home/show-log'
     }
 });
 

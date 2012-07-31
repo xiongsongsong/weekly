@@ -34,7 +34,7 @@ define(function (require, exports, module) {
                 $(data.documents).each(function (index, item) {
                     var id = '#date-' + item.year.toString() + item.month.toString() + item.date.toString();
                     var $content = $(id);
-                    $content.find('.work-diary').append($('<span class="front front' + item.front + '" front="' + item.front + '">' + data.user['id_' + item.front] + '</span>'));
+                    $content.find('.work-diary').append($('<span class="front front' + item.front + '" front="' + item.front + '">' + data.user['id_' + item.front].name + '</span>'));
                 });
                 exports.filterData();
                 require('home/calendar.js').autoResetOffset();
@@ -66,6 +66,11 @@ define(function (require, exports, module) {
             $('#more-detail-wrapper').hide();
             $('#log-list-control').hide();
         });
+        $(document).bind('keydown', function (ev) {
+            if (ev.keyCode === 113) {
+                $(document.body).toggleClass('show-amortization');
+            }
+        })
     };
 
     exports.getCurrentFilterOfFront = function () {
@@ -112,8 +117,8 @@ define(function (require, exports, module) {
             level3:0,
             level4:0
         };
-        if (html.length > 1) {
-            KISSY.each(html, function (item, index) {
+        if (html.length > 0) {
+            KISSY.each(html, function (item) {
                 count['level' + item.level]++;
                 var str = '<h2><a href="' + $.trim(item['online-url']) + '" target="_blank">' + item['page-name'] + '</a></h2>' +
                     '<ul>' +
@@ -124,7 +129,7 @@ define(function (require, exports, module) {
                         return $.trim(item['tms-url']).length > 1 ? '<li>TMS地址：<a href="' + $.trim(item['tms-url']) + '" target="_blank">' + item['tms-url'] + '</a></li>' : '';
                     })() +
                     (function () {
-                        return isNaN(front) ? '<li>前端：' + jsonData.user['id_' + item['front']] + '</li>' : '';
+                        return isNaN(front) ? '<li>前端：' + jsonData.user['id_' + item['front']]['name'] + '</li>' : '';
                     })() +
                     (function () {
                         return $.trim(item['design']).length > 1 ? '<li>设计师：' + item['design'] + '</li>' : '';
@@ -133,7 +138,7 @@ define(function (require, exports, module) {
                         return $.trim(item['customer']).length > 1 ? '<li>需求方：' + item['customer'] + '</li>' : '';
                     })() +
                     (function () {
-                        return $.trim(item['customer']).length > 1 ? '<li>页面等级：' + ['简单', '一般', '常规', '复杂'][item.level-1] + '</li>' : '';
+                        return $.trim(item['customer']).length > 1 ? '<li>页面等级：' + ['简单', '一般', '常规', '复杂'][item.level - 1] + '</li>' : '';
                     })() +
                     '<li>完成日期：' + item['year'] + '-' + item['month'] + '-' + item['date'] + '</li>' +
                     (function () {
@@ -146,18 +151,24 @@ define(function (require, exports, module) {
             htmlStr.push('<h2>没有该月的记录</h2>')
         }
         moreDetail.html(htmlStr.join(''));
+        var currentUser = jsonData.user['id_' + front];
+        var amortization = count.level1 * 20 + count.level2 * 30 + count.level3 * 50 + count.level4 * 100;
         if (isNaN(front)) {
             $('#log-list-control .J-username').html('全部页面');
         } else {
-            $('#log-list-control .J-username').html(jsonData.user['id_' + front]);
+            $('#log-list-control .J-username').html(currentUser.name + '（' + currentUser['real-name'] + '）');
         }
-        $('#statistics').html('<h2>统计 （' + html.length + '）</h2>' +
+        $('#statistics').html('<h2>' + (function () {
+            if (!isNaN(front)) {
+                return '' + currentUser['name'] + ' - <span>' + currentUser['real-name'] + '</span>';
+            } else {
+                return '统计 ';
+            }
+        })() + '<span>（' + html.length + '）</span></h2>' +
             '<ul>' +
-            '<li>简单：' + count.level1 + '</li>' +
-            '<li>一般：' + count.level2 + '</li>' +
-            '<li>常规：' + count.level3 + '</li>' +
-            '<li>复杂：' + count.level4 + '</li>' +
-            '<li><a class="J-show-more show-more">显示详情 &gt;&gt;</a></li>' +
+            '<li><span>简单：' + count.level1 + '</span><span>一般：' + count.level2 + '</span></li>' +
+            '<li><span>常规：' + count.level3 + '</span><span>复杂：' + count.level4 + '</span></li>' +
+            '<li><span class="amortization">￥' + amortization + '</span><span><a class="J-show-more show-more">查看详情 &gt;&gt;</a></span></li>' +
             '</ul>');
         moreDetailWrapper.scrollTop(0);
     };
