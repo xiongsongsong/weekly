@@ -182,6 +182,7 @@ define(function (require, exports, module) {
         $yearNode.html(currentDate.getFullYear());
         $monthNode.html(currentDate.getMonth() + 1);
         calendarPanel.html(table + calendarStr.join('') + '</table>');
+        exports.autoResetOffset();
         require('show-log').getData();
     };
 
