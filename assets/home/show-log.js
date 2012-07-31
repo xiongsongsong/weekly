@@ -69,6 +69,7 @@ define(function (require, exports, module) {
         $(document).bind('keydown', function (ev) {
             if (ev.keyCode === 113) {
                 $(document.body).toggleClass('show-amortization');
+
             }
         })
     };

@@ -19,17 +19,9 @@ exports.isLogin = function (req) {
     }
 };
 
-exports.getMaxDays = function (date, month) {
-    if (month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11) {
-        return 31;
-    } else {
-        return month == 1 ? date.getFullYear() % 4 == 0 ? 29 : 28 : 30;
-    }
-};
-
 exports.isDisabledRecord = function () {
     var date = new Date();
-    var maxDate = exports.getMaxDays(date, date.getMonth());
+    var maxDate = require('./date').getMaxDays(date, date.getMonth());
     return date.getDate() === maxDate && date.getHours() >= 16;
 };
 
@@ -216,3 +208,4 @@ exports.helperAddUser = function () {
     });
 
 };
+
