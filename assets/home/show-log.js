@@ -169,7 +169,23 @@ define(function (require, exports, module) {
             '<ul>' +
             '<li><span>简单：' + count.level1 + '</span><span>一般：' + count.level2 + '</span></li>' +
             '<li><span>常规：' + count.level3 + '</span><span>复杂：' + count.level4 + '</span></li>' +
-            '<li><span class="amortization">￥' + amortization + '</span><span><a class="J-show-more show-more">查看详情 &gt;&gt;</a></span></li>' +
+            '<li>' +
+            '<span class="amortization">￥' + amortization + '</span>' +
+
+            '<span><a class="J-show-more show-more">查看详情 &gt;&gt;</a></span></li>' +
+            '<li>' +
+            '<span style="width:100%;" class="download-csv">' + (function () {
+            var date = new Date();
+            date.setTime(jsonData.serverDate);
+            var year = parseInt($('#year-trigger').text(), 10);
+            var month = parseInt($('#month-trigger').text(), 10);
+            if (year <= date.getFullYear() && month <= date.getMonth() + 1) {
+                return '<a href="/csv/' + year + '/' + month + '">下载' + year + '年' + month + '月报表</a>'
+            } else {
+                return '';
+            }
+        })() + '</span>' +
+            '</li>' +
             '</ul>');
         moreDetailWrapper.scrollTop(0);
     };

@@ -13,18 +13,16 @@ exports.download = function (req, res) {
     var year = parseInt(req.params.year, 10),
         month = parseInt(req.params.month, 10);
     res.header('Content-Type', 'text/csv;charset=utf-8');
-    var filename = '本部前端' + year + '年' + month + '月页面提成统计表';
-    var date = new Date();
-    var isFull = true;
-    if (year >= date.getFullYear() && month >= date.getMonth() + 1) {
-        isFull = false;
-        filename += '注意：您统计的是当前月，数据可能不完整';
+    var filename = '本部前端' + year + '年' + month + '业务统计报表';
+    //IE中文件名要encodeURL，下载时方能正确显示文件名
+    if (/(msie)/gi.test(req.headers['user-agent'])) {
+        filename = encodeURIComponent(filename);
     }
-
-    res.header('Content-Disposition', 'attachment; filename=' + encodeURIComponent(filename) + '.csv');
+    var date = new Date();
+    res.header('Content-Disposition', 'attachment; filename=' + filename + '.csv');
 
     $("fed.user").find(function (result) {
-        result.documents.forEach(function (item, index) {
+        result.documents.forEach(function (item) {
             r['id_' + item._id] = {
                 name:item.name,
                 "real-name":item['real-name'],
@@ -44,14 +42,20 @@ exports.download = function (req, res) {
             });
             var list = {};
             list.arr = [];
-            list.arr.push('姓名,花名,简单,一般,常规,复杂,页面合计,提成合计');
+            list.arr.push('姓名,花名,简单,一般,常规,复杂,页面合计,提成');
             Object.keys(r).forEach(function (k) {
                 var o = r[k];
                 list.arr.push([o['real-name'], o.name, o.level1, o.level2, o.level3, o.level4, o.levelCount, o.oh].join(','));
             });
-            if (isFull === false) {
-                list.arr.push('您下载该表的时间为' + date.getFullYear() + '年' +
-                    (date.getMonth() + 1) + '月' + date.getDate() + '日，意味着当前月还未结束，故数据可能不完整。提示：下载上一月的数据是安全的。')
+            if (year === date.getFullYear() && month === date.getMonth() + 1) {
+                list.arr.push('此表统计的是截止' + date.getFullYear() + '年' +
+                    (date.getMonth() + 1) + '月' + date.getDate() + '日' + date.getHours() + '时' +
+                    date.getMinutes() + '分' + date.getSeconds() + '秒' +
+                    '的数据，您下载此表时，当月还未结束，故数据可能不完整');
+                list.arr.push('提示：下载上一月的数据是安全的。')
+            }
+            if (year >= date.getFullYear() && month > date.getMonth() + 1) {
+                list.arr.push('错误，您要求下载' + year + '年' + month + '月份的统计数据，但该月份还未到来。')
             }
             res.end(list.arr.join('\r\n'));
         });

@@ -147,6 +147,7 @@ exports.show_log = function (req, res) {
     var $ = require("mongous").Mongous;
     $("fed.log").find(300, {year:year, month:month}, function (result) {
         result.user = user;
+        result.serverDate = Date.now();
         res.end(JSON.stringify(result, undefined, '\t'));
     });
 };
@@ -199,9 +200,9 @@ exports.log_out = function (req, res) {
 /* 辅助函数，用来初始化用户Collection */
 exports.helperAddUser = function () {
     /*var userList = [ 'user_a' ];
-    var user = [];
-    var md5 = require('md5');
-    var $ = require("mongous").Mongous;
+     var user = [];
+     var md5 = require('md5');
+     var $ = require("mongous").Mongous;
      userList.forEach(function (item, index) {
      $("fed.user").save({
      _id:index + 1,

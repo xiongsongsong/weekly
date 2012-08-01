@@ -16,7 +16,7 @@ html
                     | -
                     b#month-trigger(data-type="month") !{date.getMonth()+1}
                     span.tips 用鼠标滚轮设定年月
-                        s
+
                 #log-list-control(style="display:none;")
                     span.J-username=username
                     b.close.J-close &times;
@@ -24,7 +24,6 @@ html
                 #calendar-panel
                 #more-detail-wrapper(style="display:none;")
                     #more-detail
-                #amortization-detail
             #add-record-log
                 if(!isLogin && !isDisabledRecord)
                     form.login(name="login",action="/login",method="post")
