@@ -11,6 +11,7 @@ seajs.config({
         'show-log':'/home/show-log'
     }
 });
+
 define(function (require, exports, module) {
 
     var $ = require('jquery');
@@ -73,7 +74,6 @@ define(function (require, exports, module) {
                         $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
                         $('#record-log').append('<span>（' + data.user + '）</span>')
                         JRecordLog.after('<li class="separator"></li><li><a href="log-out">退出登陆</a></li>')
-
                     } else {
                         alert('啊哦，登陆遇到错误\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '    '))
                     }

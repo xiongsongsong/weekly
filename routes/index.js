@@ -29,6 +29,7 @@ exports.isDisabledRecord = function () {
 var user = Object.create(null);
 exports.getUser = function () {
     user.result = [];
+    var $ = require("mongous").Mongous;
     $("fed.user").find({}, function (result) {
         result.documents.forEach(function (item, index) {
             user['id_' + item._id] = {
@@ -124,7 +125,7 @@ exports.save_log = function (req, res) {
             }
         }
     }
-
+    var $ = require("mongous").Mongous;
     if (errorMSG.errorList.length > 0) {
         res.end(JSON.stringify(errorMSG), undefined, '\t');
     } else {
@@ -143,6 +144,7 @@ exports.show_log = function (req, res) {
     if (isNaN(month)) {
         month = new Date().getMonth() + 1;
     }
+    var $ = require("mongous").Mongous;
     $("fed.log").find(300, {year:year, month:month}, function (result) {
         result.user = user;
         res.end(JSON.stringify(result, undefined, '\t'));
@@ -171,7 +173,7 @@ exports.login = function (req, res) {
         return;
     }
     pwd = pwd.trim();
-
+    var $ = require("mongous").Mongous;
     $("fed.user").find({name:user}, 1, function (result) {
         if (result.documents.length === 0) {
             msg.list.push('无法找到该用户');
@@ -199,13 +201,13 @@ exports.helperAddUser = function () {
     var userList = [ 'user_a' ];
     var user = [];
     var md5 = require('md5');
-    userList.forEach(function (item, index) {
-        $("fed.user").save({
-            _id:index + 1,
-            name:item,
-            pwd:md5.digest_s(item)
-        });
-    });
-
+    /*var $ = require("mongous").Mongous;
+     userList.forEach(function (item, index) {
+     $("fed.user").save({
+     _id:index + 1,
+     name:item,
+     pwd:md5.digest_s(item)
+     });
+     });*/
 };
 
