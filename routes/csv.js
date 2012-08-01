@@ -6,7 +6,6 @@
  * To change this template use File | Settings | File Templates.
  */
 
-
 exports.download = function (req, res) {
     res.charset = 'utf-8';
     var $ = require("mongous").Mongous;
@@ -46,11 +45,9 @@ exports.download = function (req, res) {
             var list = {};
             list.arr = [];
             list.arr.push('姓名,花名,简单,一般,常规,复杂,页面合计,提成合计');
-            Object.keys(r).forEach(function (key) {
-                var o = r[key];
-                var _tempArr = [];
-                _tempArr.push(o['real-name'], o.name, o.level1, o.level2, o.level3, o.level4, o.levelCount, o.oh);
-                list.arr.push(_tempArr.join(','));
+            Object.keys(r).forEach(function (k) {
+                var o = r[k];
+                list.arr.push([o['real-name'], o.name, o.level1, o.level2, o.level3, o.level4, o.levelCount, o.oh].join(','));
             });
             if (isFull === false) {
                 list.arr.push('您下载该表的时间为' + date.getFullYear() + '年' +

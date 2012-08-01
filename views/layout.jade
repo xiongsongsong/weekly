@@ -85,6 +85,10 @@ html
                                 th 备注
                                 td
                                     textarea(name="note")
+                            -if(date.getDate()>=1 && date.getDate()<=7)
+                                tr.tips
+                                    th 提示：
+                                    td 因已过上月统计期，<br>故如有忘记添加的日志，请记录在本月。<br>
                             tr
                                 th 页面完成时间
                                     b *
@@ -124,4 +128,4 @@ html
                         li
                             a(href="https://github.com/xiongsongsong/weekly") Weekly on Github
         script(src="/kissy-min.js")
-        script(src="/sea.js",data-main="/home/init.js?time=20120731.js")
+        script(src="/sea.js",data-main="/home/init.js?time=20120801.js")
