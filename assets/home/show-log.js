@@ -139,7 +139,7 @@ define(function (require, exports, module) {
                         return $.trim(item['customer']).length > 1 ? '<li>需求方：' + item['customer'] + '</li>' : '';
                     })() +
                     (function () {
-                        return $.trim(item['customer']).length > 1 ? '<li>页面等级：' + ['简单', '一般', '常规', '复杂'][item.level - 1] + '</li>' : '';
+                        return '<li>页面等级：' + ['简单', '一般', '常规', '复杂'][item.level - 1] + '</li>';
                     })() +
                     '<li>完成日期：' + item['year'] + '-' + item['month'] + '-' + item['date'] + '</li>' +
                     (function () {

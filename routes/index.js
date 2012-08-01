@@ -198,10 +198,10 @@ exports.log_out = function (req, res) {
 
 /* 辅助函数，用来初始化用户Collection */
 exports.helperAddUser = function () {
-    var userList = [ 'user_a' ];
+    /*var userList = [ 'user_a' ];
     var user = [];
     var md5 = require('md5');
-    /*var $ = require("mongous").Mongous;
+    var $ = require("mongous").Mongous;
      userList.forEach(function (item, index) {
      $("fed.user").save({
      _id:index + 1,

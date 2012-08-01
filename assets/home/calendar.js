@@ -69,6 +69,19 @@ define(function (require, exports, module) {
 
     });
 
+    var tipsCl;
+    $('#date').click(function () {
+        if (tipsCl !== undefined) {
+            clearTimeout(tipsCl);
+        }
+        var spanTips = $(this).find('span.tips');
+        spanTips.stop();
+        spanTips.fadeIn(100);
+        tipsCl = setTimeout(function () {
+            spanTips.fadeOut(150);
+        }, 5000);
+    });
+
     /*初始化日历界面*/
     exports.init = function () {
         exports.createTableView();
@@ -251,13 +264,7 @@ define(function (require, exports, module) {
         }
     };
 
-    var cl;
     $(window).on('resize', function () {
-        if (cl !== undefined) {
-            window.clearTimeout(cl);
-        } else {
-
-        }
         exports.autoResetOffset();
     });
 });

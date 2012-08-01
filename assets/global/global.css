@@ -61,17 +61,43 @@ body {
     font-size: 38px;
 }
 
+#calendar-header h2 span.tips {
+    position: absolute;
+    top: 80px;
+    left: 6em;
+    padding: .5em 1em;
+    font-size: 12px;
+    background: #16A765;
+    color: #fff;
+    letter-spacing: 2px;
+    display: none;
+}
+
+#calendar-header h2 span.tips s {
+    position: absolute;
+    width: 28px;
+    height: 24px;
+    left: 50%;
+    top: -16px;
+    background: url(/images/cire.png);
+    margin-left: -14px;
+}
+
 #calendar-header h2 b {
     color: #444;
     display: inline-block;
-    padding: 0 .2em;
+    padding: 0 1em 0 .2em;
     font-weight: normal;
     cursor: pointer;
+    background: #eee url(/images/sprites.png) 88% 16px no-repeat;
+    border-bottom: solid 1px #eee;
 }
 
 #calendar-header h2 b:hover,
 #calendar-header h2 b.hover {
-    background: #ccc;
+    background-color: #ddd;
+    background-position: 88% -41px;
+    border-bottom: solid 1px #bbb;
 }
 
 #log-list-control span {
@@ -161,9 +187,6 @@ body {
     padding: 1em 0 0 1em;
     font-size: 16px;
     margin: 0
-}
-
-#more-detail h2 {
 }
 
 #more-detail ul {

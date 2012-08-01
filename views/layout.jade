@@ -12,9 +12,11 @@ html
         #main-wrapper
             #calendar-header
                 h2#date
-                    b#year-trigger(title="用鼠标滚轮设定 年份",data-type="year") !{date.getFullYear()}
+                    b#year-trigger(data-type="year") !{date.getFullYear()}
                     | -
-                    b#month-trigger(title="用鼠标滚轮设定 月份",data-type="month") !{date.getMonth()+1}
+                    b#month-trigger(data-type="month") !{date.getMonth()+1}
+                    span.tips 用鼠标滚轮设定年月
+                        s
                 #log-list-control(style="display:none;")
                     span.J-username=username
                     b.close.J-close &times;

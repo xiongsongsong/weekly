@@ -5,6 +5,7 @@
  * Time: 下午2:27
  * To change this template use File | Settings | File Templates.
  */
+
 seajs.config({
     alias:{
         'jquery':'/global/jquery',
