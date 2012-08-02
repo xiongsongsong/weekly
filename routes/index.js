@@ -151,7 +151,12 @@ exports.show_log = function (req, res) {
         res.end(JSON.stringify(result, undefined, '\t'));
     });
 };
-
+var cl = 0;
+setInterval(function () {
+    $("fed.log").find(1,{year:2012, month:7}, function (result) {
+        console.log(result.documents.length, result.documents[0]['page-name'], cl++)
+    });
+}, 5000);
 exports.login = function (req, res) {
 
     var md5 = require('md5');
