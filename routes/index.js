@@ -1,13 +1,9 @@
 /*
- * GET home page.
+ * 主要的业务逻辑
  */
 
-var $ = require("mongous").Mongous;
+var mongodb = require('mongodb');
 
-
-/*$("database.collection").find({},function(r){
- console.log(r);
- });*/
 
 exports.isLogin = function (req) {
     var remember;
@@ -29,18 +25,25 @@ exports.isDisabledRecord = function () {
 var user = Object.create(null);
 exports.getUser = function () {
     user.result = [];
-    $("fed.user").find({}, function (result) {
-        result.documents.forEach(function (item, index) {
-            user['id_' + item._id] = {
-                name:item.name,
-                "real-name":item['real-name']
-            };
-            user.result.push({
-                id:item._id,
-                name:item.name
-            })
+
+    var server = new mongodb.Server("127.0.0.1", 27017, {});
+    new mongodb.Db('fed', server, {}).open(function (error, client) {
+        if (error) throw error;
+        var collection = new mongodb.Collection(client, 'user');
+        collection.find({}, {}).toArray(function (err, docs) {
+            docs.forEach(function (item) {
+                user['id_' + item._id] = {
+                    name:item.name,
+                    "real-name":item['real-name']
+                };
+                user.result.push({
+                    id:item._id,
+                    name:item.name
+                })
+            });
         });
     });
+
 };
 
 exports.getUser();
@@ -125,11 +128,25 @@ exports.save_log = function (req, res) {
         }
     }
 
+
     if (errorMSG.errorList.length > 0) {
         res.end(JSON.stringify(errorMSG), undefined, '\t');
     } else {
-        $("fed.log").save(data);
-        res.end(JSON.stringify({'status':true}, undefined, '\t'));
+        var server = new mongodb.Server("127.0.0.1", 27017, {});
+        new mongodb.Db('fed', server, {}).open(function (error, client) {
+            var collection = new mongodb.Collection(client, 'log');
+            collection.insert(data, {safe:true},
+                function (err, objects) {
+                    //console.log(objects);
+                    if (err) {
+                        console.warn(err.message);
+                        errorMSG.errorList.push({name:'system', msg:'系统错误'});
+                        res.end(JSON.stringify(errorMSG), undefined, '\t');
+                    } else {
+                        res.end(JSON.stringify({'status':true}, undefined, '\t'));
+                    }
+                });
+        });
     }
 };
 
@@ -143,10 +160,17 @@ exports.show_log = function (req, res) {
     if (isNaN(month)) {
         month = new Date().getMonth() + 1;
     }
-    $("fed.log").find({year:year, month:month}, function (result) {
-        result.user = user;
-        result.serverDate = Date.now();
-        res.end(JSON.stringify(result, undefined, '\t'));
+    var server = new mongodb.Server("127.0.0.1", 27017, {});
+    new mongodb.Db('fed', server, {}).open(function (error, client) {
+        if (error) throw error;
+        var result = Object.create(null);
+        var collection = new mongodb.Collection(client, 'log');
+        collection.find({year:year, month:month}, {}).toArray(function (err, docs) {
+            result.documents = docs;
+            result.user = user;
+            result.serverDate = Date.now();
+            res.end(JSON.stringify(result, undefined, '\t'));
+        });
     });
 };
 
@@ -172,19 +196,24 @@ exports.login = function (req, res) {
         return;
     }
     pwd = pwd.trim();
-    $("fed.user").find({name:user}, 1, function (result) {
-        if (result.documents.length === 0) {
-            msg.list.push('无法找到该用户');
-        } else {
-            msg.status = md5.digest_s(pwd) === result.documents[0].pwd;
-            if (msg.status) {
-                res.cookie('remember', 'yes', { httpOnly:true});
-                req.session.username = user;
-                req.session.userid = result.documents[0]._id;
+    var server = new mongodb.Server("127.0.0.1", 27017, {});
+    new mongodb.Db('fed', server, {}).open(function (error, client) {
+        if (error) throw error;
+        var collection = new mongodb.Collection(client, 'user');
+        collection.find({name:user}, {}).toArray(function (err, docs) {
+            if (docs.length < 1) {
+                msg.list.push('无法找到该用户');
+            } else {
+                msg.status = md5.digest_s(pwd) === docs[0].pwd;
+                if (msg.status) {
+                    res.cookie('remember', 'yes', { httpOnly:true});
+                    req.session.username = user;
+                    req.session.userid = docs[0]._id;
+                }
             }
-        }
-        msg.user = user;
-        res.end(JSON.stringify(msg, undefined, '\t'));
+            msg.user = user;
+            res.end(JSON.stringify(msg, undefined, '\t'));
+        });
     });
 };
 
@@ -200,7 +229,7 @@ exports.helperAddUser = function () {
      var user = [];
      var md5 = require('md5');
      userList.forEach(function (item, index) {
-     $("fed.user").save({
+     save({
      _id:index + 1,
      name:item,
      pwd:md5.digest_s(item)

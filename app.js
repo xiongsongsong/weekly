@@ -47,7 +47,7 @@ app.get('/log-out', routes.log_out);
 app.get('/csv/:year/:month', require('./routes/csv').download);
 
 //备份数据库到Ubuntu One文件夹
-app.get('/mongodump',require('./helper/dump').dump);
+app.get('/mongodump', require('./helper/dump').dump);
 
 app.listen(80, function () {
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

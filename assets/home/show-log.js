@@ -124,26 +124,26 @@ define(function (require, exports, module) {
                 var str = '<h2><a href="' + $.trim(item['online-url']) + '" target="_blank">' + item['page-name'] + '</a></h2>' +
                     '<ul>' +
                     (function () {
-                        return $.trim(item['online-url']).length > 1 ? '<li>线上地址：' + item['online-url'] + '</a></li>' : '';
+                        return $.trim(item['online-url']).length > 0 ? '<li>线上地址：' + item['online-url'] + '</a></li>' : '';
                     })() +
                     (function () {
-                        return $.trim(item['tms-url']).length > 1 ? '<li>TMS地址：<a href="' + $.trim(item['tms-url']) + '" target="_blank">' + item['tms-url'] + '</a></li>' : '';
+                        return $.trim(item['tms-url']).length > 0 ? '<li>TMS地址：<a href="' + $.trim(item['tms-url']) + '" target="_blank">' + item['tms-url'] + '</a></li>' : '';
                     })() +
                     (function () {
                         return isNaN(front) ? '<li>前端：' + jsonData.user['id_' + item['front']]['name'] + '</li>' : '';
                     })() +
                     (function () {
-                        return $.trim(item['design']).length > 1 ? '<li>设计师：' + item['design'] + '</li>' : '';
+                        return $.trim(item['design']).length > 0 ? '<li>设计师：' + item['design'] + '</li>' : '';
                     })() +
                     (function () {
-                        return $.trim(item['customer']).length > 1 ? '<li>需求方：' + item['customer'] + '</li>' : '';
+                        return $.trim(item['customer']).length > 0 ? '<li>需求方：' + item['customer'] + '</li>' : '';
                     })() +
                     (function () {
                         return '<li>页面等级：' + ['简单', '一般', '常规', '复杂'][item.level - 1] + '</li>';
                     })() +
                     '<li>完成日期：' + item['year'] + '-' + item['month'] + '-' + item['date'] + '</li>' +
                     (function () {
-                        return $.trim(item['note']).length > 1 ? '<li>备注：' + item['note'] + '</li>' : '';
+                        return $.trim(item['note']).length > 0 ? '<li>备注：' + item['note'] + '</li>' : '';
                     })() +
                     '</ul>';
                 htmlStr.push(str);

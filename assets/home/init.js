@@ -5,6 +5,7 @@
  * Time: 下午1:38
  * To change this template use File | Settings | File Templates.
  */
+
 seajs.config({
     alias:{
         'calendar':'/home/calendar',
@@ -14,7 +15,7 @@ seajs.config({
 
 seajs.config({
         map:[
-            [/(.*\.(css|js))(?:.*)$/i, "$1?201208011155.$2"]
+            [/(.*\.(css|js))(?:.*)$/i, "$1?20120803.$2"]
         ]
     }
 );
@@ -22,7 +23,7 @@ seajs.config({
 define([ 'calendar', 'record-log'], function (require) {
 
     if (KISSY.UA.ie && KISSY.UA.ie === 6) {
-        alert('哎呀！\r\n\r\n您使用的浏览器非常老旧，\r\n\r\n本页面可能会运行不正常，祝你好运！\r\n' +
+        alert('哎呀，\r\n\r\n您使用的浏览器非常老旧，\r\n\r\n本页面可能会运行不正常，祝你好运！\r\n' +
             '\r\n如果页面错误，请按F5刷新。')
     }
 
