@@ -3,7 +3,27 @@
  */
 
 var mongodb = require('mongodb');
+var server = new mongodb.Server("127.0.0.1", 27017, {});
+var fed = new mongodb.Db('fed', server, {});
 
+var Client;
+exports.dbClient = function (func) {
+    if (Client !== undefined) {
+        console.log('Database connection is alive\t' + new Date().toLocaleTimeString());
+        func();
+    } else {
+        fed.open(function (error, client) {
+            console.log('The database is open!\t' + new Date().toLocaleTimeString());
+            Client = client;
+            func();
+        });
+    }
+};
+
+fed.on('close', function () {
+    console.log('Database connection is disconnected!\t' + new Date().toLocaleTimeString());
+    Client = undefined;
+});
 
 exports.isLogin = function (req) {
     var remember;
@@ -15,6 +35,7 @@ exports.isLogin = function (req) {
     }
 };
 
+/*每个月最后一天，下午16点后，属于统计时段，将无法增添新日志记录*/
 exports.isDisabledRecord = function () {
     var date = new Date();
     var maxDate = require('./date').getMaxDays(date, date.getMonth());
@@ -25,11 +46,8 @@ exports.isDisabledRecord = function () {
 var user = Object.create(null);
 exports.getUser = function () {
     user.result = [];
-
-    var server = new mongodb.Server("127.0.0.1", 27017, {});
-    new mongodb.Db('fed', server, {}).open(function (error, client) {
-        if (error) throw error;
-        var collection = new mongodb.Collection(client, 'user');
+    exports.dbClient(function () {
+        var collection = new mongodb.Collection(Client, 'user');
         collection.find({}, {}).toArray(function (err, docs) {
             docs.forEach(function (item) {
                 user['id_' + item._id] = {
@@ -43,7 +61,6 @@ exports.getUser = function () {
             });
         });
     });
-
 };
 
 exports.getUser();
@@ -82,7 +99,7 @@ exports.save_log = function (req, res) {
 
 
     if (!exports.isLogin(req)) {
-        errorMSG.errorList.push({name:'login', msg:'登陆过期，请刷新页面重新登陆'});
+        errorMSG.errorList.push({msg:'登陆过期，请刷新页面重新登陆'});
     }
 
     if (data['page-name'] == undefined || data['page-name'].length < 1) {
@@ -94,10 +111,11 @@ exports.save_log = function (req, res) {
     }
 
     if (isNaN(data['year']) || isNaN(data['month']) || isNaN(data['date'])) {
-        errorMSG.errorList.push({name:'year', msg:'完成时间无效'});
+        isNaN(data['year']) ? errorMSG.errorList.push({name:'year', msg:'年份填写错误'}) : undefined;
+        isNaN(data['month']) ? errorMSG.errorList.push({name:'month', msg:'月份填写错误'}) : undefined;
+        isNaN(data['date']) ? errorMSG.errorList.push({name:'date', msg:'日期填写错误'}) : undefined;
     } else {
-
-        if (data['year'] < 2000 || data['year'] > 2100) {
+        if (data['year'] < 1949 || data['year'] > 2100) {
             errorMSG.errorList.push({name:'year', msg:'年份越界'});
         }
 
@@ -132,15 +150,14 @@ exports.save_log = function (req, res) {
     if (errorMSG.errorList.length > 0) {
         res.end(JSON.stringify(errorMSG), undefined, '\t');
     } else {
-        var server = new mongodb.Server("127.0.0.1", 27017, {});
-        new mongodb.Db('fed', server, {}).open(function (error, client) {
-            var collection = new mongodb.Collection(client, 'log');
+        exports.dbClient(function () {
+            var collection = new mongodb.Collection(Client, 'log');
             collection.insert(data, {safe:true},
-                function (err, objects) {
+                function (err/*,objects*/) {
                     //console.log(objects);
                     if (err) {
                         console.warn(err.message);
-                        errorMSG.errorList.push({name:'system', msg:'系统错误'});
+                        errorMSG.errorList.push({msg:'系统错误'});
                         res.end(JSON.stringify(errorMSG), undefined, '\t');
                     } else {
                         res.end(JSON.stringify({'status':true}, undefined, '\t'));
@@ -160,11 +177,9 @@ exports.show_log = function (req, res) {
     if (isNaN(month)) {
         month = new Date().getMonth() + 1;
     }
-    var server = new mongodb.Server("127.0.0.1", 27017, {});
-    new mongodb.Db('fed', server, {}).open(function (error, client) {
-        if (error) throw error;
+    exports.dbClient(function () {
         var result = Object.create(null);
-        var collection = new mongodb.Collection(client, 'log');
+        var collection = new mongodb.Collection(Client, 'log');
         collection.find({year:year, month:month}, {}).toArray(function (err, docs) {
             result.documents = docs;
             result.user = user;
@@ -196,10 +211,8 @@ exports.login = function (req, res) {
         return;
     }
     pwd = pwd.trim();
-    var server = new mongodb.Server("127.0.0.1", 27017, {});
-    new mongodb.Db('fed', server, {}).open(function (error, client) {
-        if (error) throw error;
-        var collection = new mongodb.Collection(client, 'user');
+    exports.dbClient(function () {
+        var collection = new mongodb.Collection(Client, 'user');
         collection.find({name:user}, {}).toArray(function (err, docs) {
             if (docs.length < 1) {
                 msg.list.push('无法找到该用户');

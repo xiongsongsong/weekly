@@ -28,12 +28,7 @@ define(function (require, exports, module) {
     var calendarPanel = $('#calendar-panel');
 
     /*通过鼠标滚轮修改时间*/
-    var cl;
     KISSY.Event.on([$yearNode[0], $monthNode[0]], "mousewheel", function (ev) {
-        if (cl !== undefined) {
-            clearTimeout(cl);
-        }
-
         switch (ev.currentTarget.id) {
             case  "year-trigger":
                 year = ev.deltaY > 0 ? year + 1 : year - 1;
@@ -64,9 +59,7 @@ define(function (require, exports, module) {
         _tempDate.setMonth(month - 1);
         currentDate = _tempDate;
         ev.preventDefault();
-
-        cl = setTimeout(exports.createTableView, 320);
-
+        exports.createTableView();
     });
 
     var tipsCl;
@@ -76,19 +69,15 @@ define(function (require, exports, module) {
         }
         var spanTips = $(this).find('span.tips');
         spanTips.stop();
-        spanTips.fadeIn(100);
+        spanTips.fadeIn(120);
         tipsCl = setTimeout(function () {
             spanTips.fadeOut(150);
-        }, 5000);
+        }, 3000);
     });
 
     /*初始化日历界面*/
     exports.init = function () {
         exports.createTableView();
-        $('#calendar-header').bind('selectstart', function (ev) {
-            document.selection.clear();
-            ev.preventDefault();
-        });
 
         $('.J-scroll-date').click(function (ev) {
             ev.preventDefault();

@@ -89,7 +89,7 @@ body {
     padding: 0 1em 0 .2em;
     font-weight: normal;
     cursor: pointer;
-    background: #eee url(/images/sprites.png) 88% 15px no-repeat;
+    background: #eee url(/images/sprites.png) 88% 16px no-repeat;
     border-bottom: solid 1px #eee;
 
 }
@@ -97,7 +97,7 @@ body {
 #calendar-header h2 b:hover,
 #calendar-header h2 b.hover {
     background-color: #ddd;
-    background-position: 88% -42px;
+    background-position: 88% -41px;
     border-bottom: solid 1px #bbb;
 }
 

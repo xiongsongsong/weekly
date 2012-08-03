@@ -27,7 +27,7 @@ define(function (require, exports, module) {
             $addRecordLog.stop();
             $addRecordLog.animate({left:'0px'}, 500);
             $(ev.currentTarget).addClass('current');
-            if ($formObj.size() > 1) {
+            if ($formObj.size() > 0) {
                 $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
             }
         });
@@ -54,7 +54,14 @@ define(function (require, exports, module) {
                         });
                         require('show-log').getData();
                     } else {
-                        alert('有错误！\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '    '));
+                        alert('有错误！\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '   '));
+                        for (var i = 0; i < data.errorList.length; i++) {
+                            var obj = $formObj[0].elements[data.errorList[i].name];
+                            if (obj) {
+                                obj.focus();
+                                break;
+                            }
+                        }
                     }
                 }
             });
