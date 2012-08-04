@@ -101,21 +101,7 @@ define(function (require, exports, module) {
 
             var htmlArr = [
                 '<li>' + obj['page-name'] + (function () {
-                    switch (obj['level']) {
-                        case 1:
-                            return '【简单】';
-                            break;
-                        case 2:
-                            return  '【一般】';
-                            break;
-                        case 3:
-                            return  '【常规】';
-                            break;
-                        case 4:
-                            return  '【复杂】';
-                            break;
-
-                    }
+                    return ['【简单】', '【一般】', '【常规】', '【复杂】'][obj['level'] - 1];
                 })() + '</li>',
                 (function () {
                     var str = '';
