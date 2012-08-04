@@ -240,11 +240,9 @@ define(function (require, exports, module) {
             var calendarWrapperWidth = mainWrapper[0].offsetWidth;
             $('#calendar-wrapper').height(calendarWrapperHeight + 'px');
 
-            calendarContainer.height(calendarWrapperHeight - 24 + 'px');
             calendarContainer.width(calendarWrapperWidth - 24 + 'px');
 
-
-            var calendarContainerHeight = $(window).height() - header.height() - calendarHeader.height() - 60 - 28;
+            var calendarContainerHeight = $(window).height() - header.height() - calendarHeader.height() - trObj.eq(0).height() - 24 - (trObj.size() - 1);
             trObj.each(function (index, item) {
                 if (index > 0) {
                     $(item).find('div.wrapper').height(parseInt(calendarContainerHeight / (trObj.size() - 1), 10) + 'px');

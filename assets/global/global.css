@@ -49,6 +49,10 @@ body {
     top: 76px;
 }
 
+#calendar-panel {
+    height: 100%;
+}
+
 #calendar-header {
     height: 76px;
     background: #eee;
@@ -157,6 +161,11 @@ body {
 
 #calendar-container td div.wrapper {
     position: relative;
+    height: 100%;
+}
+
+#calendar-container td div.wrapper:hover {
+    box-shadow: inset 0 0 8px #888;
 }
 
 #calendar-container td div.wrapper b.day {
