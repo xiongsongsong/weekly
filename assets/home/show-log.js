@@ -107,7 +107,7 @@ define(function (require, exports, module) {
                     var str = '';
                     obj['design'].length >= 1 ? str += '设计:' + obj['design'] : '';
                     obj['design'].length >= 1 ? str += '需求:' + obj['customer'] : '';
-                    return '<li>' + str + '</li>';
+                    return str.length > 1 ? '<li>' + str + '</li>' : '';
                 })(),
                 (function () {
                     var str = '';
