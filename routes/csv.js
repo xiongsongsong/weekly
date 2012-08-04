@@ -11,7 +11,8 @@ exports.download = function (req, res) {
     var r = {};
     var year = parseInt(req.params.year, 10),
         month = parseInt(req.params.month, 10);
-    res.header('Content-Type', 'text/csv;charset=utf-8');
+    res.charset = 'utf-8';
+    res.header('Content-Type', 'object/stream;charset=utf-8');
     var filename = '本部前端' + year + '年' + month + '业务统计报表';
     //IE中文件名要encodeURL，下载时方能正确显示文件名
     if (/(msie)/gi.test(req.headers['user-agent'])) {
@@ -64,7 +65,8 @@ exports.download = function (req, res) {
                 if (year >= date.getFullYear() && month > date.getMonth() + 1) {
                     list.arr.push('错误，您要求下载' + year + '年' + month + '月份的统计数据，但该月份还未到来。')
                 }
-                res.end(list.arr.join('\r\n'));
+                var buffer = new Buffer(list.arr.join('\r\n'),'utf8');
+                res.end(buffer);
             });
         });
     });
