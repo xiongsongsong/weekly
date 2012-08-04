@@ -100,14 +100,14 @@ define(function (require, exports, module) {
             tempContainer.className += ' work-describe';
 
             var htmlArr = [
-                '<li>' + obj['page-name'] + (function () {
+                '<li title="' + obj['page-name'] + '">' + obj['page-name'] + (function () {
                     return ['【简单】', '【一般】', '【常规】', '【复杂】'][obj['level'] - 1];
                 })() + '</li>',
                 (function () {
                     var str = '';
                     obj['design'].length >= 1 ? str += '设计:' + obj['design'] : '';
                     obj['design'].length >= 1 ? str += '需求:' + obj['customer'] : '';
-                    return str.length > 1 ? '<li>' + str + '</li>' : '';
+                    return str.length > 1 ? '<li title="' + str + '">' + str + '</li>' : '';
                 })(),
                 (function () {
                     var str = '';

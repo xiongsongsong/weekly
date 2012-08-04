@@ -335,6 +335,8 @@ body {
 
 #calendar-container div.work-describe ul li {
     width: 100%;
+    text-indent: 1em;
+    padding-top: .5em;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
