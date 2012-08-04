@@ -59,6 +59,7 @@ define(function (require, exports, module) {
             exports.filterLogList();
             moreDetailWrapper.show();
             moreDetailWrapper.scrollTop(0);
+            moreDetailWrapper.height($('#calendar-wrapper').height());
             $('#log-list-control').show();
         });
 

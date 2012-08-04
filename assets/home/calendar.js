@@ -173,11 +173,9 @@ define(function (require, exports, module) {
             if (j == 0 || (j + 1) % 7 == 1) {
                 calendarStr.push('<tr>')
             }
-            if ((j + 1) % 7 == 0 && j > 0) {
-                calendarStr.push('<td' + _current + '><div class="wrapper"><div class="work-diary"></div><b class="day">' + dateArr[j].date + '</b></div></td></tr>')
-            } else {
-                calendarStr.push('<td' + _current + '><div class="wrapper"><div class="work-diary"></div><b class="day">' + dateArr[j].date + '</b></div></td>');
-            }
+            calendarStr.push('<td' + _current + '><div class="wrapper"><div class="container"><div class="work-diary"></div><b class="day">' + dateArr[j].date + '</b></div></div></td>');
+
+            if ((j + 1) % 7 == 0 && j > 0) calendarStr.push('</tr>');
             _current = '';
         }
 
@@ -239,7 +237,7 @@ define(function (require, exports, module) {
             var calendarWrapperHeight = mainWrapper[0].offsetHeight - calendarHeader.height();
             var calendarWrapperWidth = mainWrapper[0].offsetWidth;
             $('#calendar-wrapper').height(calendarWrapperHeight + 'px');
-
+            $('#more-detail-wrapper').height(calendarWrapperHeight + 'px');
             calendarContainer.width(calendarWrapperWidth - 24 + 'px');
 
             var calendarContainerHeight = $(window).height() - header.height() - calendarHeader.height() - trObj.eq(0).height() - 24 - (trObj.size() - 1);
@@ -249,6 +247,7 @@ define(function (require, exports, module) {
                 }
             });
         }
+
     };
 
     $(window).on('resize', function () {
