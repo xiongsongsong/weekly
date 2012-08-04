@@ -30,11 +30,11 @@ define(function (require, exports, module) {
             success:function (data) {
                 jsonData = KISSY.JSON.parse(data);
                 data = jsonData;
-                $('#calendar-container').find('.work-diary').html('');
+                $('#calendar-container').find('.work-diary-list').html('');
                 $(data.documents).each(function (index, item) {
                     var id = '#date-' + item.year.toString() + item.month.toString() + item.date.toString();
                     var $content = $(id);
-                    $content.find('.work-diary').append($('<span class="front front' + item.front + '" front="' + item.front + '">' + data.user['id_' + item.front].name + '</span>'));
+                    $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="' + item.front + '" data-id="' + item._id + '">' + data.user['id_' + item.front].name + '</span>'));
                 });
                 exports.filterData();
                 require('home/calendar.js').autoResetOffset();
@@ -42,18 +42,22 @@ define(function (require, exports, module) {
         })
     };
 
+    var $frontObj = $('ul.user-filter span.front');
+    exports.checkedFront = function (target) {
+        var $target = $(target);
+        if ($target.hasClass('show-all')) {
+            $frontObj.removeClass('weak highlight', 1);
+        } else {
+            $('ul.user-filter span.front').removeClass('highlight').addClass('weak');
+            $target.removeClass('weak').addClass('highlight');
+        }
+        exports.filterData();
+    };
+
     /*添加事件，让用户可点击*/
     exports.filterEvent = function () {
-        var $frontObj = $('ul.user-filter span.front');
         $frontObj.live('click', function (ev) {
-            var $target = $(ev.currentTarget);
-            if ($target.hasClass('show-all')) {
-                $frontObj.removeClass('weak highlight', 1);
-            } else {
-                $('ul.user-filter span.front').removeClass('highlight').addClass('weak');
-                $target.removeClass('weak').addClass('highlight');
-            }
-            exports.filterData();
+            exports.checkedFront(ev.target);
         });
         $('#statistics a.J-show-more').live('click', function () {
             exports.filterLogList();
@@ -72,7 +76,69 @@ define(function (require, exports, module) {
                 $(document.body).toggleClass('show-amortization');
 
             }
-        })
+        });
+
+        $frontObj.live('click', function () {
+            $('#calendar-panel div.work-diary-list').not().animate({top:0}, 300);
+            $('#calendar-panel div.work-describe').remove();
+        });
+
+        $('#calendar-panel span.front').live('click', function (ev) {
+            var target = $(ev.target);
+            var parentsNode = target.parents('div.work-diary');
+            $('#calendar-panel div.work-describe').remove();
+            $('#calendar-panel div.work-diary-list').not(parentsNode.find('div.work-diary-list')).animate({top:0}, 100);
+            var _id = target.attr('data-id');
+            var obj;
+            for (var i = 0; i < jsonData.documents.length; i++) {
+                if (jsonData.documents[i]._id === _id) obj = jsonData.documents[i];
+            }
+            var id = 'tempNode' + new Date().getTime() + '' + parseInt(Math.random() * 1000000, 10);
+
+            var tempContainer = parentsNode[0].cloneNode(false);
+            tempContainer.id = id;
+            tempContainer.className += ' work-describe';
+
+            var htmlArr = [
+                '<li>' + obj['page-name'] + (function () {
+                    switch (obj['level']) {
+                        case 1:
+                            return '【简单】';
+                            break;
+                        case 2:
+                            return  '【一般】';
+                            break;
+                        case 3:
+                            return  '【常规】';
+                            break;
+                        case 4:
+                            return  '【复杂】';
+                            break;
+
+                    }
+                })() + '</li>',
+                (function () {
+                    var str = '';
+                    obj['design'].length >= 1 ? str += '设计:' + obj['design'] : '';
+                    obj['design'].length >= 1 ? str += '需求:' + obj['customer'] : '';
+                    return '<li>' + str + '</li>';
+                })(),
+                (function () {
+                    var str = '';
+                    obj['online-url'].length >= 1 ? str += '<a href="' + obj['online-url'] + '" target="_blank">线上地址</a> ' : '';
+                    obj['tms-url'].length >= 1 ? str += '<a href="' + obj['tms-url'] + '" target="_blank">TMS地址</a>' : '';
+                    return str.length > 1 ? '<li>' + str + '</li>' : '';
+                })()
+            ];
+            tempContainer.innerHTML = '<ul>' + htmlArr.join('') + '</ul>';
+            parentsNode.append(tempContainer);
+            tempContainer = $('#' + id);
+            var workDiaryList = parentsNode.find('div.work-diary-list');
+            exports.checkedFront($frontObj.filter('span.front' + target.attr('front')));
+            $(workDiaryList).animate({top:-workDiaryList.height() + 'px'}, 300);
+            tempContainer.css({'border':'solid 1px ' + target.css('background-color')});
+        });
+
     };
 
     exports.getCurrentFilterOfFront = function () {
@@ -103,7 +169,7 @@ define(function (require, exports, module) {
         var moreDetail = $('#more-detail');
         var front = exports.getCurrentFilterOfFront();
         var html = [];
-        KISSY.each(jsonData.documents, function (item, index) {
+        KISSY.each(jsonData.documents, function (item) {
             if (isNaN(front)) {
                 html.push(item)
             } else {
