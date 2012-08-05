@@ -1,4 +1,5 @@
 .idea/
+.DS_Store
 test*.html
 storage/
 index.html

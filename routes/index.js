@@ -120,7 +120,7 @@ exports.save_log = function (req, res) {
         }
 
         if (data['month'] < 1 || data['month'] > 12) {
-            errorMSG.errorList.push({name:'date', msg:'月份越界'});
+            errorMSG.errorList.push({name:'month', msg:'月份越界'});
         }
 
         if (data['month'] == 2) {

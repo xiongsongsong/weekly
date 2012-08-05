@@ -87,7 +87,7 @@ define(function (require, exports, module) {
             var target = $(ev.target);
             var parentsNode = target.parents('div.work-diary');
             $('#calendar-panel div.work-describe').remove();
-            $('#calendar-panel div.work-diary-list').not(parentsNode.find('div.work-diary-list')).animate({top:0}, 100);
+            $('#calendar-panel div.work-diary-list').not(parentsNode.find('div.work-diary-list')).animate({top:0}, 300);
             var _id = target.attr('data-id');
             var obj;
             for (var i = 0; i < jsonData.documents.length; i++) {
@@ -100,13 +100,14 @@ define(function (require, exports, module) {
             tempContainer.className += ' work-describe';
 
             var htmlArr = [
-                '<li title="' + obj['page-name'] + '">' + obj['page-name'] + (function () {
-                    return ['【简单】', '【一般】', '【常规】', '【复杂】'][obj['level'] - 1];
-                })() + '</li>',
+                (function () {
+                    var level = ['简单】', '【一般】', '【常规】', '【复杂】'][obj['level'] - 1];
+                    return '<li title="' + level + obj['page-name'] + '">' + obj['page-name'] + '</li>';
+                })(),
                 (function () {
                     var str = '';
-                    obj['design'].length >= 1 ? str += '设计:' + obj['design'] : '';
-                    obj['design'].length >= 1 ? str += '需求:' + obj['customer'] : '';
+                    obj['design'].length >= 1 ? str += '设计:' + obj['design'] + ' ' : '';
+                    obj['customer'].length >= 1 ? str += '需求:' + obj['customer'] : '';
                     return str.length > 1 ? '<li title="' + str + '">' + str + '</li>' : '';
                 })(),
                 (function () {

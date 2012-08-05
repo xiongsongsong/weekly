@@ -12,7 +12,7 @@ exports.download = function (req, res) {
     var year = parseInt(req.params.year, 10),
         month = parseInt(req.params.month, 10);
     res.charset = 'utf-8';
-    res.header('Content-Type', 'object/stream;charset=utf-8');
+    res.header('Content-Type', 'text/csv;charset=utf-8');
     var filename = '本部前端' + year + '年' + month + '业务统计报表';
     //IE中文件名要encodeURL，下载时方能正确显示文件名
     if (/(msie)/gi.test(req.headers['user-agent'])) {
@@ -50,10 +50,10 @@ exports.download = function (req, res) {
                 });
                 var list = {};
                 list.arr = [];
-                list.arr.push('姓名,花名,简单,一般,常规,复杂,页面合计,提成');
+                list.arr.push(['姓名', '花名', '简单', '一般', '常规', '复杂', '页面合计', '提成'].join(';'));
                 Object.keys(r).forEach(function (k) {
                     var o = r[k];
-                    list.arr.push([o['real-name'], o.name, o.level1, o.level2, o.level3, o.level4, o.levelCount, o.oh].join(','));
+                    list.arr.push([o['real-name'], o.name, o.level1, o.level2, o.level3, o.level4, o.levelCount, o.oh].join(';'));
                 });
                 if (year === date.getFullYear() && month === date.getMonth() + 1) {
                     list.arr.push('此表统计的是截止' + date.getFullYear() + '年' +
@@ -65,8 +65,7 @@ exports.download = function (req, res) {
                 if (year >= date.getFullYear() && month > date.getMonth() + 1) {
                     list.arr.push('错误，您要求下载' + year + '年' + month + '月份的统计数据，但该月份还未到来。')
                 }
-                var buffer = new Buffer(list.arr.join('\r\n'),'utf8');
-                res.end(buffer);
+                res.end(require('iconv-lite').encode(list.arr.join('\r\n'), 'GBK'));
             });
         });
     });
