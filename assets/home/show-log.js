@@ -78,10 +78,20 @@ define(function (require, exports, module) {
             }
         });
 
-        $frontObj.live('click', function () {
+        //复位日历框为初始状态
+        exports.resetDescribe = function () {
             $('#calendar-panel div.work-diary-list').not().animate({top:0}, 300);
             $('#calendar-panel div.work-describe').remove();
+        };
+
+        $frontObj.live('click', exports.resetDescribe);
+
+        $('#calendar-panel').click(function (ev) {
+            if (!($(ev.target).hasClass('front') || $(ev.target).parents('.work-describe').size() > 0)) {
+                exports.resetDescribe();
+            }
         });
+
 
         $('#calendar-panel span.front').live('click', function (ev) {
             var target = $(ev.target);
@@ -102,7 +112,13 @@ define(function (require, exports, module) {
             var htmlArr = [
                 (function () {
                     var level = ['简单】', '【一般】', '【常规】', '【复杂】'][obj['level'] - 1];
-                    return '<li title="' + level + obj['page-name'] + '">' + obj['page-name'] + '</li>';
+                    return '<li title="' + level + obj['page-name'] + '">' +
+                        (function () {
+                            return obj['online-url'].length > 1 ?
+                                '<a href="' + obj['online-url'] + '" target="_blank">' + obj['page-name'] + '</a>'
+                                : obj['page-name'];
+                        })() +
+                        '</li>';
                 })(),
                 (function () {
                     var str = '';
@@ -112,7 +128,6 @@ define(function (require, exports, module) {
                 })(),
                 (function () {
                     var str = '';
-                    obj['online-url'].length >= 1 ? str += '<a href="' + obj['online-url'] + '" target="_blank">线上地址</a> ' : '';
                     obj['tms-url'].length >= 1 ? str += '<a href="' + obj['tms-url'] + '" target="_blank">TMS地址</a>' : '';
                     return str.length > 1 ? '<li>' + str + '</li>' : '';
                 })()
@@ -229,15 +244,9 @@ define(function (require, exports, module) {
             '<span><a class="J-show-more show-more">查看详情 &gt;&gt;</a></span></li>' +
             '<li>' +
             '<span style="width:100%;" class="download-csv">' + (function () {
-            var date = new Date();
-            date.setTime(jsonData.serverDate);
             var year = parseInt($('#year-trigger').text(), 10);
             var month = parseInt($('#month-trigger').text(), 10);
-            if (year <= date.getFullYear() && month <= date.getMonth() + 1) {
-                return '<a href="/csv/' + year + '/' + month + '">下载' + year + '年' + month + '月报表</a>'
-            } else {
-                return '';
-            }
+            return '<a href="/csv/' + year + '/' + month + '">下载' + year + '年' + month + '月报表</a>'
         })() + '</span>' +
             '</li>' +
             '</ul>');

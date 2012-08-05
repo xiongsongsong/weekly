@@ -326,17 +326,20 @@ body {
 }
 
 #calendar-container div.work-describe {
-    background: #f1f1f1;
+    background: #f9f9f9;
+    overflow-y: auto;
+    font-family: verdana, simsun, sans-serif;
 }
 
 #calendar-container div.work-describe ul {
     width: 100%;
+    padding-top: .5em;
+    line-height: 170%;
 }
 
 #calendar-container div.work-describe ul li {
     width: 100%;
-    text-indent: 1em;
-    padding-top: .5em;
+    text-indent: .8em;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -412,8 +415,8 @@ span.front13 {
 
 #sidebar-wrapper span.front {
     margin: 2px;
-    padding: 3px 1px;
-    width: 60px;
+    padding: 3px;
+    width: 50px;
     cursor: default;
 }
 
@@ -436,6 +439,7 @@ body #sidebar-wrapper span.highlight {
     bottom: 0;
     width: 180px;
     z-index: 5;
+    overflow: auto;
 }
 
 #record-log span {
@@ -471,7 +475,7 @@ body #sidebar-wrapper span.highlight {
 
 #statistics ul li span {
     display: inline-block;
-    width: 48%;
+    margin-right: 1em;
 }
 
 #statistics ul li span.amortization {
