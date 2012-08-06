@@ -329,6 +329,8 @@ body {
     background: #f9f9f9;
     overflow-y: auto;
     font-family: verdana, simsun, sans-serif;
+    margin-left: -1px;
+    margin-top: -1px;
 }
 
 #calendar-container div.work-describe ul {

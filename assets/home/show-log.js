@@ -87,7 +87,8 @@ define(function (require, exports, module) {
         $frontObj.live('click', exports.resetDescribe);
 
         $('#calendar-panel').click(function (ev) {
-            if (!($(ev.target).hasClass('front') || $(ev.target).parents('.work-describe').size() > 0)) {
+            var t = $(ev.target);
+            if (!(t.hasClass('front') || t.hasClass('work-describe') || t.parents('.work-describe').size() > 0)) {
                 exports.resetDescribe();
             }
         });
