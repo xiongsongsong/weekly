@@ -53,7 +53,7 @@ exports.download = function (req, res) {
                 list.arr.push(['姓名', '花名', '简单', '一般', '常规', '复杂', '页面合计', '提成'].join(','));
                 Object.keys(r).forEach(function (k) {
                     var o = r[k];
-                    list.arr.push([o['real-name'], o.name, o.level1, o.level2, o.level3, o.level4, o.levelCount, o.oh].join(';'));
+                    list.arr.push([o['real-name'], o.name, o.level1, o.level2, o.level3, o.level4, o.levelCount, o.oh].join(','));
                 });
                 var dateTime = date.getFullYear() + '年' +
                     (date.getMonth() + 1) + '月' + date.getDate() + '日' + date.getHours() + '时' +
