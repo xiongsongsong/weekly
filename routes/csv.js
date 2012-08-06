@@ -50,7 +50,7 @@ exports.download = function (req, res) {
                 });
                 var list = {};
                 list.arr = [];
-                list.arr.push(['姓名', '花名', '简单', '一般', '常规', '复杂', '页面合计', '提成'].join(';'));
+                list.arr.push(['姓名', '花名', '简单', '一般', '常规', '复杂', '页面合计', '提成'].join(','));
                 Object.keys(r).forEach(function (k) {
                     var o = r[k];
                     list.arr.push([o['real-name'], o.name, o.level1, o.level2, o.level3, o.level4, o.levelCount, o.oh].join(';'));
