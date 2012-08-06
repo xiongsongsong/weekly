@@ -475,7 +475,7 @@ body #sidebar-wrapper span.highlight {
 
 #statistics ul li span {
     display: inline-block;
-    margin-right: 1em;
+    width: 40%;
 }
 
 #statistics ul li span.amortization {
