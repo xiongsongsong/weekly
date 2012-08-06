@@ -13,7 +13,7 @@ exports.download = function (req, res) {
         month = parseInt(req.params.month, 10);
     res.charset = 'utf-8';
     res.header('Content-Type', 'text/csv;charset=utf-8');
-    var filename = '本部前端' + year + '年' + month + '业务统计报表';
+    var filename = '本部前端' + year + '年' + month + '月业务统计报表';
     //IE中文件名要encodeURL，下载时方能正确显示文件名
     if (/(msie)/gi.test(req.headers['user-agent'])) {
         filename = encodeURIComponent(filename);
