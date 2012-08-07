@@ -56,10 +56,10 @@ define(function (require, exports, module) {
 
     /*添加事件，让用户可点击*/
     exports.filterEvent = function () {
-        $frontObj.live('click', function (ev) {
+        $frontObj.live('mousedown', function (ev) {
             exports.checkedFront(ev.target);
         });
-        $('#statistics a.J-show-more').live('click', function () {
+        $('#statistics a.J-show-more').live('mousedown', function () {
             exports.filterLogList();
             moreDetailWrapper.show();
             moreDetailWrapper.scrollTop(0);
@@ -67,26 +67,33 @@ define(function (require, exports, module) {
             $('#log-list-control').show();
         });
 
-        $('#log-list-control .J-close').click(function () {
+        $('#log-list-control .J-close').mousedown(function () {
             $('#more-detail-wrapper').hide();
             $('#log-list-control').hide();
         });
         $(document).bind('keydown', function (ev) {
-            if (ev.keyCode === 113) {
-                $(document.body).toggleClass('show-amortization');
-
+            if (ev.target.nodeName !== 'INPUT') {
+                switch (ev.keyCode) {
+                    case 113:
+                        $(document.body).toggleClass('show-amortization');
+                        break;
+                    case 27:
+                        exports.resetDescribe();
+                        exports.checkedFront($('#sidebar-group span.show-all'));
+                        break;
+                }
             }
         });
 
         //复位日历框为初始状态
         exports.resetDescribe = function () {
-            $('#calendar-panel div.work-diary-list').not().animate({top:0}, 300);
+            $('#calendar-panel div.work-diary-list').not().stop().animate({top:0}, 300);
             $('#calendar-panel div.work-describe').remove();
         };
 
-        $frontObj.live('click', exports.resetDescribe);
+        $frontObj.live('mousedown', exports.resetDescribe);
 
-        $('#calendar-panel').click(function (ev) {
+        $('#calendar-panel').mousedown(function (ev) {
             var t = $(ev.target);
             if (!(t.hasClass('front') || t.hasClass('work-describe') || t.parents('.work-describe').size() > 0)) {
                 exports.resetDescribe();
@@ -94,7 +101,7 @@ define(function (require, exports, module) {
         });
 
 
-        $('#calendar-panel span.front').live('click', function (ev) {
+        $('#calendar-panel span.front').live('mousedown', function (ev) {
             var target = $(ev.target);
             var parentsNode = target.parents('div.work-diary');
             $('#calendar-panel div.work-describe').remove();

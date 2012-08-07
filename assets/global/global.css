@@ -144,6 +144,7 @@ body {
     overflow: hidden;
     background: #fcfcfc;
     width: 14.285%;
+    letter-spacing: .3em;
 }
 
 #calendar-container tr.th th.weekend {
