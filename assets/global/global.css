@@ -16,7 +16,7 @@ body {
 }
 
 #header {
-    background: #4C565E;
+    background: #9a3461 url(/love/yuanjin.jpg) 233px center no-repeat;
     height: 98px;
     position: absolute;
     left: 0;
@@ -30,7 +30,7 @@ body {
     left: 25px;
     top: 32px;
     font-size: 22px;
-    color: #7fffd4;
+    color: #fff5b4;
     font-weight: bold;
     text-shadow: 1px 1px 1px #000;
     font-family: simsun, simhei, arial, sans-serif;
