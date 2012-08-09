@@ -58,7 +58,7 @@ exports.download = function (req, res) {
                 var dateTime = date.getFullYear() + '年' +
                     (date.getMonth() + 1) + '月' + date.getDate() + '日' + date.getHours() + '时' +
                     date.getMinutes() + '分' + date.getSeconds() + '秒';
-                list.arr.push(filename);
+                list.arr.push(decodeURIComponent(filename));
                 list.arr.push('您下载此表的时间为：' + dateTime);
                 if (year === date.getFullYear() && month === date.getMonth() + 1) {
                     list.arr.push('提示：由于当月还未结束，故数据可能不完整');
