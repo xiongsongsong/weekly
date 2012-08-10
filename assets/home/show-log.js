@@ -149,6 +149,17 @@ define(function (require, exports, module) {
             tempContainer.css({'border':'solid 1px ' + target.css('background-color')});
         });
 
+        var cl;
+        $(window).resize(function () {
+            if (cl !== undefined) {
+                clearTimeout(cl);
+            }
+            cl = setTimeout(function () {
+                var workDiaryList = $('#calendar-panel div.work-describe').siblings('.work-diary-list');
+                $(workDiaryList).stop().animate({top:-workDiaryList.height() + 'px'}, 300);
+            }, 300);
+        })
+
     };
 
     exports.getCurrentFilterOfFront = function () {
