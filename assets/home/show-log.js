@@ -87,7 +87,7 @@ define(function (require, exports, module) {
 
         //复位日历框为初始状态
         exports.resetDescribe = function () {
-            $('#calendar-panel div.work-diary-list').not().stop().animate({top:0}, 300);
+            $('#calendar-panel div.work-diary-list').stop().animate({top:0}, 300);
             $('#calendar-panel div.work-describe').remove();
         };
 
@@ -105,7 +105,7 @@ define(function (require, exports, module) {
             var target = $(ev.target);
             var parentsNode = target.parents('div.work-diary');
             $('#calendar-panel div.work-describe').remove();
-            $('#calendar-panel div.work-diary-list').not(parentsNode.find('div.work-diary-list')).animate({top:0}, 300);
+            $('#calendar-panel div.work-diary-list').stop().not(parentsNode.find('div.work-diary-list')).animate({top:0}, 300);
             var _id = target.attr('data-id');
             var obj;
             for (var i = 0; i < jsonData.documents.length; i++) {
