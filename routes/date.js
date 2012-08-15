@@ -3,13 +3,10 @@
  * User: 松松
  * Date: 12-7-31
  * Time: 下午6:51
- * To change this template use File | Settings | File Templates.
+ * 一三五七八十腊，三十一天永不差
  */
 
 exports.getMaxDays = function (date, month) {
-    if (month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11) {
-        return 31;
-    } else {
-        return month == 1 ? date.getFullYear() % 4 == 0 ? 29 : 28 : 30;
-    }
+    month++;
+    return [1, 3, 5, 7, 8, 10, 12].indexOf(month) > -1 ? 31 : month == 2 ? date.getFullYear() % 4 == 0 ? 29 : 28 : 30;
 };
