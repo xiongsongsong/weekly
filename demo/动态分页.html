@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js"></script>
+    <style>
+        #content {
+            border: solid 1px red;
+            padding: 1em;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="content">
+
+</div>
+
+<div id="p">
+
+</div>
+
+<script type="text/template" id="default-pagination-tpl"><br>
+
+    {{#! 显示首页 }}
+    {{#if currentPage === startPage }}
+    <a class="pg-prev pg-first pg-disabled" href="静态分页.html#">首页</a>
+    {{#else}}
+    <a class="pg-prev pg-first" href="静态分页.html#" data-page="{{ startPage }}">首页</a>
+    {{/if}}
+
+    {{#! 显示上一页 }}
+    {{#if currentPage === startPage }}
+    <a class="pg-prev pg-disabled">上一页</a>
+    {{#else}}
+    <a class="pg-prev" href="静态分页.html#" data-page="{{ currentPage - 1 }}">上一页</a>
+    {{/if}}
+
+    {{#if showPageNum }}
+    {{#! 左边固定显示几页, 如固定显示 1 和 2 }}
+    {{#if currentPage > startPage + alwaysDisplayCount - 1}}
+    {{#for var i = 0; i < alwaysDisplayCount; i++ }}
+    {{#! 避免后面重复显示 }}
+    {{#if i + startPage < startIndex }}
+    <a class="pg-page pg-item" href="静态分页.html#" data-page="{{ i + startPage }}">{{ i + startPage }}</a>
+    {{/if}}
+    {{/for}}
+    {{/if}}
+
+    {{#! 是否显示省略号 }}
+    {{#if ellipseText && startIndex > startPage + alwaysDisplayCount }}
+    <span class="pg-item">…</span>
+    {{/if}}
+
+    {{#! 显示页数 }}
+    {{#for var i = startIndex; i <= endIndex; i++ }}
+    {{#if currentPage !== i }}
+    <a class="pg-page pg-item" href="静态分页.html#" data-page="{{ i }}">{{ i }}</a>
+    {{#else}}
+    <span class="pg-current pg-item">{{ i }}</span>
+    {{/if}}
+    {{/for}}
+
+    {{#! 是否显示省略号 }}
+    {{#if ellipseText && endIndex < endPage - alwaysDisplayCount }}
+    <span class="pg-item">…</span>
+    {{/if}}
+
+    {{#! 右边固定显示几页 }}
+    {{#if currentPage < endPage - alwaysDisplayCount + 1 }}
+    {{#for var i = endPage - alwaysDisplayCount + 1; i <= endPage; i++ }}
+    {{#if i > endIndex }}
+    <a class="pg-page pg-item" href="静态分页.html#" data-page="{{ i }}">{{ i }}</a>
+    {{/if}}
+    {{/for}}
+    {{/if}}
+    {{/if}}
+
+    {{#! 显示下一页 }}
+    {{#if currentPage === endPage }}
+    <a class="pg-next pg-disabled">下一页</a>
+    {{#else}}
+    <a class="pg-next" href="静态分页.html#" data-page="{{ currentPage + 1 }}">下一页</a>
+    {{/if}}
+
+    {{#! 显示末页 }}
+    {{#if currentPage === endPage }}
+    <a class="pg-next pg-last pg-disabled" href="静态分页.html#">末页</a>
+    {{#else}}
+    <a class="pg-next pg-last" href="静态分页.html#" data-page="{{ endPage }}">末页</a>
+    {{/if}}
+</script>
+
+<script>
+    KISSY.config({
+        packages:[
+            {
+                name:"gallery",
+                tag:"20111220",
+                path:"http://a.tbcdn.cn/s/kissy/", // cdn上适当修改对应路径
+                charset:"utf-8"
+            }
+        ]
+    });
+
+
+    KISSY.use('gallery/pagination/1.0/index', function (S, P) {
+        var pagination = new P({
+            container:'#p',
+            totalPage:2,
+            template:S.DOM.get('#default-pagination-tpl').innerHTML,
+            callback:function (idx, pg, ready) {
+                KISSY.io({
+                    url:'http://localhost:8000/pagination',
+                    data:{
+                        page:idx
+                    },
+                    dataType:'jsonp',
+                    success:function (result) {
+                        var li = '';
+                        for (var i = 0; i < result.data.length; i++) {
+                            li += '<p>' + result.data[i].title + '</p>'
+                        }
+                        pagination.set('totalPage', result.totalPage);
+                        S.DOM.get('#content').innerHTML = li;
+                        ready(idx);
+                    }
+                });
+                return false;
+            }
+        });
+    });
+</script>
+</body>
+</html>

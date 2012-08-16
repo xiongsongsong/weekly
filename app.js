@@ -46,6 +46,9 @@ app.get('/log-out', routes.log_out);
 //下载报表
 app.get('/csv/:year/:month/:format?', require('./routes/csv').download);
 
+app.get('/tea/:which?', require('./helper/tea'));
+
+
 //备份数据库到Ubuntu One文件夹
 app.get('/mongodump', require('./helper/dump').dump);
 
