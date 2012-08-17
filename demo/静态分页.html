@@ -74,13 +74,8 @@
             callback:function (idx, pg, ready) {
                 var content = S.DOM.get('#content');
                 content.innerHTML = idx;
-                if (idx > 1) {
-                    content.appendChild(result.getElementsByTagName('div')[idx * 2 - 2].cloneNode(true));
-                    content.appendChild(result.getElementsByTagName('div')[idx * 2 - 1].cloneNode(true));
-                } else {
-                    content.appendChild(result.getElementsByTagName('div')[0].cloneNode(true));
-                    content.appendChild(result.getElementsByTagName('div')[1].cloneNode(true));
-                }
+                content.appendChild(result.getElementsByTagName('div')[idx * 2 - 2].cloneNode(true));
+                content.appendChild(result.getElementsByTagName('div')[idx * 2 - 1].cloneNode(true));
                 ready(idx);
                 return false;
             }
