@@ -6,36 +6,33 @@
     <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js"></script>
     <style>
         #content {
-            border: solid 1px red;
             padding: 1em;
+            height: 200px;
         }
     </style>
 </head>
 
 <body>
 
-<div id="content">
+<div id="content"><!--这里显示分页的内容--></div>
 
-</div>
+<div id="p"><!--这里显示分页的控件--></div>
 
-<div id="p">
-
-</div>
-
+<!--下面是分页控件的模板-->
 <script type="text/template" id="default-pagination-tpl"><br>
 
     {{#! 显示首页 }}
     {{#if currentPage === startPage }}
-    <a class="pg-prev pg-first pg-disabled" href="静态分页.html#">首页</a>
+    <a class="pg-prev pg-first pg-disabled" href="#">首页</a>
     {{#else}}
-    <a class="pg-prev pg-first" href="静态分页.html#" data-page="{{ startPage }}">首页</a>
+    <a class="pg-prev pg-first" href="#" data-page="{{ startPage }}">首页</a>
     {{/if}}
 
     {{#! 显示上一页 }}
     {{#if currentPage === startPage }}
     <a class="pg-prev pg-disabled">上一页</a>
     {{#else}}
-    <a class="pg-prev" href="静态分页.html#" data-page="{{ currentPage - 1 }}">上一页</a>
+    <a class="pg-prev" href="#" data-page="{{ currentPage - 1 }}">上一页</a>
     {{/if}}
 
     {{#if showPageNum }}
@@ -44,7 +41,7 @@
     {{#for var i = 0; i < alwaysDisplayCount; i++ }}
     {{#! 避免后面重复显示 }}
     {{#if i + startPage < startIndex }}
-    <a class="pg-page pg-item" href="静态分页.html#" data-page="{{ i + startPage }}">{{ i + startPage }}</a>
+    <a class="pg-page pg-item" href="#" data-page="{{ i + startPage }}">{{ i + startPage }}</a>
     {{/if}}
     {{/for}}
     {{/if}}
@@ -57,7 +54,7 @@
     {{#! 显示页数 }}
     {{#for var i = startIndex; i <= endIndex; i++ }}
     {{#if currentPage !== i }}
-    <a class="pg-page pg-item" href="静态分页.html#" data-page="{{ i }}">{{ i }}</a>
+    <a class="pg-page pg-item" href="#" data-page="{{ i }}">{{ i }}</a>
     {{#else}}
     <span class="pg-current pg-item">{{ i }}</span>
     {{/if}}
@@ -72,7 +69,7 @@
     {{#if currentPage < endPage - alwaysDisplayCount + 1 }}
     {{#for var i = endPage - alwaysDisplayCount + 1; i <= endPage; i++ }}
     {{#if i > endIndex }}
-    <a class="pg-page pg-item" href="静态分页.html#" data-page="{{ i }}">{{ i }}</a>
+    <a class="pg-page pg-item" href="#" data-page="{{ i }}">{{ i }}</a>
     {{/if}}
     {{/for}}
     {{/if}}
@@ -82,18 +79,19 @@
     {{#if currentPage === endPage }}
     <a class="pg-next pg-disabled">下一页</a>
     {{#else}}
-    <a class="pg-next" href="静态分页.html#" data-page="{{ currentPage + 1 }}">下一页</a>
+    <a class="pg-next" href="#" data-page="{{ currentPage + 1 }}">下一页</a>
     {{/if}}
 
     {{#! 显示末页 }}
     {{#if currentPage === endPage }}
-    <a class="pg-next pg-last pg-disabled" href="静态分页.html#">末页</a>
+    <a class="pg-next pg-last pg-disabled" href="#">末页</a>
     {{#else}}
-    <a class="pg-next pg-last" href="静态分页.html#" data-page="{{ endPage }}">末页</a>
+    <a class="pg-next pg-last" href="#" data-page="{{ endPage }}">末页</a>
     {{/if}}
 </script>
 
 <script>
+    /*配置包，让kissy知道从下方的path中去加载组件*/
     KISSY.config({
         packages:[
             {
@@ -107,24 +105,47 @@
 
 
     KISSY.use('gallery/pagination/1.0/index', function (S, P) {
+        /*实例化一个构造器*/
         var pagination = new P({
+            //分页内容的容器
             container:'#p',
-            totalPage:2,
+            //分页空间的模板
             template:S.DOM.get('#default-pagination-tpl').innerHTML,
+            //当切换页时，执行的回调
+            //实例化后，将默认执行一次下方的callback
             callback:function (idx, pg, ready) {
+                S.DOM.get('#content').innerHTML = '正在努力加载第 ' + idx + ' 页的数据';
+                //发送请求
                 KISSY.io({
-                    url:'http://localhost:8000/pagination',
+                    //接口地址
+                    url:'demo/pagination',
+                    //发出去的参数
                     data:{
-                        page:idx
+                        //告诉服务器，当前在第几页，默认从1开始
+                        page:idx,
+                        //演示所用的参数，告诉服务器产生30页的假数据
+                        totalPage:30
                     },
+                    //因为jsonp请求本身是以Get方式发起，故可以省略
+                    //type:'GET',
+                    //服务器返回的数据类型
                     dataType:'jsonp',
+                    //服务器返回数据后，执行success
                     success:function (result) {
-                        var li = '';
+                        var p = [];
                         for (var i = 0; i < result.data.length; i++) {
-                            li += '<p>' + result.data[i].title + '</p>'
+                            p.push('<p>' + result.data[i].title + '</p>');
+
                         }
+                        //非常重要：因为总页数是动态的（比如留言突然增加了几条）
+                        //所以，这里始终动态更新下总页数
                         pagination.set('totalPage', result.totalPage);
-                        S.DOM.get('#content').innerHTML = li;
+
+                        //插入服务器返回的数据
+                        S.DOM.get('#content').innerHTML = p.join('');
+
+                        //非常重要：当一切操作就绪后（比如本示例中插入HTML）
+                        //通知下分页器更新加载状态
                         ready(idx);
                     }
                 });
@@ -132,6 +153,7 @@
             }
         });
     });
+
 </script>
 </body>
 </html>

@@ -17,6 +17,7 @@ app.configure(function () {
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(__dirname + '/assets'));
+    app.use(express.static(__dirname + '/demo'));
 });
 
 app.configure('development', function () {
@@ -46,7 +47,8 @@ app.get('/log-out', routes.log_out);
 //下载报表
 app.get('/csv/:year/:month/:format?', require('./routes/csv').download);
 
-app.get('/tea/:which?', require('./helper/tea'));
+//茶歇会的DEMO接口服务
+app.get('/demo/:which?', require('./helper/demo').init);
 
 
 //备份数据库到Ubuntu One文件夹
