@@ -36,15 +36,17 @@ define(function (require, exports, module) {
                     var $content = $(id);
                     $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="' + item.front + '" data-id="' + item._id + '">' + data.user['id_' + item.front].name + '</span>'));
                 });
+                exports.updateUserList();
                 exports.filterData();
                 require('home/calendar.js').autoResetOffset();
             }
         })
     };
 
-    var $frontObj = $('ul.user-filter span.front');
+
     exports.checkedFront = function (target) {
         var $target = $(target);
+        var $frontObj = $('ul.user-filter span.front');
         if ($target.hasClass('show-all')) {
             $frontObj.removeClass('weak highlight', 1);
         } else {
@@ -56,7 +58,7 @@ define(function (require, exports, module) {
 
     /*添加事件，让用户可点击*/
     exports.filterEvent = function () {
-        $frontObj.live('mousedown', function (ev) {
+        $('ul.user-filter span.front').live('mousedown', function (ev) {
             exports.checkedFront(ev.target);
         });
         $('#statistics a.J-show-more').live('mousedown', function () {
@@ -91,7 +93,7 @@ define(function (require, exports, module) {
             $('#calendar-panel div.work-describe').remove();
         };
 
-        $frontObj.live('mousedown', exports.resetDescribe);
+        $('ul.user-filter span.front').live('mousedown', exports.resetDescribe);
 
         $('#calendar-panel').mousedown(function (ev) {
             var t = $(ev.target);
@@ -104,6 +106,7 @@ define(function (require, exports, module) {
         $('#calendar-panel span.front').live('mousedown', function (ev) {
             var target = $(ev.target);
             var parentsNode = target.parents('div.work-diary');
+            var $frontObj = $('ul.user-filter span.front');
             $('#calendar-panel div.work-describe').remove();
             $('#calendar-panel div.work-diary-list').stop().not(parentsNode.find('div.work-diary-list')).animate({top:0}, 300);
             var _id = target.attr('data-id');
@@ -172,8 +175,8 @@ define(function (require, exports, module) {
         var $frontObj = $('ul.user-filter span.front');
         var $calendarWrapper = $('#calendar-wrapper');
         var $target = $frontObj.filter('.highlight');
+        var front = exports.getCurrentFilterOfFront();
         if ($target.size() > 0) {
-            var front = exports.getCurrentFilterOfFront();
             $calendarWrapper.find('span.front').hide();
             $calendarWrapper.find('.front' + front).each(function (index, item) {
                 $(item).show()
@@ -181,14 +184,13 @@ define(function (require, exports, module) {
         } else {
             $calendarWrapper.find('span.front').show();
         }
-        exports.filterLogList();
+        exports.filterLogList(front);
     };
 
     /*显示不同用户的页面记录*/
-    exports.filterLogList = function () {
+    exports.filterLogList = function (front) {
         if (jsonData == undefined)return;
         var moreDetail = $('#more-detail');
-        var front = exports.getCurrentFilterOfFront();
         var html = [];
         KISSY.each(jsonData.documents, function (item) {
             if (isNaN(front)) {
@@ -277,17 +279,19 @@ define(function (require, exports, module) {
             '</ul>');
         moreDetailWrapper.scrollTop(0);
 
+    };
+
+    exports.updateUserList = function () {
         /*填充用户列表*/
         var userFilterContainer = $('#user-filter-container');
         var str = [];
         for (var a in jsonData.user) {
             if (jsonData.user.hasOwnProperty(a)) {
-                str.push('<span class="front front' + jsonData.user[a].id + '">' + jsonData.user[a].name + '</span>');
+                str.push('<span class="front front' + jsonData.user[a].id + '" front="' + jsonData.user[a].id + '">' + jsonData.user[a].name + '</span>');
             }
         }
         str.push('<span class="front show-all">所有 ESC</span>');
         userFilterContainer.html(str.join(''));
-
     };
 
     exports.filterEvent();
