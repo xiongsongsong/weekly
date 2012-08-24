@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>背景翻转</title>
+    <meta charset="utf-8">
+    <style>
+        a {
+            display: inline-block;
+            width: 56px;
+            height: 42px;
+            background: url(images.gif) no-repeat;
+            text-decoration: none;
+        }
+
+        a b {
+            visibility: hidden;
+        }
+
+        a:hover {
+            background-position: 0 bottom;
+        }
+
+        a.b {
+            background-position: -56px 0;
+        }
+
+        a.b:hover {
+            background-position: -56px bottom;
+        }
+
+        a.w {
+            background-position: -114px 0;
+        }
+
+        a.w:hover {
+            background-position: -114px bottom;
+        }
+    </style>
+</head>
+<body>
+<a href="#" class="t"><b>淘</b></a>
+<a href="#" class="b"><b>宝</b></a>
+<a href="#" class="w"><b>网</b></a>
+</body>
+</html>
