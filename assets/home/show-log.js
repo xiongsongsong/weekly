@@ -209,7 +209,13 @@ define(function (require, exports, module) {
         if (html.length > 0) {
             KISSY.each(html, function (item) {
                 count['level' + item.level]++;
-                var str = '<h2><a href="' + $.trim(item['online-url']) + '" target="_blank">' + item['page-name'] + '</a></h2>' +
+                var str = '<h2>' + (function () {
+                    if ($.trim(item['online-url'].length) > 0) {
+                        return '<a href="' + $.trim(item['online-url']) + '" target="_blank">' + item['page-name'] + '</a>';
+                    } else {
+                        return  item['page-name'];
+                    }
+                })() + '</h2>' +
                     '<ul>' +
                     (function () {
                         return $.trim(item['online-url']).length > 0 ? '<li>线上地址：' + item['online-url'] + '</a></li>' : '';
@@ -270,6 +276,18 @@ define(function (require, exports, module) {
             '</li>' +
             '</ul>');
         moreDetailWrapper.scrollTop(0);
+
+        /*填充用户列表*/
+        var userFilterContainer = $('#user-filter-container');
+        var str = [];
+        for (var a in jsonData.user) {
+            if (jsonData.user.hasOwnProperty(a)) {
+                str.push('<span class="front front' + jsonData.user[a].id + '">' + jsonData.user[a].name + '</span>');
+            }
+        }
+        str.push('<span class="front show-all">所有 ESC</span>');
+        userFilterContainer.html(str.join(''));
+
     };
 
     exports.filterEvent();
