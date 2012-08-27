@@ -35,7 +35,7 @@ define(function (require, exports, module) {
                 $(data.documents).each(function (index, item) {
                     var id = '#date-' + item.year.toString() + item.month.toString() + item.date.toString();
                     var $content = $(id);
-                    $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="' + item.front + '" data-id="' + item._id + '">' + data.user['id_' + item.front].name + '</span>'));
+                    $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="' + item.front + '" data-id="' + item._id + '">' + beautifyName(data.user['id_' + item.front].name) + '</span>'));
                 });
 
                 front = exports.getCurrentFilterOfFront();
@@ -257,11 +257,11 @@ define(function (require, exports, module) {
         if (isNaN(front)) {
             $('#log-list-control .J-username').html('全部页面');
         } else {
-            $('#log-list-control .J-username').html(currentUser.name + '（' + currentUser['real-name'] + '）');
+            $('#log-list-control .J-username').html(beautifyName(currentUser.name) + '（' + currentUser['real-name'] + '）');
         }
         $('#statistics').html('<h2>' + (function () {
             if (!isNaN(front)) {
-                return '' + currentUser['name'] + ' - <span>' + currentUser['real-name'] + '</span>';
+                return '' + beautifyName(currentUser['name']) + ' - <span>' + currentUser['real-name'] + '</span>';
             } else {
                 return '统计 ';
             }
@@ -290,7 +290,7 @@ define(function (require, exports, module) {
         var str = [];
         for (var a in jsonData.user) {
             if (jsonData.user.hasOwnProperty(a)) {
-                str.push('<span class="front front' + jsonData.user[a].id + '" front="' + jsonData.user[a].id + '">' + jsonData.user[a].name + '</span>');
+                str.push('<span class="front front' + jsonData.user[a].id + '" front="' + jsonData.user[a].id + '">' + beautifyName(jsonData.user[a].name) + '</span>');
             }
         }
         str.push('<span class="front show-all">所有 ESC</span>');
@@ -298,6 +298,17 @@ define(function (require, exports, module) {
         exports.checkedFront();
         exports.filterData();
     };
+
+    //尝试过滤花名中的非中文字符
+    function beautifyName(name) {
+        var _name = name.match(/[\u4E00-\u9FA5]+/);
+        if (_name && _name.length > 0 && _name[0].length > 1) {
+            return _name[0].substring(0, 2);
+        } else {
+            return name.substring(0, 3) + '..';
+        }
+
+    }
 
     exports.filterEvent();
 
