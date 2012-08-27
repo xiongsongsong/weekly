@@ -18,6 +18,7 @@ define(function (require, exports, module) {
     /*初始化并显示数据*/
     var jsonData;
     var moreDetailWrapper = $('#more-detail-wrapper');
+    var front;
     exports.getData = function () {
         $.ajax('/show_log/json', {
             type:'get',
@@ -36,18 +37,20 @@ define(function (require, exports, module) {
                     var $content = $(id);
                     $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="' + item.front + '" data-id="' + item._id + '">' + data.user['id_' + item.front].name + '</span>'));
                 });
+
+                front = exports.getCurrentFilterOfFront();
                 exports.updateUserList();
-                exports.filterData();
                 require('home/calendar.js').autoResetOffset();
             }
         })
     };
 
 
-    exports.checkedFront = function (target) {
-        var $target = $(target);
+    exports.checkedFront = function () {
+        front = parseInt(front, 10);
+        var $target = $('ul.user-filter span.front' + front);
         var $frontObj = $('ul.user-filter span.front');
-        if ($target.hasClass('show-all')) {
+        if ($target.hasClass('show-all') || $target.size() < 1) {
             $frontObj.removeClass('weak highlight', 1);
         } else {
             $('ul.user-filter span.front').removeClass('highlight').addClass('weak');
@@ -59,7 +62,8 @@ define(function (require, exports, module) {
     /*添加事件，让用户可点击*/
     exports.filterEvent = function () {
         $('ul.user-filter span.front').live('mousedown', function (ev) {
-            exports.checkedFront(ev.target);
+            front = $(ev.target).attr('front');
+            exports.checkedFront();
         });
         $('#statistics a.J-show-more').live('mousedown', function () {
             exports.filterLogList();
@@ -80,8 +84,9 @@ define(function (require, exports, module) {
                         $(document.body).toggleClass('show-amortization');
                         break;
                     case 27:
+                        front = null;
                         exports.resetDescribe();
-                        exports.checkedFront($('#sidebar-group span.show-all'));
+                        exports.checkedFront();
                         break;
                 }
             }
@@ -105,8 +110,8 @@ define(function (require, exports, module) {
 
         $('#calendar-panel span.front').live('mousedown', function (ev) {
             var target = $(ev.target);
+            front = target.attr('front');
             var parentsNode = target.parents('div.work-diary');
-            var $frontObj = $('ul.user-filter span.front');
             $('#calendar-panel div.work-describe').remove();
             $('#calendar-panel div.work-diary-list').stop().not(parentsNode.find('div.work-diary-list')).animate({top:0}, 300);
             var _id = target.attr('data-id');
@@ -147,7 +152,7 @@ define(function (require, exports, module) {
             parentsNode.append(tempContainer);
             tempContainer = $('#' + id);
             var workDiaryList = parentsNode.find('div.work-diary-list');
-            exports.checkedFront($frontObj.filter('span.front' + target.attr('front')));
+            exports.checkedFront();
             $(workDiaryList).animate({top:-workDiaryList.height() + 'px'}, 300);
             tempContainer.css({'border':'solid 1px ' + target.css('background-color')});
         });
@@ -175,7 +180,6 @@ define(function (require, exports, module) {
         var $frontObj = $('ul.user-filter span.front');
         var $calendarWrapper = $('#calendar-wrapper');
         var $target = $frontObj.filter('.highlight');
-        var front = exports.getCurrentFilterOfFront();
         if ($target.size() > 0) {
             $calendarWrapper.find('span.front').hide();
             $calendarWrapper.find('.front' + front).each(function (index, item) {
@@ -184,11 +188,11 @@ define(function (require, exports, module) {
         } else {
             $calendarWrapper.find('span.front').show();
         }
-        exports.filterLogList(front);
+        exports.filterLogList();
     };
 
     /*显示不同用户的页面记录*/
-    exports.filterLogList = function (front) {
+    exports.filterLogList = function () {
         if (jsonData == undefined)return;
         var moreDetail = $('#more-detail');
         var html = [];
@@ -278,11 +282,10 @@ define(function (require, exports, module) {
             '</li>' +
             '</ul>');
         moreDetailWrapper.scrollTop(0);
-
     };
 
+    /*填充用户列表*/
     exports.updateUserList = function () {
-        /*填充用户列表*/
         var userFilterContainer = $('#user-filter-container');
         var str = [];
         for (var a in jsonData.user) {
@@ -292,6 +295,8 @@ define(function (require, exports, module) {
         }
         str.push('<span class="front show-all">所有 ESC</span>');
         userFilterContainer.html(str.join(''));
+        exports.checkedFront();
+        exports.filterData();
     };
 
     exports.filterEvent();
