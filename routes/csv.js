@@ -5,7 +5,8 @@
  * Time: 下午5:12
  * To change this template use File | Settings | File Templates.
  */
-var mongodb = require('mongodb');
+var DB = require('../helper/db');
+var USER = require('../helper/user');
 
 exports.download = function (req, res) {
     var r = {};
@@ -21,16 +22,14 @@ exports.download = function (req, res) {
     var date = new Date();
     res.header('Content-Disposition', 'attachment; filename=' + filename + '.csv');
 
-    var server = new mongodb.Server("127.0.0.1", 27017, {});
-    new mongodb.Db('fed', server, {}).open(function (error, client) {
-        if (error) throw error;
-        var result = Object.create(null);
-        var collection = new mongodb.Collection(client, 'user');
-        collection.find({}, {}).toArray(function (err, docs) {
-            docs.forEach(function (item) {
-                r['id_' + item._id] = {
-                    name:item.name,
-                    "real-name":item['real-name'],
+
+    USER.updateFrontList({
+        callback:function () {
+            var user = USER.frontList;
+            Object.keys(user).forEach(function (item) {
+                r['id_' + user[item].id] = {
+                    name:user[item].name,
+                    "real-name":user[item]['real-name'],
                     level1:0,
                     level2:0,
                     level3:0,
@@ -38,11 +37,10 @@ exports.download = function (req, res) {
                 }
             });
 
-
-            var logCollection = new mongodb.Collection(client, 'log');
-            logCollection.find({year:year, month:month}, {}).toArray(function (err, result) {
+            var logCollection = new DB.mongodb.Collection(DB.client, 'log');
+            logCollection.find({year:year, month:month, level:{'$gt':0}}, {}).toArray(function (err, result) {
                 result.forEach(function (item) {
-                    r['id_' + item.front]['level' + item.level]++;
+                    if (item.leave === undefined) r['id_' + item.front]['level' + item.level]++;
                 });
                 Object.keys(r).forEach(function (key) {
                     r[key].levelCount = r[key].level1 + r[key].level2 + r[key].level3 + r[key].level4;
@@ -68,6 +66,6 @@ exports.download = function (req, res) {
                 }
                 res.end(require('iconv-lite').encode(list.arr.join('\r\n'), 'GBK'));
             });
-        });
+        }
     });
 };

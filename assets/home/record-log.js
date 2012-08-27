@@ -76,14 +76,14 @@ define(function (require, exports, module) {
                 data:$loginFormObj.serialize(),
                 cache:false,
                 success:function (data) {
-                    if (data.status) {
+                    if (data.status === true) {
                         $loginFormObj.hide();
                         $formObj.show();
                         $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
-                        $('#record-log').append('<span>（' + data.user + '）</span>')
+                        $('#record-log').append('<span>（' + $loginFormObj[0].elements['user'].value + '）</span>');
                         JRecordLog.after('<li class="separator"></li><li><a href="log-out">退出登陆</a></li>')
                     } else {
-                        alert('啊哦，登陆遇到错误\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '    '))
+                        alert('用户名或密码不正确。');
                     }
                 }
             });

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        label {
+            display: block;
+        }
+
+        textarea {
+            width: 100%;
+        }
+
+        #info sup {
+            color: green;
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+<label>用逗号分隔字符，以5个进行拆分</label>
+<textarea id="textarea" rows="10"></textarea>
+<script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js"></script>
+<p id="info"></p>
+<script>
+    KISSY.ready(function (S) {
+        var DOM = S.DOM, Event = S.Event;
+        var textArea = DOM.get('#textarea');
+
+        function sliceValue(num) {
+            //以逗号分隔字符串，并排除连续的逗号
+            var arr = textArea.value.split(/[,，]+/);
+            var strArr = [];
+            for (var i = 0; i < arr.length / num; i++) {
+                strArr.push(arr.slice(i * num, i * num + num).join('<sup>，</sup>'));
+            }
+            DOM.get('#info').innerHTML = strArr.join('<br>');
+        }
+
+        Event.on(textArea, 'valuechange', function () {
+            sliceValue(5);
+        });
+
+    });
+</script>
+</body>
+</html>

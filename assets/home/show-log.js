@@ -18,6 +18,7 @@ define(function (require, exports, module) {
     /*初始化并显示数据*/
     var jsonData;
     var moreDetailWrapper = $('#more-detail-wrapper');
+    var front;
     exports.getData = function () {
         $.ajax('/show_log/json', {
             type:'get',
@@ -36,16 +37,20 @@ define(function (require, exports, module) {
                     var $content = $(id);
                     $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="' + item.front + '" data-id="' + item._id + '">' + data.user['id_' + item.front].name + '</span>'));
                 });
-                exports.filterData();
+
+                front = exports.getCurrentFilterOfFront();
+                exports.updateUserList();
                 require('home/calendar.js').autoResetOffset();
             }
         })
     };
 
-    var $frontObj = $('ul.user-filter span.front');
-    exports.checkedFront = function (target) {
-        var $target = $(target);
-        if ($target.hasClass('show-all')) {
+
+    exports.checkedFront = function () {
+        front = parseInt(front, 10);
+        var $target = $('ul.user-filter span.front' + front);
+        var $frontObj = $('ul.user-filter span.front');
+        if ($target.hasClass('show-all') || $target.size() < 1) {
             $frontObj.removeClass('weak highlight', 1);
         } else {
             $('ul.user-filter span.front').removeClass('highlight').addClass('weak');
@@ -56,8 +61,9 @@ define(function (require, exports, module) {
 
     /*添加事件，让用户可点击*/
     exports.filterEvent = function () {
-        $frontObj.live('mousedown', function (ev) {
-            exports.checkedFront(ev.target);
+        $('ul.user-filter span.front').live('mousedown', function (ev) {
+            front = $(ev.target).attr('front');
+            exports.checkedFront();
         });
         $('#statistics a.J-show-more').live('mousedown', function () {
             exports.filterLogList();
@@ -78,8 +84,9 @@ define(function (require, exports, module) {
                         $(document.body).toggleClass('show-amortization');
                         break;
                     case 27:
+                        front = null;
                         exports.resetDescribe();
-                        exports.checkedFront($('#sidebar-group span.show-all'));
+                        exports.checkedFront();
                         break;
                 }
             }
@@ -91,7 +98,7 @@ define(function (require, exports, module) {
             $('#calendar-panel div.work-describe').remove();
         };
 
-        $frontObj.live('mousedown', exports.resetDescribe);
+        $('ul.user-filter span.front').live('mousedown', exports.resetDescribe);
 
         $('#calendar-panel').mousedown(function (ev) {
             var t = $(ev.target);
@@ -103,6 +110,7 @@ define(function (require, exports, module) {
 
         $('#calendar-panel span.front').live('mousedown', function (ev) {
             var target = $(ev.target);
+            front = target.attr('front');
             var parentsNode = target.parents('div.work-diary');
             $('#calendar-panel div.work-describe').remove();
             $('#calendar-panel div.work-diary-list').stop().not(parentsNode.find('div.work-diary-list')).animate({top:0}, 300);
@@ -144,7 +152,7 @@ define(function (require, exports, module) {
             parentsNode.append(tempContainer);
             tempContainer = $('#' + id);
             var workDiaryList = parentsNode.find('div.work-diary-list');
-            exports.checkedFront($frontObj.filter('span.front' + target.attr('front')));
+            exports.checkedFront();
             $(workDiaryList).animate({top:-workDiaryList.height() + 'px'}, 300);
             tempContainer.css({'border':'solid 1px ' + target.css('background-color')});
         });
@@ -173,7 +181,6 @@ define(function (require, exports, module) {
         var $calendarWrapper = $('#calendar-wrapper');
         var $target = $frontObj.filter('.highlight');
         if ($target.size() > 0) {
-            var front = exports.getCurrentFilterOfFront();
             $calendarWrapper.find('span.front').hide();
             $calendarWrapper.find('.front' + front).each(function (index, item) {
                 $(item).show()
@@ -188,7 +195,6 @@ define(function (require, exports, module) {
     exports.filterLogList = function () {
         if (jsonData == undefined)return;
         var moreDetail = $('#more-detail');
-        var front = exports.getCurrentFilterOfFront();
         var html = [];
         KISSY.each(jsonData.documents, function (item) {
             if (isNaN(front)) {
@@ -209,7 +215,13 @@ define(function (require, exports, module) {
         if (html.length > 0) {
             KISSY.each(html, function (item) {
                 count['level' + item.level]++;
-                var str = '<h2><a href="' + $.trim(item['online-url']) + '" target="_blank">' + item['page-name'] + '</a></h2>' +
+                var str = '<h2>' + (function () {
+                    if ($.trim(item['online-url'].length) > 0) {
+                        return '<a href="' + $.trim(item['online-url']) + '" target="_blank">' + item['page-name'] + '</a>';
+                    } else {
+                        return  item['page-name'];
+                    }
+                })() + '</h2>' +
                     '<ul>' +
                     (function () {
                         return $.trim(item['online-url']).length > 0 ? '<li>线上地址：' + item['online-url'] + '</a></li>' : '';
@@ -270,6 +282,21 @@ define(function (require, exports, module) {
             '</li>' +
             '</ul>');
         moreDetailWrapper.scrollTop(0);
+    };
+
+    /*填充用户列表*/
+    exports.updateUserList = function () {
+        var userFilterContainer = $('#user-filter-container');
+        var str = [];
+        for (var a in jsonData.user) {
+            if (jsonData.user.hasOwnProperty(a)) {
+                str.push('<span class="front front' + jsonData.user[a].id + '" front="' + jsonData.user[a].id + '">' + jsonData.user[a].name + '</span>');
+            }
+        }
+        str.push('<span class="front show-all">所有 ESC</span>');
+        userFilterContainer.html(str.join(''));
+        exports.checkedFront();
+        exports.filterData();
     };
 
     exports.filterEvent();

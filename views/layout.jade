@@ -29,6 +29,9 @@ html
                     form.login(name="login",action="/login",method="post")
                         table
                             tr
+                                th
+                                td 使用 OA 帐号登入
+                            tr
                                 th 用户名
                                 td
                                     input.text(type="text",name="user")
@@ -110,7 +113,7 @@ html
                     h2 控制台
                     ul
                         li.J-record-log
-                            b#record-log 记录工作 >>
+                            b#record-log 记录工作
                                 if(isLogin)
                                     span （!{username}）
                         if(isLogin)
@@ -119,10 +122,7 @@ html
                                 a(href="log-out") 退出登陆
                     h2 过滤器
                     ul.user-filter
-                        li
-                            each item in user.result
-                                span.front(class="front#{item.id}",front="#{item.id}")=item.name
-                            span.front.show-all 所有,ESC
+                        li#user-filter-container
                     #statistics
                     h2 一起改进
                     ul
