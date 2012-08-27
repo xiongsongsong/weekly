@@ -83,7 +83,7 @@ define(function (require, exports, module) {
                         $('#record-log').append('<span>（' + $loginFormObj[0].elements['user'].value + '）</span>');
                         JRecordLog.after('<li class="separator"></li><li><a href="log-out">退出登陆</a></li>')
                     } else {
-                        alert('啊哦，用户名或密码不正确\r\n' + KISSY.JSON.stringify(data, undefined, '    '))
+                        alert('用户名或密码不正确。');
                     }
                 }
             });
