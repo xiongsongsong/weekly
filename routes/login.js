@@ -18,7 +18,7 @@ exports.login = function (req, res) {
     var options = {
         host:'192.168.1.240',
         port:80,
-        path:'/node/check.php',
+        path:'/node/check/',
         method:'POST',
         headers:{
             'Content-Type':'application/x-www-form-urlencoded',

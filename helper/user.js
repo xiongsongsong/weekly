@@ -14,7 +14,7 @@ exports.DBuser = Object.create(null);
 exports.init = function () {
     var callee = arguments.callee;
     var bufferHelper = new BufferHelper();
-    http.get("http://192.168.1.240/node/user-list.php", function (res) {
+    http.get("http://192.168.1.240/node/user-list/", function (res) {
         res.on('data', function (chunk) {
             bufferHelper.concat(chunk);
         });
@@ -35,7 +35,7 @@ function processingUser(data) {
         exports.DBuser = data;
     }
     catch (err) {
-        console.log('无法获取用户数据');
+        console.log('无法获取用户数据' + new Date().toLocaleTimeString());
     }
 }
 
