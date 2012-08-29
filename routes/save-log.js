@@ -90,6 +90,8 @@ exports.save_log = function (req, res) {
                     console.warn(err.message);
                     errorMSG.errorList.push({msg:'系统错误'});
                     res.end(JSON.stringify(errorMSG), undefined, '    ');
+                    //每次添加日志，都自动备份数据库
+                    require('../helper/dump').dump();
                 } else {
                     res.end(JSON.stringify({'status':true}, undefined, '    '));
                 }

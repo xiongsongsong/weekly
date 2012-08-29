@@ -23,7 +23,7 @@ exports.init = function () {
             setTimeout(callee, 2000);
         });
         res.on('error', function (e) {
-            console.log("Got error: " + e.message);
+            console.log("无法链接用户列表接口: " + new Date().toLocaleTimeString());
         });
     });
 };

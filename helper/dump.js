@@ -18,7 +18,7 @@ exports.dump = function (req, res) {
         date.getDate() + '_' +
         date.getHours() + '_' +
         date.getMinutes() + '_' +
-        date.getSeconds() +
+        date.getSeconds() + '_' +
         date.getMilliseconds(), function (err, stdout) {
         if (err) {
             res !== undefined ? res.end(err.toString()) : console.log(err);
