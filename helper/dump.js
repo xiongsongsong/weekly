@@ -13,13 +13,15 @@ exports.dump = function (req, res) {
     req !== undefined ? res.write('开始备份数据库\r\n\r\n') : undefined;
     var date = new Date();
     exec('mongodump -d fed -o ~/Ubuntu\\ One/Database/' +
-        date.getFullYear() + '_' +
-        (date.getMonth() + 1) + '_' +
-        date.getDate() + '_' +
-        date.getHours() + '_' +
-        date.getMinutes() + '_' +
-        date.getSeconds() + '_' +
-        date.getMilliseconds(), function (err, stdout) {
+        date.getFullYear() + '-' +
+        (date.getMonth() + 1) + '-' +
+        date.getDate() + '-' +
+        date.getHours() + ' ' +
+        date.getMinutes() + '-' +
+        date.getSeconds() + '-' +
+        date.getMilliseconds() + (function () {
+        return req.session.username ? req.session.username : '手动备份';
+    }), function (err, stdout) {
         if (err) {
             res !== undefined ? res.end(err.toString()) : console.log(err);
         } else {

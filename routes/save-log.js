@@ -84,8 +84,8 @@ exports.save_log = function (req, res) {
     } else {
         var collection = new DB.mongodb.Collection(DB.client, 'log');
         collection.insert(data, {safe:true},
-            function (err/*, objects*/) {
-                //console.log(objects);
+            function (err, objects) {
+                console.log(objects);
                 if (err) {
                     console.warn(err.message);
                     errorMSG.errorList.push({msg:'系统错误'});
