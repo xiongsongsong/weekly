@@ -38,9 +38,6 @@ function init(app) {
 //茶歇会的DEMO接口服务
     app.get('/demo/:which?', require('../helper/demo').init);
 
-//备份数据库到Ubuntu One文件夹
-    app.get('/mongodump', require('../helper/dump').dump);//首页
-
 //保存日志
     app.post('/save-log', require('./save-log').save_log);
 

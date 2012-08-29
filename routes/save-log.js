@@ -84,15 +84,15 @@ exports.save_log = function (req, res) {
     } else {
         var collection = new DB.mongodb.Collection(DB.client, 'log');
         collection.insert(data, {safe:true},
-            function (err, objects) {
-                console.log(objects);
+            function (err/*, objects*/) {
+                /*console.log(objects);*/
                 if (err) {
                     console.warn(err.message);
                     errorMSG.errorList.push({msg:'系统错误'});
                     res.end(JSON.stringify(errorMSG), undefined, '    ');
                 } else {
                     //每次添加日志，都自动备份数据库
-                    require('../helper/dump').dump();
+                    require('../helper/dump').dump(req);
                     res.end(JSON.stringify({'status':true}, undefined, '    '));
                 }
             });

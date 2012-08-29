@@ -8,24 +8,21 @@
 
 var exec = require('child_process').exec;
 
-exports.dump = function (req, res) {
-    req !== undefined ? res.header('Content-Type', 'text/plain; charset=utf-8') : undefined;
-    req !== undefined ? res.write('开始备份数据库\r\n\r\n') : undefined;
+exports.dump = function (req) {
     var date = new Date();
+    var username = req.session.username;
     exec('mongodump -d fed -o ~/Ubuntu\\ One/Database/' +
         date.getFullYear() + '-' +
         (date.getMonth() + 1) + '-' +
         date.getDate() + '-' +
-        date.getHours() + ' ' +
+        date.getHours() + '-' +
         date.getMinutes() + '-' +
         date.getSeconds() + '-' +
-        date.getMilliseconds() + (function () {
-        return req.session.username ? req.session.username : '手动备份';
-    }), function (err, stdout) {
+        date.getMilliseconds() +'_of_'+ username, function (err, stdout) {
         if (err) {
-            res !== undefined ? res.end(err.toString()) : console.log(err);
+            console.log(err);
         } else {
-            res !== undefined ? res.end('Success!\r\n\r\n\t' + Date.now() + '\n' + stdout) : console.log(stdout);
+            console.log('Backup database success!'+ username +'\t'+new Date().toLocaleTimeString());
         }
     });
 };
