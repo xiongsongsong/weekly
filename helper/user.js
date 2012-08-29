@@ -14,18 +14,27 @@ exports.DBuser = Object.create(null);
 exports.init = function () {
     var callee = arguments.callee;
     var bufferHelper = new BufferHelper();
-    http.get("http://192.168.1.240/node/user-list/", function (res) {
-        res.on('data', function (chunk) {
-            bufferHelper.concat(chunk);
+
+    try {
+        http.get("http://192.168.1.240/node/user-list/", function (res) {
+            res.on('data', function (chunk) {
+                bufferHelper.concat(chunk);
+            });
+            res.on('end', function () {
+                processingUser(bufferHelper.toBuffer().toString());
+                setTimeout(callee, 2000);
+            });
+            res.on('error', function (e) {
+                console.log("接口服务器错误: " + new Date().toLocaleTimeString());
+                console.log(e.toString());
+            });
         });
-        res.on('end', function () {
-            processingUser(bufferHelper.toBuffer().toString());
-            setTimeout(callee, 2000);
-        });
-        res.on('error', function (e) {
-            console.log("无法链接用户列表接口: " + new Date().toLocaleTimeString());
-        });
-    });
+    } catch (e) {
+        console.log("无法联系用户列表接口: " + new Date().toLocaleTimeString());
+        console.log(e.toString() + new Date().toLocaleTimeString());
+        setTimeout(callee, 2000);
+    }
+
 };
 
 function processingUser(data) {
