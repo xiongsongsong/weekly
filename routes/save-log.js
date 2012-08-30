@@ -91,9 +91,19 @@ exports.save_log = function (req, res) {
                     errorMSG.errorList.push({msg:'系统错误'});
                     res.end(JSON.stringify(errorMSG), undefined, '    ');
                 } else {
-                    //每次添加日志，都自动备份数据库
+                    //如果当前用户是第一次添加日志，则立即更新用户列表的缓存
+                    if (require('../helper/user').frontList['id_' + req.session.userid] === undefined) {
+                        require('../helper/user').updateFrontList({
+                            callback:function () {
+                                res.end(JSON.stringify({'status':true}, undefined, '    '));
+                            }
+                        });
+                    } else {
+                        res.end(JSON.stringify({'status':true}, undefined, '    '));
+                    }
+                    //When adding a log, automatic backup of the database
                     require('../helper/dump').dump(req);
-                    res.end(JSON.stringify({'status':true}, undefined, '    '));
+
                 }
             });
     }
