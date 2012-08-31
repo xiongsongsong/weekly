@@ -4,9 +4,9 @@
 
 
 exports.init = function (app) {
-    require('../helper/user').init();
     require('../helper/db').open({
         success:function () {
+            require('../helper/user').init();
             console.log('数据库连接成功，开始启动路由');
             init(app);
         },

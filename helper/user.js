@@ -37,11 +37,21 @@ exports.init = function () {
 
 };
 
+
+var _init = false;
+
 function processingUser(data) {
     try {
         data = JSON.parse(data);
         delete data.end;
         exports.DBuser = data;
+        //当第一次获取到用户列表后
+        //马上去mongodb中筛选出“前端”用户所对应的用户信息，比如用户名、昵称等
+        if (_init === false) {
+            _init = true;
+            console.log('成功从拉取用户数据');
+            exports.updateFrontList();
+        }
     }
     catch (err) {
         console.log('无法获取用户数据' + new Date().toLocaleTimeString());
@@ -53,6 +63,7 @@ exports.isLeave = function () {
 
 };
 
+
 exports.updateFrontList = function (param) {
     var DB = require('../helper/db');
     DB.dbServer.createCollection('log', function (err, collection) {
@@ -62,6 +73,7 @@ exports.updateFrontList = function (param) {
                 front['id_' + item] = exports.DBuser['id_' + item];
             });
             exports.frontList = front;
+            console.log((new Date).toLocaleString() + ',更新了用户列表。');
             if (param && param.callback) {
                 param.callback();
             } else {

@@ -19,17 +19,13 @@ exports.show_log = function (req, res) {
         month = new Date().getMonth() + 1;
     }
 
-    require('../helper/user').updateFrontList({
-        callback:function () {
-            var result = Object.create(null);
-            var collection = new DB.mongodb.Collection(DB.client, 'log');
-            collection.find({year:year, month:month, level:{'$gt':0}}, {}).toArray(function (err, docs) {
-                result.documents = docs;
-                result.user = require('../helper/user').frontList;
-                result.serverDate = Date.now();
-                res.end(JSON.stringify(result, undefined, '\t'));
-            });
-        }
-    })
+    var result = Object.create(null);
+    var collection = new DB.mongodb.Collection(DB.client, 'log');
+    collection.find({year:year, month:month, level:{'$gt':0}}, {}).toArray(function (err, docs) {
+        result.documents = docs;
+        result.user = require('../helper/user').frontList;
+        result.serverDate = Date.now();
+        res.end(JSON.stringify(result, undefined, '\t'));
+    });
 
 };
