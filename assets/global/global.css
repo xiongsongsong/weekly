@@ -278,7 +278,9 @@ body {
 
 #add-record-log td input.text,
 #add-record-log td textarea {
+    font-family: Consolas, verdana, simsun, sans-serif;
     padding: .5em;
+    height: 1.4em;
     width: 240px;
     border: solid 1px #A0C9C9;
     background: #fff;
