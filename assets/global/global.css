@@ -16,7 +16,7 @@ body {
 }
 
 #header {
-    background: #4C565E;
+    background: url(../images/birthday.gif) 0 center repeat-x;
     height: 98px;
     position: absolute;
     left: 0;
@@ -28,11 +28,14 @@ body {
 #header h1 {
     position: absolute;
     left: 25px;
-    top: 32px;
+    top: 22px;
     font-size: 22px;
-    color: #7fffd4;
+    color: #ff107c;
+    background: #ff107c;
+    color: #fff;
+    border-radius: 12px;
+    padding: .4em;
     font-weight: bold;
-    text-shadow: 1px 1px 1px #000;
     font-family: simsun, simhei, arial, sans-serif;
 }
 
