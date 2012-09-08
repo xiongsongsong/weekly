@@ -31,6 +31,7 @@ define(function (require, exports, module) {
             success:function (data) {
                 jsonData = KISSY.JSON.parse(data);
                 data = jsonData;
+                exports.jsonData = jsonData;
                 $('#calendar-container').find('.work-diary-list').html('');
                 $(data.documents).each(function (index, item) {
                     var id = '#date-' + item.year.toString() + item.month.toString() + item.date.toString();
@@ -146,6 +147,12 @@ define(function (require, exports, module) {
                     var str = '';
                     obj['tms-url'].length >= 1 ? str += '<a href="' + obj['tms-url'] + '" target="_blank">TMS地址</a>' : '';
                     return str.length > 1 ? '<li>' + str + '</li>' : '';
+                })(),
+                (function () {
+                    //如果登陆用户，并且是当前条目拥有者，则显示编辑按钮
+                    if (jsonData.userid && jsonData.userid === obj['front']) {
+                        return '<li class="edit"><b class="J-edit" data-id="' + _id + '">编辑</li>';
+                    }
                 })()
             ];
             tempContainer.innerHTML = '<ul>' + htmlArr.join('') + '</ul>';

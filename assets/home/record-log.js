@@ -6,6 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
+"use strict";
+
 seajs.config({
     alias:{
         'jquery':'/global/jquery',
@@ -20,10 +22,33 @@ define(function (require, exports, module) {
     var $formObj = $(document.forms['add-record-log']);
     var $loginFormObj = $(document.forms['login']);
     var left = -480;
-    var JRecordLog = $('.J-record-log');
+    var JRecordLog = $('.J-record-log,.J-edit');
 
     exports.init = function () {
         JRecordLog.live('click', function (ev) {
+            var $target = $(ev.currentTarget);
+            if ($target.hasClass('J-edit')) {
+                var id = $target.attr('data-id');
+                $formObj.find('.J-temp').remove();
+                var currentDocument;
+                $(require('show-log').jsonData.documents).each(function (index, item) {
+                    if (id === item._id) {
+                        currentDocument = item;
+                        return false;
+                    }
+                });
+                if (currentDocument === undefined)return;
+                $formObj[0].elements['page-name'].value = currentDocument['page-name'];
+                $formObj[0].elements['design'].value = currentDocument['design'];
+                $formObj[0].elements['customer'].value = currentDocument['customer'];
+                $formObj[0].elements['level'].value = currentDocument['level'];
+                $formObj[0].elements['online-url'].value = currentDocument['online-url'];
+                $formObj[0].elements['tms-url'].value = currentDocument['tms-url'];
+                $formObj[0].elements['note'].value = currentDocument['note'];
+
+                $formObj.find('tr:first').before('<tr class="J-temp"><td colspan="2" style="text-align: center;">正在修改JSON页面</td></tr>');
+            }
+
             $addRecordLog.stop();
             $addRecordLog.animate({left:'0px'}, 500);
             $(ev.currentTarget).addClass('current');

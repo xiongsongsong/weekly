@@ -342,6 +342,23 @@ body {
     line-height: 170%;
 }
 
+#calendar-container div.work-describe ul li.edit {
+    position: absolute;
+    width: auto;
+    position: absolute;
+    right: .5em;
+    top: .5em;
+}
+
+#calendar-container div.work-describe ul li.edit b {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #4454a7;
+    font-weight: normal;
+    background: #f9f9f9;
+    padding: 0 .5em;
+}
+
 #calendar-container div.work-describe ul li {
     width: 100%;
     text-indent: .8em;

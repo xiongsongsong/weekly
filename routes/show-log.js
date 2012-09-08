@@ -25,6 +25,7 @@ exports.show_log = function (req, res) {
         result.documents = docs;
         result.user = require('../helper/user').frontList;
         result.serverDate = Date.now();
+        if (require('./login').isLogin(req)) result.userid = req.session.userid;
         res.end(JSON.stringify(result, undefined, '\t'));
     });
 

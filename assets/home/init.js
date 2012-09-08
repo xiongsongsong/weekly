@@ -6,6 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
+"use strict";
+
 seajs.config({
     alias:{
         'calendar':'/home/calendar',

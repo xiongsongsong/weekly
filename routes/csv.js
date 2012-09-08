@@ -5,9 +5,9 @@
  * Time: 下午5:12
  * To change this template use File | Settings | File Templates.
  */
-var DB = require('../helper/db');
 
 exports.download = function (req, res) {
+    var DB = require('../helper/db');
     var r = {};
     var year = parseInt(req.params.year, 10),
         month = parseInt(req.params.month, 10);
