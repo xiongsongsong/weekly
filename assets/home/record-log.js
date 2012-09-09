@@ -20,6 +20,7 @@ define(function (require, exports, module) {
     var $ = require('jquery');
     var $addRecordLog = $('#add-record-log');
     var $formObj = $(document.forms['add-record-log']);
+    var ele = $formObj[0].elements;
     var $loginFormObj = $(document.forms['login']);
     var left = -480;
     var JRecordLog = $('.J-record-log,.J-edit');
@@ -30,23 +31,29 @@ define(function (require, exports, module) {
             if ($target.hasClass('J-edit')) {
                 var id = $target.attr('data-id');
                 $formObj.find('.J-temp').remove();
-                var currentDocument;
+                var currentDoc;
                 $(require('show-log').jsonData.documents).each(function (index, item) {
                     if (id === item._id) {
-                        currentDocument = item;
+                        currentDoc = item;
                         return false;
                     }
                 });
-                if (currentDocument === undefined)return;
-                $formObj[0].elements['page-name'].value = currentDocument['page-name'];
-                $formObj[0].elements['design'].value = currentDocument['design'];
-                $formObj[0].elements['customer'].value = currentDocument['customer'];
-                $formObj[0].elements['level'].value = currentDocument['level'];
-                $formObj[0].elements['online-url'].value = currentDocument['online-url'];
-                $formObj[0].elements['tms-url'].value = currentDocument['tms-url'];
-                $formObj[0].elements['note'].value = currentDocument['note'];
+                if (currentDoc === undefined)return;
+                ele['page-name'].value = currentDoc['page-name'];
+                ele['design'].value = currentDoc['design'];
+                ele['customer'].value = currentDoc['customer'];
+                ele['level'].value = currentDoc['level'];
+                ele['online-url'].value = currentDoc['online-url'];
+                ele['tms-url'].value = currentDoc['tms-url'];
+                ele['note'].value = currentDoc['note'];
+                ele['year'].value = currentDoc['year'];
+                ele['month'].value = currentDoc['month'];
+                ele['date'].value = currentDoc['date'];
+                ele['smt'].value = '确定修改';
 
                 $formObj.find('tr:first').before('<tr class="J-temp"><td colspan="2" style="text-align: center;">正在修改JSON页面</td></tr>');
+                $formObj.append($('<input type="hidden" name="type" value="edit" class="J-temp">'));
+                $formObj.append($('<input type="hidden" name="object_id" value="' + id + '" class="J-temp">'));
             }
 
             $addRecordLog.stop();
@@ -65,7 +72,13 @@ define(function (require, exports, module) {
         });
 
         $formObj.submit(function (ev) {
+            savelog();
+            ev.preventDefault();
+        });
+
+        function savelog() {
             var formData = $formObj.serialize();
+            console.log(formData);
             $.ajax('/save-log', {
                 type:'post',
                 dataType:'json',
@@ -78,7 +91,9 @@ define(function (require, exports, module) {
                             JRecordLog.removeClass('current')
                         });
                         require('show-log').getData();
+                        require('show-log').resetDescribe();
                     } else {
+                        console.log(data);
                         alert('有错误！\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '   '));
                         for (var i = 0; i < data.errorList.length; i++) {
                             var obj = $formObj[0].elements[data.errorList[i].name];
@@ -90,9 +105,7 @@ define(function (require, exports, module) {
                     }
                 }
             });
-
-            ev.preventDefault();
-        });
+        }
 
         $loginFormObj.submit(function (ev) {
             $.ajax('/login', {

@@ -43,4 +43,10 @@ function init(app) {
 
 //拉取日志信息
     app.get('/show_log/:date', require('./show-log').show_log);
+
+//本地测试使用 获取用户列表
+    app.get('/node/user-list', require('../helper/temp').tempUser);
+
+    //本地测试使用 获取临时文件
+    app.post('/node/check', require('../helper/temp').check);
 }

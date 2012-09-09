@@ -64,6 +64,8 @@ exports.isLeave = function () {
 };
 
 
+//获取日志文档中，所有的front-id（即uid）
+
 exports.updateFrontList = function (param) {
     var DB = require('../helper/db');
     DB.dbServer.createCollection('log', function (err, collection) {
@@ -76,10 +78,7 @@ exports.updateFrontList = function (param) {
             console.log((new Date).toLocaleString() + ',更新了用户列表。');
             if (param && param.callback) {
                 param.callback();
-            } else {
-                return front;
             }
         });
     });
 };
-
