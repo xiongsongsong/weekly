@@ -24,7 +24,9 @@ exports.show_log = function (req, res) {
 
     var result = Object.create(null);
     var collection = new DB.mongodb.Collection(DB.client, 'log');
-    collection.find({year:year, month:month, level:{'$gt':0}}, {}).toArray(function (err, docs) {
+    collection.find({year:year, month:month, level:{'$gt':0}}, {}).sort([
+        ['_id', -1]
+    ]).toArray(function (err, docs) {
         docs.forEach(function (item) {
             Object.keys(item).forEach(function (k) {
                 if (typeof item[k] === 'string') item[k] = sanitize(item[k]).xss();
