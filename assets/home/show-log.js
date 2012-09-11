@@ -7,7 +7,8 @@
  */
 seajs.config({
     alias:{
-        'jquery':'/global/jquery'
+        'jquery':'/global/jquery',
+        'render-log':'/home/render-log'
     }
 });
 
@@ -18,7 +19,6 @@ define(function (require, exports, module) {
     /*初始化并显示数据*/
     var jsonData;
     var moreDetailWrapper = $('#more-detail-wrapper');
-    var front;
     exports.getData = function () {
         $.ajax('/show_log/json', {
             type:'get',
@@ -38,22 +38,19 @@ define(function (require, exports, module) {
                     var $content = $(id);
                     $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="' + item.front + '" data-id="' + item._id + '">' + beautifyName(data.user['id_' + item.front].name) + '</span>'));
                 });
-
-                front = exports.getCurrentFilterOfFront();
+                exports.front = exports.getCurrentFilterOfFront();
                 exports.updateUserList();
                 exports.checkedFront();
                 exports.filterData();
                 exports.filterLogList();
-
-                require('home/calendar.js').autoResetOffset();
             }
         })
     };
 
 
     exports.checkedFront = function () {
-        front = parseInt(front, 10);
-        var $target = $('ul.user-filter span.front' + front);
+        exports.front = parseInt(exports.front, 10);
+        var $target = $('ul.user-filter span.front' + exports.front);
         var $frontObj = $('ul.user-filter span.front');
         if ($target.hasClass('show-all') || $target.size() < 1) {
             $frontObj.removeClass('weak highlight', 1);
@@ -66,9 +63,10 @@ define(function (require, exports, module) {
     /*添加事件，让用户可点击*/
     function filterEvent() {
         $('ul.user-filter span.front').live('mousedown', function (ev) {
-            front = $(ev.target).attr('front');
+            exports.front = $(ev.target).attr('front');
             exports.checkedFront();
             exports.filterData();
+            exports.filterLogList();
         });
         $('#statistics a.J-show-more').live('mousedown', function () {
             exports.filterLogList();
@@ -89,7 +87,7 @@ define(function (require, exports, module) {
                         $(document.body).toggleClass('show-amortization');
                         break;
                     case 27:
-                        front = null;
+                        exports.front = null;
                         exports.resetDescribe();
                         exports.checkedFront();
                         exports.filterData();
@@ -116,14 +114,17 @@ define(function (require, exports, module) {
 
         $('#calendar-panel span.front').live('mousedown', function (ev) {
             var target = $(ev.target);
-            front = target.attr('front');
+            exports.front = target.attr('front');
             var parentsNode = target.parents('div.work-diary');
             $('#calendar-panel div.work-describe').remove();
             $('#calendar-panel div.work-diary-list').stop().not(parentsNode.find('div.work-diary-list')).animate({top:0}, 300);
             var _id = target.attr('data-id');
-            var obj;
+            var data;
             for (var i = 0; i < jsonData.documents.length; i++) {
-                if (jsonData.documents[i]._id === _id) obj = jsonData.documents[i];
+                if (jsonData.documents[i]._id === _id) {
+                    data = jsonData.documents[i];
+                    break;
+                }
             }
             var id = 'tempNode' + new Date().getTime() + '' + parseInt(Math.random() * 1000000, 10);
 
@@ -131,41 +132,13 @@ define(function (require, exports, module) {
             tempContainer.id = id;
             tempContainer.className += ' work-describe';
 
-            var htmlArr = [
-                (function () {
-                    var level = ['简单】', '【一般】', '【常规】', '【复杂】'][obj['level'] - 1];
-                    return '<li title="' + level + obj['page-name'] + '">' +
-                        (function () {
-                            return obj['online-url'].length > 1 ?
-                                '<a href="' + obj['online-url'] + '" target="_blank">' + obj['page-name'] + '</a>'
-                                : obj['page-name'];
-                        })() +
-                        '</li>';
-                })(),
-                (function () {
-                    var str = '';
-                    obj['design'].length >= 1 ? str += '设计:' + obj['design'] + ' ' : '';
-                    obj['customer'].length >= 1 ? str += '需求:' + obj['customer'] : '';
-                    return str.length > 1 ? '<li title="' + str + '">' + str + '</li>' : '';
-                })(),
-                (function () {
-                    var str = '';
-                    obj['tms-url'].length >= 1 ? str += '<a href="' + obj['tms-url'] + '" target="_blank">TMS地址</a>' : '';
-                    return str.length > 1 ? '<li>' + str + '</li>' : '';
-                })(),
-                (function () {
-                    //如果登陆用户，并且是当前条目拥有者，则显示编辑按钮
-                    if (jsonData.userid && jsonData.userid === obj['front']) {
-                        return '<li class="edit"><b class="J-edit" data-id="' + _id + '">编辑</li>';
-                    }
-                })()
-            ];
-            tempContainer.innerHTML = '<ul>' + htmlArr.join('') + '</ul>';
+            tempContainer.innerHTML = '<ul>' + require('render-log').workDescribe(data, _id).join('') + '</ul>';
             parentsNode.append(tempContainer);
             tempContainer = $('#' + id);
             var workDiaryList = parentsNode.find('div.work-diary-list');
             exports.checkedFront();
             exports.filterData();
+            exports.filterLogList();
             $(workDiaryList).animate({top:-workDiaryList.height() + 'px'}, 300);
             tempContainer.css({'border':'solid 1px ' + target.css('background-color')});
         });
@@ -195,7 +168,7 @@ define(function (require, exports, module) {
         var $target = $frontObj.filter('.highlight');
         if ($target.size() > 0) {
             $calendarWrapper.find('span.front').hide();
-            $calendarWrapper.find('.front' + front).each(function (index, item) {
+            $calendarWrapper.find('.front' + exports.front).each(function (index, item) {
                 $(item).show()
             });
         } else {
@@ -207,77 +180,23 @@ define(function (require, exports, module) {
     exports.filterLogList = function () {
         if (jsonData == undefined)return;
         var moreDetail = $('#more-detail');
-        var html = [];
-        KISSY.each(jsonData.documents, function (item) {
-            if (isNaN(front)) {
-                html.push(item)
-            } else {
-                if (item.front === front) {
-                    html.push(item)
-                }
-            }
-        });
-        var htmlStr = [];
-        var count = {
-            level1:0,
-            level2:0,
-            level3:0,
-            level4:0
-        };
-        if (html.length > 0) {
-            KISSY.each(html, function (item) {
-                count['level' + item.level]++;
-                var str = '<h2>' + (function () {
-                    if ($.trim(item['online-url'].length) > 0) {
-                        return '<a href="' + $.trim(item['online-url']) + '" target="_blank">' + item['page-name'] + '</a>';
-                    } else {
-                        return  item['page-name'];
-                    }
-                })() + '</h2>' +
-                    '<ul>' +
-                    (function () {
-                        return $.trim(item['online-url']).length > 0 ? '<li>线上地址：' + item['online-url'] + '</a></li>' : '';
-                    })() +
-                    (function () {
-                        return $.trim(item['tms-url']).length > 0 ? '<li>TMS地址：<a href="' + $.trim(item['tms-url']) + '" target="_blank">' + item['tms-url'] + '</a></li>' : '';
-                    })() +
-                    (function () {
-                        return isNaN(front) ? '<li>前端：' + jsonData.user['id_' + item['front']]['name'] + '</li>' : '';
-                    })() +
-                    (function () {
-                        return $.trim(item['design']).length > 0 ? '<li>设计师：' + item['design'] + '</li>' : '';
-                    })() +
-                    (function () {
-                        return $.trim(item['customer']).length > 0 ? '<li>需求方：' + item['customer'] + '</li>' : '';
-                    })() +
-                    (function () {
-                        return '<li>页面等级：' + ['简单', '一般', '常规', '复杂'][item.level - 1] + '</li>';
-                    })() +
-                    '<li>完成日期：' + item['year'] + '-' + item['month'] + '-' + item['date'] + '</li>' +
-                    (function () {
-                        return $.trim(item['note']).length > 0 ? '<li>备注：' + item['note'] + '</li>' : '';
-                    })() +
-                    '</ul>';
-                htmlStr.push(str);
-            });
-        } else {
-            htmlStr.push('<h2>没有该月的记录</h2>')
-        }
-        moreDetail.html(htmlStr.join(''));
-        var currentUser = jsonData.user['id_' + front];
+        var logList = require('render-log').logList();
+        moreDetail.html(logList.list.join(''));
+        var currentUser = jsonData.user['id_' + exports.front];
+        var count = logList.count;
         var amortization = count.level1 * 20 + count.level2 * 30 + count.level3 * 50 + count.level4 * 100;
-        if (isNaN(front)) {
+        if (isNaN(exports.front)) {
             $('#log-list-control .J-username').html('全部页面');
         } else {
             $('#log-list-control .J-username').html(beautifyName(currentUser.name) + '（' + currentUser['real-name'] + '）');
         }
         $('#statistics').html('<h2>' + (function () {
-            if (!isNaN(front)) {
+            if (!isNaN(exports.front)) {
                 return '' + beautifyName(currentUser['name']) + ' - <span>' + currentUser['real-name'] + '</span>';
             } else {
                 return '统计 ';
             }
-        })() + '<span>（' + html.length + '）</span></h2>' +
+        })() + '<span>（' + logList.length + '）</span></h2>' +
             '<ul>' +
             '<li><span>简单：' + count.level1 + '</span><span>一般：' + count.level2 + '</span></li>' +
             '<li><span>常规：' + count.level3 + '</span><span>复杂：' + count.level4 + '</span></li>' +

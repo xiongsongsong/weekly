@@ -16,7 +16,6 @@ seajs.config({
 });
 
 define(function (require, exports, module) {
-
     var $ = require('jquery');
     var $addRecordLog = $('#add-record-log');
     var $formObj = $(document.forms['add-record-log']);
@@ -31,14 +30,14 @@ define(function (require, exports, module) {
             if ($target.hasClass('J-edit')) {
                 var id = $target.attr('data-id');
                 $formObj.find('.J-temp').remove();
-                var currentDoc;
+                var currentDoc = undefined;
                 $(require('show-log').jsonData.documents).each(function (index, item) {
                     if (id === item._id) {
                         currentDoc = item;
                         return false;
                     }
                 });
-                if (currentDoc === undefined)return;
+                if (currentDoc === undefined) return;
                 ele['page-name'].value = currentDoc['page-name'];
                 ele['design'].value = currentDoc['design'];
                 ele['customer'].value = currentDoc['customer'];
@@ -72,13 +71,12 @@ define(function (require, exports, module) {
         });
 
         $formObj.submit(function (ev) {
-            savelog();
+            saveLog();
             ev.preventDefault();
         });
 
-        function savelog() {
+        function saveLog() {
             var formData = $formObj.serialize();
-            console.log(formData);
             $.ajax('/save-log', {
                 type:'post',
                 dataType:'json',
