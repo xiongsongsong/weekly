@@ -41,6 +41,8 @@ define(function (require, exports, module) {
 
                 front = exports.getCurrentFilterOfFront();
                 exports.updateUserList();
+                exports.checkedFront();
+                exports.filterData();
                 require('home/calendar.js').autoResetOffset();
             }
         })
@@ -57,7 +59,6 @@ define(function (require, exports, module) {
             $('ul.user-filter span.front').removeClass('highlight').addClass('weak');
             $target.removeClass('weak').addClass('highlight');
         }
-        exports.filterData();
     };
 
     /*添加事件，让用户可点击*/
@@ -65,6 +66,7 @@ define(function (require, exports, module) {
         $('ul.user-filter span.front').live('mousedown', function (ev) {
             front = $(ev.target).attr('front');
             exports.checkedFront();
+            exports.filterData();
         });
         $('#statistics a.J-show-more').live('mousedown', function () {
             exports.filterLogList();
@@ -88,6 +90,7 @@ define(function (require, exports, module) {
                         front = null;
                         exports.resetDescribe();
                         exports.checkedFront();
+                        exports.filterData();
                         break;
                 }
             }
@@ -160,6 +163,7 @@ define(function (require, exports, module) {
             tempContainer = $('#' + id);
             var workDiaryList = parentsNode.find('div.work-diary-list');
             exports.checkedFront();
+            exports.filterData();
             $(workDiaryList).animate({top:-workDiaryList.height() + 'px'}, 300);
             tempContainer.css({'border':'solid 1px ' + target.css('background-color')});
         });
@@ -302,8 +306,6 @@ define(function (require, exports, module) {
         }
         str.push('<span class="front show-all">所有 ESC</span>');
         userFilterContainer.html(str.join(''));
-        exports.checkedFront();
-        exports.filterData();
     };
 
     //尝试过滤花名中的非中文字符
