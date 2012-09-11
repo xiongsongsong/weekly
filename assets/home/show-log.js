@@ -43,6 +43,8 @@ define(function (require, exports, module) {
                 exports.updateUserList();
                 exports.checkedFront();
                 exports.filterData();
+                exports.filterLogList();
+
                 require('home/calendar.js').autoResetOffset();
             }
         })
@@ -62,7 +64,7 @@ define(function (require, exports, module) {
     };
 
     /*添加事件，让用户可点击*/
-    exports.filterEvent = function () {
+    function filterEvent() {
         $('ul.user-filter span.front').live('mousedown', function (ev) {
             front = $(ev.target).attr('front');
             exports.checkedFront();
@@ -179,7 +181,7 @@ define(function (require, exports, module) {
             }, 300);
         })
 
-    };
+    }
 
     exports.getCurrentFilterOfFront = function () {
         var $frontObj = $('ul.user-filter span.front');
@@ -199,7 +201,6 @@ define(function (require, exports, module) {
         } else {
             $calendarWrapper.find('span.front').show();
         }
-        exports.filterLogList();
     };
 
     /*显示不同用户的页面记录*/
@@ -319,7 +320,7 @@ define(function (require, exports, module) {
 
     }
 
-    exports.filterEvent();
+    filterEvent();
 
 });
 
