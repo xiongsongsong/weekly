@@ -346,11 +346,14 @@ body {
     top: .5em;
 }
 
+#calendar-container div.work-describe ul li b {
+    font-weight: normal;
+}
+
 #calendar-container div.work-describe ul li.edit b {
     cursor: pointer;
     text-decoration: underline;
     color: #4454a7;
-    font-weight: normal;
     background: #f9f9f9;
     padding: 0 .5em;
 }

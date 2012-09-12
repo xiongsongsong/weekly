@@ -73,12 +73,6 @@ define(function (require, exports, module) {
             }
         });
 
-        /*解决方案就是：
-         *
-         *    渲染出所有的LI节点，然后通过样式觉得是否隐藏
-         *
-         * */
-
         var list = [];
         var count = {
             level1:0,

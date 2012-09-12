@@ -94,7 +94,7 @@ define(function (require, exports, module) {
                             console.log('编辑模式');
                             showLog.getData({
                                 callback:function () {
-                                    require('show-log').updateCurrentInfo(ele['object_id'].value);
+                                    showLog.updateCurrentInfo(ele['object_id'].value);
                                 }
                             });
                         } else {
