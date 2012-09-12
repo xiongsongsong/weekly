@@ -19,6 +19,46 @@ define(function (require, exports, module) {
     var showLog = require('show-log');
     var $ = require('jquery');
 
+    function createTpl(item, name) {
+        var attr = 'class="J-' + name + '" data-id="' + item._id + '"';
+        switch (name) {
+            case 'page-name':
+                return '<span ' + attr + '>' + item[name] + '</span>';
+                break;
+            case 'front':
+                return '<span ' + attr + '>' + showLog.jsonData.user['id_' + item['front']]['name'] + '</span>';
+                break;
+            case 'online-url':
+                return '<span ' + attr + '>' + item[name] + '</span>';
+                break;
+            case 'tms-url':
+                return '<a href="' + item['tms-url'] + '" ' + attr + '>' + item[name] + '</a>';
+                break;
+            case 'design':
+                return '<span ' + attr + '>' + item[name] + '</span>';
+                break;
+            case 'customer':
+                return '<span ' + attr + '>' + item[name] + '</span>';
+                break;
+            case 'note':
+                return '<span ' + attr + '>' + item[name] + '</span>';
+                break;
+            case 'year':
+                return '<span ' + attr + '>' + item[name] + '</span>';
+                break;
+            case 'month':
+                return '<span ' + attr + '>' + item[name] + '</span>';
+                break;
+            case 'date':
+                return '<span ' + attr + '>' + item[name] + '</span>';
+                break;
+        }
+    }
+
+    function isHidden(item, name) {
+        return $.trim(item[name]).length < 1 ? ' class="hidden J-container"' : ' class="J-container"';
+    }
+
     exports.logList = function () {
         var jsonData = showLog.jsonData;
         var html = [];
@@ -33,6 +73,12 @@ define(function (require, exports, module) {
             }
         });
 
+        /*解决方案就是：
+         *
+         *    渲染出所有的LI节点，然后通过样式觉得是否隐藏
+         *
+         * */
+
         var list = [];
         var count = {
             level1:0,
@@ -45,33 +91,33 @@ define(function (require, exports, module) {
                 count['level' + item.level]++;
                 var str = '<h2>' + (function () {
                     if ($.trim(item['online-url']).length > 0) {
-                        return '<a href="' + $.trim(item['online-url']) + '" target="_blank">' + item['page-name'] + '</a>';
+                        return '<a href="' + $.trim(item['online-url']) + '" target="_blank">' + createTpl(item, 'page-name') + '</a>';
                     } else {
-                        return  item['page-name'];
+                        return  createTpl(item, 'page-name');
                     }
                 })() + '</h2>' +
                     '<ul>' +
                     (function () {
-                        return $.trim(item['online-url']).length > 0 ? '<li>线上地址：' + item['online-url'] + '</a></li>' : '';
+                        return '<li ' + isHidden(item, 'online-url') + '>线上地址：' + createTpl(item, 'online-url') + '</li>';
                     })() +
                     (function () {
-                        return $.trim(item['tms-url']).length > 0 ? '<li>TMS地址：<a href="' + $.trim(item['tms-url']) + '" target="_blank">' + item['tms-url'] + '</a></li>' : '';
+                        return '<li ' + isHidden(item, 'tms-url') + '>TMS地址：' + createTpl(item, 'tms-url') + '</li>';
                     })() +
                     (function () {
-                        return isNaN(front) ? '<li>前端：' + jsonData.user['id_' + item['front']]['name'] + '</li>' : '';
+                        return isNaN(front) ? '<li>前端：' + createTpl(item, 'front') + '</li>' : '';
                     })() +
                     (function () {
-                        return $.trim(item['design']).length > 0 ? '<li>设计师：' + item['design'] + '</li>' : '';
+                        return  '<li ' + isHidden(item, 'design') + '>设计师：' + createTpl(item, 'design') + '</li>';
                     })() +
                     (function () {
-                        return $.trim(item['customer']).length > 0 ? '<li>需求方：' + item['customer'] + '</li>' : '';
+                        return '<li ' + isHidden(item, 'customer') + '>需求方：' + createTpl(item, 'customer') + '</li>';
                     })() +
                     (function () {
                         return '<li>页面等级：' + ['简单', '一般', '常规', '复杂'][item.level - 1] + '</li>';
                     })() +
-                    '<li>完成日期：' + item['year'] + '-' + item['month'] + '-' + item['date'] + '</li>' +
+                    '<li>完成日期：' + createTpl(item, 'year') + '-' + createTpl(item, 'month') + '-' + createTpl(item, 'date') + '</li>' +
                     (function () {
-                        return $.trim(item['note']).length > 0 ? '<li>备注：' + item['note'] + '</li>' : '';
+                        return '<li ' + isHidden(item, 'note') + '>备注：' + createTpl(item, 'note') + '</li>';
                     })() +
                     '</ul>';
                 list.push(str);
@@ -94,26 +140,24 @@ define(function (require, exports, module) {
                 return '<li title="' + level + data['page-name'] + '">' +
                     (function () {
                         return $.trim(data['online-url']).length > 1 ?
-                            '<a href="' + data['online-url'] + '" target="_blank">' + data['page-name'] + '</a>'
-                            : data['page-name'];
+                            '<a href="' + data['online-url'] + '" target="_blank">' + createTpl(data, 'page-name') + '</a>'
+                            : createTpl(data, 'page-name');
                     })() +
                     '</li>';
             })(),
             (function () {
                 var str = '';
-                data['design'].length >= 1 ? str += '设计:' + data['design'] + ' ' : '';
-                data['customer'].length >= 1 ? str += '需求:' + data['customer'] : '';
-                return str.length > 1 ? '<li title="' + str + '">' + str + '</li>' : '';
+                str += '<b ' + isHidden(data, 'design') + '>设计:' + createTpl(data, 'design') + '</b>';
+                str += '<b ' + isHidden(data, 'customer') + '>需求:' + createTpl(data, 'customer') + '</b>';
+                return str.length > 1 ? '<li>' + str + '</li>' : '';
             })(),
             (function () {
-                var str = '';
-                data['tms-url'].length >= 1 ? str += '<a href="' + data['tms-url'] + '" target="_blank">TMS地址</a>' : '';
-                return str.length > 1 ? '<li>' + str + '</li>' : '';
+                return '<li ' + isHidden(data, 'tms-url') + '><a href="' + data['tms-url'] + '" target="_blank">TMS地址<b class="hidden">' + createTpl(data, 'tms-url') + '</b></a></li>';
             })(),
             (function () {
                 //如果登陆用户，并且是当前条目拥有者，则显示编辑按钮
                 if (jsonData.userid && jsonData.userid === data['front']) {
-                    return '<li class="edit"><b class="J-edit" data-id="' + _id + '">编辑</li>';
+                    return '<li class="edit"><b class="J-edit" data-id="' + _id + '">编辑</b></li>';
                 }
             })()
         ];

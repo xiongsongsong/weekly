@@ -16,6 +16,7 @@ seajs.config({
 
 define(function (require, exports, module) {
     var $ = require('jquery');
+    var showLog = require('show-log');
     var $yearNode = $('#year-trigger'),
         $monthNode = $('#month-trigger');
     var header = $('#header');
@@ -183,7 +184,15 @@ define(function (require, exports, module) {
         $monthNode.html(currentDate.getMonth() + 1);
         calendarPanel.html(table + calendarStr.join('') + '</table>');
         exports.autoResetOffset();
-        require('show-log').getData();
+        showLog.getData({
+            callback:function () {
+                showLog.updateDiaryList();
+                showLog.updateUserList();
+                showLog.checkedFront();
+                showLog.filterData();
+                showLog.filterLogList();
+            }
+        });
     };
 
     /*

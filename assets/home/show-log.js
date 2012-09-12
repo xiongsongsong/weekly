@@ -5,6 +5,7 @@
  * Time: 下午5:22
  * 显示工作日志，并提供过滤，查看详情和简单统计等功能
  */
+
 seajs.config({
     alias:{
         'jquery':'/global/jquery',
@@ -19,7 +20,7 @@ define(function (require, exports, module) {
     /*初始化并显示数据*/
     var jsonData;
     var moreDetailWrapper = $('#more-detail-wrapper');
-    exports.getData = function () {
+    exports.getData = function (object) {
         $.ajax('/show_log/json', {
             type:'get',
             cache:false,
@@ -29,20 +30,12 @@ define(function (require, exports, module) {
                 month:$('#month-trigger').text()
             },
             success:function (data) {
-                jsonData = KISSY.JSON.parse(data);
-                data = jsonData;
-                exports.jsonData = jsonData;
-                $('#calendar-container').find('.work-diary-list').html('');
-                $(data.documents).each(function (index, item) {
-                    var id = '#date-' + item.year.toString() + item.month.toString() + item.date.toString();
-                    var $content = $(id);
-                    $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="' + item.front + '" data-id="' + item._id + '">' + beautifyName(data.user['id_' + item.front].name) + '</span>'));
-                });
+                exports.jsonData = KISSY.JSON.parse(data);
+                jsonData = exports.jsonData;
                 exports.front = exports.getCurrentFilterOfFront();
-                exports.updateUserList();
-                exports.checkedFront();
-                exports.filterData();
-                exports.filterLogList();
+                if (object && object.callback) {
+                    object.callback();
+                }
             }
         })
     };
@@ -161,6 +154,18 @@ define(function (require, exports, module) {
         return parseInt($frontObj.filter('.highlight').attr('front'), 10);
     };
 
+    //更新日历上的日志方框
+    exports.updateDiaryList = function () {
+        $('#calendar-container').find('.work-diary-list').html('');
+        $(jsonData.documents).each(function (index, item) {
+            var id = '#date-' + item.year.toString() + item.month.toString() + item.date.toString();
+            var $content = $(id);
+            $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="'
+                + item.front + '" data-id="' + item._id + '">'
+                + beautifyName(jsonData.user['id_' + item.front].name) + '</span>'));
+        });
+    };
+
     /*根据条件过滤数据*/
     exports.filterData = function () {
         var $frontObj = $('ul.user-filter span.front');
@@ -226,6 +231,24 @@ define(function (require, exports, module) {
         }
         str.push('<span class="front show-all">所有 ESC</span>');
         userFilterContainer.html(str.join(''));
+    };
+
+    /*更新当前用户的信息*/
+    exports.updateCurrentInfo = function (_id) {
+        var currentObject;
+        for (var i = 0; i < jsonData.documents.length; i++) {
+            if (_id === jsonData.documents[i]._id) {
+                currentObject = jsonData.documents[i];
+                break;
+            }
+        }
+        if (currentObject === undefined) return;
+        var containerArr = [];
+        for (var key in currentObject) {
+            if (currentObject.hasOwnProperty(key)) containerArr.push(key);
+        }
+        console.log(containerArr, _id);
+
     };
 
     //尝试过滤花名中的非中文字符

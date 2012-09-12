@@ -18,6 +18,7 @@ seajs.config({
 define(function (require, exports, module) {
     var $ = require('jquery');
     var $addRecordLog = $('#add-record-log');
+    var showLog = require('show-log');
     var $formObj = $(document.forms['add-record-log']);
     var ele = $formObj[0].elements;
     var $loginFormObj = $(document.forms['login']);
@@ -88,10 +89,27 @@ define(function (require, exports, module) {
                         $addRecordLog.animate({left:left + 'px'}, 500, function () {
                             JRecordLog.removeClass('current')
                         });
-                        require('show-log').getData();
-                        require('show-log').resetDescribe();
+                        //if it is in edit mode
+                        if (ele['type'] && ele['type'].value === 'edit') {
+                            console.log('编辑模式');
+                            showLog.getData({
+                                callback:function () {
+                                    require('show-log').updateCurrentInfo(ele['object_id'].value);
+                                }
+                            });
+                        } else {
+                            console.log('保存模式');
+                            showLog.getData({
+                                callback:function () {
+                                    showLog.updateDiaryList();
+                                    showLog.updateUserList();
+                                    showLog.checkedFront();
+                                    showLog.filterData();
+                                    showLog.filterLogList();
+                                }
+                            });
+                        }
                     } else {
-                        console.log(data);
                         alert('有错误！\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '   '));
                         for (var i = 0; i < data.errorList.length; i++) {
                             var obj = $formObj[0].elements[data.errorList[i].name];

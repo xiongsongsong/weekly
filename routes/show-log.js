@@ -16,7 +16,7 @@ exports.show_log = function (req, res) {
     var year = parseInt(req.query.year, 10);
     var month = parseInt(req.query.month, 10);
     if (isNaN(year)) {
-        year = new Date().getFullYear()
+        year = new Date().getFullYear();
     }
     if (isNaN(month)) {
         month = new Date().getMonth() + 1;
@@ -27,15 +27,15 @@ exports.show_log = function (req, res) {
     collection.find({year:year, month:month, level:{'$gt':0}}, {}).sort([
         ['_id', -1]
     ]).toArray(function (err, docs) {
-        docs.forEach(function (item) {
-            Object.keys(item).forEach(function (k) {
-                if (typeof item[k] === 'string') item[k] = sanitize(item[k]).xss();
-            })
+            docs.forEach(function (item) {
+                Object.keys(item).forEach(function (k) {
+                    if (typeof item[k] === 'string') item[k] = sanitize(item[k]).xss();
+                })
+            });
+            result.documents = docs;
+            result.user = require('../helper/user').frontList;
+            result.serverDate = Date.now();
+            if (require('./login').isLogin(req)) result.userid = req.session.userid;
+            res.end(JSON.stringify(result, undefined, '\t'));
         });
-        result.documents = docs;
-        result.user = require('../helper/user').frontList;
-        result.serverDate = Date.now();
-        if (require('./login').isLogin(req)) result.userid = req.session.userid;
-        res.end(JSON.stringify(result, undefined, '\t'));
-    });
 };
