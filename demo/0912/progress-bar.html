@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>进度条</title>
+    <style>
+        .scroll {
+            margin: 0 auto 40px auto;
+            background: #444;
+            height: 12px;
+            font-size: 12px;
+            position: relative;
+        }
+
+        .scroll .full {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            background: red;
+            height: 100%;
+            text-align: right;
+            color: #fff;
+        }
+
+        #special {
+            background: #444;
+        }
+
+        #special .full {
+            background: #999;
+        }
+
+    </style>
+</head>
+
+<body>
+<h1>进度条</h1>
+
+<div class="scroll" style="width:20%;"><span class="full"></span></div>
+<div class="scroll" id="special" style="width:60%;"><span class="full"></span></div>
+<div class="scroll" style="width:80%;"><span class="full"></span></div>
+<script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js"></script>
+<script>
+    KISSY.each(KISSY.DOM.query('.full'), function (item) {
+        KISSY.Anim(item, {width:'50%'}, 1, 'easeBothStrong',function () {
+            item.innerHTML = '50%';
+        }).run();
+    });
+</script>
+</body>
+</html>
