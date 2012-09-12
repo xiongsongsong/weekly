@@ -28,9 +28,10 @@ define(function (require, exports, module) {
     exports.init = function () {
         JRecordLog.live('click', function (ev) {
             var $target = $(ev.currentTarget);
+            $formObj.find('.J-temp').remove();
+            $formObj[0].reset();
             if ($target.hasClass('J-edit')) {
                 var id = $target.attr('data-id');
-                $formObj.find('.J-temp').remove();
                 var currentDoc = undefined;
                 $(require('show-log').jsonData.documents).each(function (index, item) {
                     if (id === item._id) {
@@ -49,11 +50,14 @@ define(function (require, exports, module) {
                 ele['year'].value = currentDoc['year'];
                 ele['month'].value = currentDoc['month'];
                 ele['date'].value = currentDoc['date'];
+                if (!ele['smt'].getAttribute('default-text')) ele['smt'].setAttribute('default-text', ele['smt'].value);
                 ele['smt'].value = '确定修改';
 
                 $formObj.find('tr:first').before('<tr class="J-temp"><td colspan="2" style="text-align: center;">正在修改JSON页面</td></tr>');
                 $formObj.append($('<input type="hidden" name="type" value="edit" class="J-temp">'));
                 $formObj.append($('<input type="hidden" name="object_id" value="' + id + '" class="J-temp">'));
+            } else {
+                if (ele['smt'].getAttribute('default-text')) ele['smt'].value = ele['smt'].getAttribute('default-text');
             }
 
             $addRecordLog.stop();
@@ -91,14 +95,15 @@ define(function (require, exports, module) {
                         });
                         //if it is in edit mode
                         if (ele['type'] && ele['type'].value === 'edit') {
-                            console.log('编辑模式');
                             showLog.getData({
                                 callback:function () {
                                     showLog.updateCurrentInfo(ele['object_id'].value);
+                                    showLog.filterLogList();
+                                    $formObj[0].reset();
+                                    $formObj.find('.J-temp').remove();
                                 }
                             });
                         } else {
-                            console.log('保存模式');
                             showLog.getData({
                                 callback:function () {
                                     showLog.updateDiaryList();

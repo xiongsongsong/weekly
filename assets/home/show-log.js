@@ -156,7 +156,7 @@ define(function (require, exports, module) {
         return parseInt($frontObj.filter('.highlight').attr('front'), 10);
     };
 
-    //更新日历上的日志方框
+    //更新日历上每一天的日志详情
     exports.updateDiaryList = function () {
         $('#calendar-container').find('.work-diary-list').html('');
         $(jsonData.documents).each(function (index, item) {
@@ -219,7 +219,6 @@ define(function (require, exports, module) {
         })() + '</span>' +
             '</li>' +
             '</ul>');
-        moreDetailWrapper.scrollTop(0);
     };
 
     /*填充用户列表*/
@@ -237,7 +236,6 @@ define(function (require, exports, module) {
 
     /*更新当前用户的信息*/
     exports.updateCurrentInfo = function (_id) {
-        console.log(_id);
         var currentObject;
         for (var i = 0; i < jsonData.documents.length; i++) {
             if (_id === jsonData.documents[i]._id) {
@@ -251,35 +249,53 @@ define(function (require, exports, module) {
             if (currentObject.hasOwnProperty(key)) containerArr.push(key);
         }
 
+
         KISSY.each(containerArr, function (item) {
-            $('.J-' + item + '[data-id=504abbe4370f2f0416000001]').each(function (index, obj) {
-                if (obj.getAttribute('data-id') === currentObject._id) console.log(obj.parentNode)
+            $('body .J-' + item + '[data-id="' + currentObject._id + '"]').each(function (index, obj) {
                 var $obj = $(obj);
                 if (currentObject[item].length > 0) {
                     $obj.html(currentObject[item]);
                     $obj.parents('.J-container').removeClass('hidden');
-                    //判断是否需要增加A链接
-                    if (item === 'tms-url' || item === 'online-url') {
-                        var aNode = $obj.parents('a');
-                        //如果未发现A标签
-                        if (aNode.size() < 1) {
-                            if (currentObject[item].length > 1) {
-                                $obj.wrap('<a href="#"></a>');
-                            }
-                        } else {
-                            if (currentObject[item].length > 1) {
-                                aNode.attr('href', currentObject[item]);
-                            } else {
-                                $obj.wrap('<a />');
-                            }
-                        }
-                    }
                 } else {
                     $obj.parents('.J-container').addClass('hidden');
                 }
+
+                var aNode = $obj.parents('a');
+                switch (item) {
+                    case 'tms-url':
+                        break;
+                    case 'page-name':
+                        break;
+                    case 'online-url':
+                        break;
+                }
+                if (item === 'tms-url' || item === 'page-name' || item === 'online-url') {
+                    if (aNode.size() === 0 && currentObject[item] && $.trim(currentObject[item]).length > 0) {
+                        if (item === 'page-name') {
+                            if ($.trim(currentObject['online-url']).length > 0) {
+                                $obj.wrap('<a href="' + currentObject['online-url'] + '" />');
+                            }
+                        } else {
+                            $obj.wrap('<a href="' + currentObject[item] + '" />');
+                        }
+                    } else {
+                        if (item === 'page-name') {
+                            if ($.trim(currentObject['online-url']).length > 0) {
+                                aNode.attr('href', currentObject['online-url']);
+                            } else {
+                                if ($obj.parents('a').size() > 0) $obj.unwrap();
+                            }
+                        } else {
+                            if (currentObject[item].length > 0) {
+                                aNode.attr('href', currentObject[item]);
+                            } else {
+                                if ($obj.parents('a').size() > 0)  $obj.unwrap();
+                            }
+                        }
+                    }
+                }
             });
         })
-
     };
 
     //尝试过滤花名中的非中文字符

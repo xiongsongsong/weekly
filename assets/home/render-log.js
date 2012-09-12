@@ -32,7 +32,7 @@ define(function (require, exports, module) {
                 return '<span ' + attr + '>' + item[name] + '</span>';
                 break;
             case 'tms-url':
-                return '<a href="' + item['tms-url'] + '" ' + attr + '>' + item[name] + '</a>';
+                return '<a href="' + item['tms-url'] + '" ' + attr + ' target="_blank">' + item['tms-url'] + '</a>';
                 break;
             case 'design':
                 return '<span ' + attr + '>' + item[name] + '</span>';
@@ -89,6 +89,9 @@ define(function (require, exports, module) {
                     } else {
                         return  createTpl(item, 'page-name');
                     }
+                })() + (function () {
+                    //如果登陆用户，并且是当前条目拥有者，则显示编辑按钮
+                    return jsonData.userid && jsonData.userid === item['front'] ? '<b class="J-edit edit" data-id="' + item._id + '">[编辑]</b>' : '';
                 })() + '</h2>' +
                     '<ul>' +
                     (function () {
@@ -130,8 +133,7 @@ define(function (require, exports, module) {
         var jsonData = showLog.jsonData;
         return [
             (function () {
-                var level = ['【简单】', '【一般】', '【常规】', '【复杂】'][data['level'] - 1];
-                return '<li title="' + level + data['page-name'] + '">' +
+                return '<li>' +
                     (function () {
                         return $.trim(data['online-url']).length > 1 ?
                             '<a href="' + data['online-url'] + '" target="_blank">' + createTpl(data, 'page-name') + '</a>'
@@ -146,13 +148,11 @@ define(function (require, exports, module) {
                 return str.length > 1 ? '<li>' + str + '</li>' : '';
             })(),
             (function () {
-                return '<li ' + isHidden(data, 'tms-url') + '><a href="' + data['tms-url'] + '" target="_blank">TMS地址<b class="hidden">' + createTpl(data, 'tms-url') + '</b></a></li>';
+                return '<li ' + isHidden(data, 'tms-url') + '>' + createTpl(data, 'tms-url') + '</li>';
             })(),
             (function () {
                 //如果登陆用户，并且是当前条目拥有者，则显示编辑按钮
-                if (jsonData.userid && jsonData.userid === data['front']) {
-                    return '<li class="edit"><b class="J-edit" data-id="' + _id + '">编辑</b></li>';
-                }
+                return jsonData.userid && jsonData.userid === data['front'] ? '<li class="edit"><b class="J-edit" data-id="' + _id + '">编辑</b></li>' : '';
             })()
         ];
     }

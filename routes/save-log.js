@@ -90,7 +90,10 @@ exports.save_log = function (req, res) {
     var collection = new DB.mongodb.Collection(DB.client, 'log');
 
     if (isEdit) {
-        collection.update({_id:DB.mongodb.ObjectID(body['object_id']), front:req.session.userid}, data, {}, function () {
+        collection.update({
+            _id:DB.mongodb.ObjectID(body['object_id']),
+            front:req.session.userid
+        }, data, {}, function () {
             res.end(JSON.stringify({'status':true}, undefined, '    '));
         });
     } else {
