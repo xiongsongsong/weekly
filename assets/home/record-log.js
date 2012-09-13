@@ -53,13 +53,13 @@ define(function (require, exports, module) {
                 if (!ele['smt'].getAttribute('default-text')) ele['smt'].setAttribute('default-text', ele['smt'].value);
                 ele['smt'].value = '确定修改';
 
-                $formObj.find('tr:first').before('<tr class="J-temp"><td colspan="2" style="text-align: center;">正在修改JSON页面</td></tr>');
+                $formObj.find('tr:first').before('<tr class="J-temp"><td colspan="2" class="edit-log">修改：' + currentDoc['page-name'] + '</td></tr>');
                 $formObj.append($('<input type="hidden" name="type" value="edit" class="J-temp">'));
                 $formObj.append($('<input type="hidden" name="object_id" value="' + id + '" class="J-temp">'));
-
                 $('#more-detail-wrapper').addClass('edit');
             } else {
                 if (ele['smt'].getAttribute('default-text')) ele['smt'].value = ele['smt'].getAttribute('default-text');
+                $('#more-detail-wrapper').removeClass('edit');
             }
 
             $addRecordLog.stop();

@@ -36,6 +36,11 @@ body {
     text-shadow: 1px 1px 1px #000;
 }
 
+#header h1 span {
+    font-size: 14px;
+    margin-left: 1em;
+}
+
 #main-wrapper {
     position: absolute;
     left: 180px;
@@ -244,6 +249,12 @@ body {
 #add-record-log th,
 #add-record-log td {
     padding: .5em 1em;
+}
+
+#add-record-log td.edit-log {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 #add-record-log th {
