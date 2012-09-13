@@ -191,6 +191,10 @@ body {
     z-index: 2;
 }
 
+#more-detail-wrapper.edit #more-detail {
+    padding-left: 434px;
+}
+
 #more-detail {
     margin: 0 1em 0 0;
 }

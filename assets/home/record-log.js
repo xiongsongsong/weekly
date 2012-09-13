@@ -56,6 +56,8 @@ define(function (require, exports, module) {
                 $formObj.find('tr:first').before('<tr class="J-temp"><td colspan="2" style="text-align: center;">正在修改JSON页面</td></tr>');
                 $formObj.append($('<input type="hidden" name="type" value="edit" class="J-temp">'));
                 $formObj.append($('<input type="hidden" name="object_id" value="' + id + '" class="J-temp">'));
+
+                $('#more-detail-wrapper').addClass('edit');
             } else {
                 if (ele['smt'].getAttribute('default-text')) ele['smt'].value = ele['smt'].getAttribute('default-text');
             }
@@ -81,6 +83,7 @@ define(function (require, exports, module) {
         });
 
         function saveLog() {
+            $('#more-detail-wrapper').removeClass('edit');
             var formData = $formObj.serialize();
             $.ajax('/save-log', {
                 type:'post',
@@ -98,7 +101,18 @@ define(function (require, exports, module) {
                             showLog.getData({
                                 callback:function () {
                                     showLog.updateCurrentInfo(ele['object_id'].value);
-                                    showLog.filterLogList();
+                                    showLog.updateDiaryList();
+                                    var highLight = $('#calendar-panel span.front[data-id=' + ele['object_id'].value + ']');
+                                    //如果在当月更新了日期，则跳转到指定日期，并高亮之
+                                    if (highLight.size() > 0) {
+                                        showLog.checkedFrontDaily({target:highLight});
+                                    } else {
+                                        //如果将日志更改到了非当前所切换月份，则重新过滤当前用户
+                                        showLog.resetDescribe();
+                                        showLog.checkedFront();
+                                        showLog.filterData();
+                                        showLog.filterLogList();
+                                    }
                                     $formObj[0].reset();
                                     $formObj.find('.J-temp').remove();
                                 }
@@ -139,6 +153,11 @@ define(function (require, exports, module) {
                         $loginFormObj.hide();
                         $formObj.show();
                         $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
+                        showLog.getData({
+                            callback:function () {
+                                showLog.resetDescribe();
+                            }
+                        });
                         $('#record-log').append('<span>（' + $loginFormObj[0].elements['user'].value + '）</span>');
                         JRecordLog.after('<li class="separator"></li><li><a href="log-out">退出登陆</a></li>')
                     } else {

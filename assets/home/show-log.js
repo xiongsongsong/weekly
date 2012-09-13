@@ -43,6 +43,7 @@ define(function (require, exports, module) {
     };
 
 
+    //高亮对应的用户
     exports.checkedFront = function () {
         exports.front = parseInt(exports.front, 10);
         var $target = $('ul.user-filter span.front' + exports.front);
@@ -62,9 +63,11 @@ define(function (require, exports, module) {
             exports.checkedFront();
             exports.filterData();
             exports.filterLogList();
+            moreDetailWrapper.scrollTop(0);
         });
         $('#statistics a.J-show-more').live('mousedown', function () {
             exports.filterLogList();
+            moreDetailWrapper.scrollTop(0);
             moreDetailWrapper.show();
             moreDetailWrapper.scrollTop(0);
             moreDetailWrapper.height($('#calendar-wrapper').height());
@@ -108,6 +111,11 @@ define(function (require, exports, module) {
 
 
         $('#calendar-panel span.front').live('mousedown', function (ev) {
+            exports.checkedFrontDaily(ev);
+        });
+
+        //显示某条日志的daily，须传入#calendar-panel span.front中的某个节点
+        exports.checkedFrontDaily = function (ev) {
             var target = $(ev.target);
             exports.front = target.attr('front');
             var parentsNode = target.parents('div.work-diary');
@@ -130,13 +138,15 @@ define(function (require, exports, module) {
             tempContainer.innerHTML = '<ul>' + require('render-log').workDescribe(data, _id).join('') + '</ul>';
             parentsNode.append(tempContainer);
             tempContainer = $('#' + id);
-            var workDiaryList = parentsNode.find('div.work-diary-list');
+
             exports.checkedFront();
             exports.filterData();
             exports.filterLogList();
+
+            var workDiaryList = parentsNode.find('div.work-diary-list');
             $(workDiaryList).animate({top:-workDiaryList.height() + 'px'}, 300);
             tempContainer.css({'border':'solid 1px ' + target.css('background-color')});
-        });
+        };
 
         var cl;
         $(window).resize(function () {
