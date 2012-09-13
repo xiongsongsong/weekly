@@ -71,6 +71,7 @@ define(function (require, exports, module) {
         });
 
         $('input.hidden-form').live('click', function () {
+            $('#more-detail-wrapper').removeClass('edit');
             $addRecordLog.stop();
             $addRecordLog.animate({left:left + 'px'}, 500, function () {
                 JRecordLog.removeClass('current')
