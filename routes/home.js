@@ -6,6 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
+'use strict';
 
 exports.index = function (req, res) {
     res.render('index', {

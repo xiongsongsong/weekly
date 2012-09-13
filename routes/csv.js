@@ -6,6 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
+'use strict';
+
 exports.download = function (req, res) {
     var DB = require('../helper/db');
     var r = {};

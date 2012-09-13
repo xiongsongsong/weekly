@@ -2,6 +2,8 @@
  * 记录业务日志
  * */
 
+'use strict';
+
 var express = require('express');
 var app = module.exports = express.createServer();
 
@@ -27,8 +29,6 @@ app.configure('production', function () {
 });
 
 require('./routes').init(app);
-
-//TODO：处理XSS漏洞
 
 app.listen(80, function () {
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

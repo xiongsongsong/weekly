@@ -2,6 +2,7 @@
  * 主要的业务逻辑
  */
 
+'use strict';
 
 exports.init = function (app) {
     require('../helper/db').open({

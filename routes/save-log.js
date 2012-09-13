@@ -6,6 +6,8 @@
  * 负责记录日志和更新日志
  */
 
+'use strict';
+
 var DB = require('../helper/db');
 
 exports.save_log = function (req, res) {
