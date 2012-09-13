@@ -30,4 +30,8 @@ define([ 'calendar', 'record-log'], function (require) {
     /*写工作日志 */
     require('record-log').init();
 
+    setTimeout(function () {
+        KISSY.Anim(KISSY.get('#header span'),{top:'0'},1,'elasticOut').run();
+    }, 500);
+
 });

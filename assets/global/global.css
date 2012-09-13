@@ -39,6 +39,8 @@ body {
 #header h1 span {
     font-size: 14px;
     margin-left: 1em;
+    position: relative;
+    top: -80px;
 }
 
 #main-wrapper {
