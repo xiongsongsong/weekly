@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>抽奖</title>
+    <style>
+        #product-node {
+            margin: 1em auto;
+        }
+
+        body {
+            background: #555;
+            color: #fff;
+        }
+
+        #product-node b {
+            background: #333;
+            position: absolute;
+            padding: 1em;
+        }
+
+        input {
+            padding: 1em;
+        }
+
+        #product-node .current {
+            background: green;
+            border: solid 1px #000;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<h1 id="h1"> 抽奖 </h1>
+
+<p id="info"></p>
+
+<div id="product-node">
+    <b style="left: 415px; top: 132px;">一个萝卜</b>
+    <b style="left: 499px; top: 176px;" class="tks">再接再厉</b>
+    <b style="left: 544px; top: 240px;">两窝菠菜</b>
+    <b style="left: 516px; top: 312px;">三颗白菜</b>
+    <b style="left: 397px; top: 356px;" class="tks">纳税光荣</b>
+    <b style="left: 327px; top: 306px;">四根地瓜</b>
+    <b style="left: 278px; top: 242px;">500万！</b>
+    <b style="left: 305px; top: 180px;" class="tks">下次再来</b>
+</div>
+
+<input type="button" id="try" value="试试手气">
+<input type="button" id="yes" value="一定中奖">
+<input type="button" id="no" value="永不中奖">
+<input type="button" id="stop" value="不抽了">
+<script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js"></script>
+
+<script>
+    (function () {
+        var DOM = KISSY.DOM;
+
+        function SwitchProduct(configs) {
+            this.speed = configs.speed > 1 ? configs.speed : 100;
+            this.delay = configs.delay;
+            this.which = configs.which > 0 && configs.which <= configs.imgArr.length ? configs.which : 1;
+            this.cl = undefined;
+            this.imgArr = configs.imgArr;
+            this.num = 0;
+            this.duration = configs.duration > 1000 ? configs.duration : 2000;
+
+            this.defaultNum = this.num;
+            this.defaultSpeed = this.speed;
+            this.className = configs.className;
+            this.configs = configs;
+            this._timer = 0;
+            console.log(this);
+        }
+
+        SwitchProduct.prototype.stop = function () {
+            clearTimeout(this.cl);
+            DOM.removeClass(this.imgArr, this.className);
+        };
+
+        SwitchProduct.prototype._start = function () {
+            var func = arguments.callee;
+            var self = this;
+            if (this.num >= this.imgArr.length) this.num = 0;
+            DOM.removeClass(this.imgArr, this.className);
+            DOM.addClass(this.imgArr[this.num], this.className);
+            if (this.speed > 220 && this.num === this.which - 1) {
+                this.stop();
+                if (typeof this.configs.callback === 'function') {
+                    this.configs.callback.call(self, this.imgArr[this.num]);
+                }
+                return;
+            }
+            if (this._timer > this.duration) this.speed += this.delay;
+
+            this.num++;
+            this.cl = setTimeout(function () {
+                func.call(self);
+            }, this.speed);
+            this._timer += this.speed;
+        };
+
+        SwitchProduct.prototype.start = function () {
+            if (this.which > this.imgArr.length || this.which < 0) throw  new Error('对应商品不存在');
+            this.stop();
+            this.num = this.defaultNum;
+            this.speed = this.defaultSpeed;
+            this._timer = 0;
+            this._start();
+        };
+
+        var luck = new SwitchProduct({
+            //初识速度
+            speed:50,
+            //速度递减值
+            delay:3,
+            //中奖商品索引
+            //which:10,
+            //奖品队列
+            imgArr:DOM.query('b', DOM.get('#product-node')),
+            //高亮商品的class
+            className:'current',
+            //持续时间
+            duration:1500,
+            //回调函数
+            callback:function (node) {
+                DOM.get('#info').innerHTML = node.innerHTML;
+                DOM.addClass(node, this.className);
+            }
+        });
+
+
+        KISSY.Event.on('#try', 'click', function () {
+            var which = 0;
+            //随机选择一个
+            while (which > luck.imgArr.length || which == 0) {
+                which = parseInt(Math.random() * 10, 10);
+            }
+            luck.which = which;
+            luck.start();
+        });
+
+        KISSY.Event.on('#yes', 'click', function () {
+            luck.which = 3;
+            luck.start();
+        });
+        KISSY.Event.on('#no', 'click', function () {
+            luck.which = 8;
+            luck.start();
+        });
+
+        KISSY.Event.on('#stop', 'click', function () {
+
+            luck.stop();
+        });
+
+    })();
+</script>
+</body>
+</html>
