@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>原生分页</title>
+    <style>
+        li {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<h1></h1>
+<ul id="result">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li>7</li>
+    <li>8</li>
+    <li>9</li>
+    <li>10</li>
+    <li>11</li>
+    <li>12</li>
+    <li>14</li>
+    <li>15</li>
+    <li>16</li>
+    <li>17</li>
+</ul>
+
+<div id="control">
+    <input type="button" value="first" data-type="first">
+    <input type="button" value="上一页" data-type="prev">
+    <input type="button" value="下一页" data-type="next">
+    <input type="button" value="last" data-type="last">
+</div>
+
+<script>
+    function Pagination(configs) {
+        this.page = isNaN(configs.page) ? 0 : configs.page;
+        this.num = configs.num;
+        this.nodeList = configs.nodeList;
+        this.totalPage = Math.ceil(this.nodeList.length / this.num);
+        this.ready();
+    }
+
+    Pagination.prototype.ready = function () {
+        for (var i = 0; i < this.nodeList.length; i++) {
+            this.nodeList[i].style.display = 'none';
+        }
+        var currentLi = this.nodeList.slice(this.page * this.num, this.page * this.num + this.num);
+        for (i = 0; i < currentLi.length; i++) {
+            currentLi[i].style.display = 'block';
+        }
+    };
+
+    Pagination.prototype.next = function () {
+        this.page++;
+        if (this.page >= this.totalPage) this.page = this.totalPage - 1;
+        this.ready();
+    };
+
+    Pagination.prototype.prev = function () {
+        this.page--;
+        if (this.page < 0) this.page = 0;
+        this.ready();
+    };
+
+    Pagination.prototype.first = function () {
+        this.page = 0;
+        this.ready();
+    };
+
+    Pagination.prototype.last = function () {
+        this.page = this.totalPage - 1;
+        this.ready();
+    };
+
+
+    var p = new Pagination({
+        num:3,
+        nodeList:(function () {
+            var liObj = document.getElementsByTagName('li');
+            var liArr = [];
+            for (var i = 0; i < liObj.length; i++) {
+                liArr.push(liObj[i]);
+            }
+            return liArr;
+        })()
+    });
+
+    document.getElementById('control').onclick = function (ev) {
+        ev = ev || window.event;
+        var target = ev.target || ev.srcElement;
+        var type = target.getAttribute('data-type');
+        if (typeof p[type] === 'function') p[type]();
+    }
+
+
+</script>
+</body>
+</html>
