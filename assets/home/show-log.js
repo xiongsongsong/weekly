@@ -89,6 +89,7 @@ define(function (require, exports, module) {
                         exports.resetDescribe();
                         exports.checkedFront();
                         exports.filterData();
+                        exports.filterLogList();
                         break;
                 }
             }
