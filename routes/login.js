@@ -38,18 +38,17 @@ exports.login = function (req, res) {
                 var result = bufferHelper.toBuffer().toString();
                 var obj = JSON.parse(result);
                 if (typeof obj['UID'] == 'number') {
-                    res.write(result);
                     req.session.username = req.body.user;
                     req.session.userid = obj['UID'];
+                    res.end(result);
                 } else {
-                    res.write('{"status":"UID is null"}');
+                    res.end('{"status":"UID is null"}');
                 }
 
             } catch (err) {
                 console.log(err);
-                res.write('{"status":"Unable to link login authentication services."}');
+                res.end('{"status":"Unable to link login authentication services."}');
             }
-            res.end();
         });
     });
 
