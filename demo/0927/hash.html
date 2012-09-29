@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>自动触发某事件</title>
+</head>
+<body>
+<button>第1块</button>
+<button>第2块</button>
+<button>第3块</button>
+<button>第4块</button>
+<p>1</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>4</p>
+<script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js"></script>
+<script>
+    KISSY.ready(function (S) {
+        var DOM = S.DOM, Event = S.Event;
+        var button = DOM.query('button');
+        var p = DOM.query('p');
+        Event.on(button, 'click', function (ev) {
+            var index = S.indexOf(ev.currentTarget, button);
+            ev.currentTarget.focus();
+            console.log(index);
+            DOM.hide(p);
+            DOM.show(p[index]);
+        });
+        var hash = parseInt(window.location.hash.substring(1), 10);
+        Event.fire(button[isNaN(hash) ? 0 : hash - 1], 'click');
+    })
+</script>
+</body>
+</html>

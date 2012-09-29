@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>自定义JSONP接口</title>
+    <style type="text/css">
+        ol {
+            margin: 2em;
+            padding: 0;
+            line-height: 180%;
+        }
+
+        textarea {
+            width: 80%;
+            height: 220px;
+            background: #000;
+            color: #fff;
+            padding: 1em;
+            font-family: Consolas, sans-serif;
+            font-size: 15px;
+        }
+
+    </style>
+</head>
+<body>
+<h1>自定义JSONP接口111231231231</h1>
+<ol>
+    <li>确保安装Node，可以去<a href="http://nodejs.org">nodejs.org</a>下载</li>
+    <li>在某目录执行：npm install express</li>
+    <li>应该会看到一个node_modules目录，在同级目录下，复制下面代码存为jsonp.js</li>
+    <li>
+<textarea>
+var express = require('express');
+var app = module.exports = express.createServer();
+
+app.get('*', function (req, res) {
+    var query = req.query;
+    var callback = req.query.callback;
+    delete query.callback;
+    res.end(callback + '(' + JSON.stringify(query, undefined, ' ') + ');');
+});
+
+app.listen(80);
+</textarea>
+    </li>
+    <li>运行：node jsonp</li>
+    <li>尝试访问：http://localhost/?name=suncn&pwd=suncn&callback=hello</li>
+    <li>Win+R：notepad c:\windows\system32\drivers\etc\hosts</li>
+    <li>输入：127.0.0.1 jsonp.com jsonp1.com jsonp2.net</li>
+    <li>重启浏览器</li>
+    <li>尝试访问：http://jsonp2.net/?name=suncn&pwd=suncn&callback=hello</li>
+</ol>
+</body>
+</html>
