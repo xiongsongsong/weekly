@@ -17,13 +17,19 @@ body {
 }
 
 #header {
-    background: #4C565E;
+    background: url(/images/zhongqiu_bg.png);
     height: 98px;
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     z-index: 6;
+}
+
+#header img {
+    position: absolute;
+    right: 1em;
+    top: 0;
 }
 
 #header h1 {
@@ -34,6 +40,7 @@ body {
     color: #7fffd4;
     font-weight: bold;
     text-shadow: 1px 1px 1px #000;
+    color: #f4ffa7;
 }
 
 #header h1 span {
