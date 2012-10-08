@@ -536,12 +536,7 @@ body #sidebar-wrapper span.highlight {
     padding: 0 5px;
 }
 
-#statistics ul li span.download-csv {
-    display: none;
-}
-
-body.show-amortization #statistics ul li span.amortization,
-body.show-amortization #statistics ul li span.download-csv {
+body.show-amortization #statistics ul li span.amortization {
     display: inline-block;
 }
 
