@@ -26,8 +26,20 @@ define(function (require, exports, module) {
     var month = parseInt($monthNode.html(), 10);
     var currentDate = new Date();
     currentDate.setDate(1);
-    currentDate.setFullYear(year);
-    currentDate.setMonth(month - 1);
+
+    var hashDate = window.location.hash.substring(1).split('-');
+    var _hashYear = parseInt(hashDate[0], 10);
+    var _hashMonth = parseInt(hashDate[1], 10);
+
+    //如果location.hash中有值，则显示当月的数据
+    if (!isNaN(_hashYear) && !isNaN(_hashMonth) && _hashMonth > 0 && _hashMonth <= 12) {
+        currentDate.setFullYear(_hashYear);
+        currentDate.setMonth(_hashMonth - 1);
+    } else {
+        currentDate.setFullYear(year);
+        currentDate.setMonth(month - 1);
+    }
+
     var calendarPanel = $('#calendar-panel');
 
     /*通过鼠标滚轮修改时间*/
