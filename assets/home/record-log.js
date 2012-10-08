@@ -6,6 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
+"use strict";
+
 seajs.config({
     alias:{
         'jquery':'/global/jquery',
@@ -14,16 +16,52 @@ seajs.config({
 });
 
 define(function (require, exports, module) {
-
     var $ = require('jquery');
     var $addRecordLog = $('#add-record-log');
+    var showLog = require('show-log');
     var $formObj = $(document.forms['add-record-log']);
+    var ele = $formObj[0].elements;
     var $loginFormObj = $(document.forms['login']);
     var left = -480;
-    var JRecordLog = $('.J-record-log');
+    var JRecordLog = $('.J-record-log,.J-edit');
 
     exports.init = function () {
         JRecordLog.live('click', function (ev) {
+            var $target = $(ev.currentTarget);
+            $formObj.find('.J-temp').remove();
+            $formObj[0].reset();
+            if ($target.hasClass('J-edit')) {
+                var id = $target.attr('data-id');
+                var currentDoc = undefined;
+                $(require('show-log').jsonData.documents).each(function (index, item) {
+                    if (id === item._id) {
+                        currentDoc = item;
+                        return false;
+                    }
+                });
+                if (currentDoc === undefined) return;
+                ele['page-name'].value = currentDoc['page-name'];
+                ele['design'].value = currentDoc['design'];
+                ele['customer'].value = currentDoc['customer'];
+                ele['level'].value = currentDoc['level'];
+                ele['online-url'].value = currentDoc['online-url'];
+                ele['tms-url'].value = currentDoc['tms-url'];
+                ele['note'].value = currentDoc['note'];
+                ele['year'].value = currentDoc['year'];
+                ele['month'].value = currentDoc['month'];
+                ele['date'].value = currentDoc['date'];
+                if (!ele['smt'].getAttribute('default-text')) ele['smt'].setAttribute('default-text', ele['smt'].value);
+                ele['smt'].value = '确定修改';
+
+                $formObj.find('tr:first').before('<tr class="J-temp"><td colspan="2" class="edit-log">修改：' + currentDoc['page-name'] + '</td></tr>');
+                $formObj.append($('<input type="hidden" name="type" value="edit" class="J-temp">'));
+                $formObj.append($('<input type="hidden" name="object_id" value="' + id + '" class="J-temp">'));
+                $('#more-detail-wrapper').addClass('edit');
+            } else {
+                if (ele['smt'].getAttribute('default-text')) ele['smt'].value = ele['smt'].getAttribute('default-text');
+                $('#more-detail-wrapper').removeClass('edit');
+            }
+
             $addRecordLog.stop();
             $addRecordLog.animate({left:'0px'}, 500);
             $(ev.currentTarget).addClass('current');
@@ -33,6 +71,7 @@ define(function (require, exports, module) {
         });
 
         $('input.hidden-form').live('click', function () {
+            $('#more-detail-wrapper').removeClass('edit');
             $addRecordLog.stop();
             $addRecordLog.animate({left:left + 'px'}, 500, function () {
                 JRecordLog.removeClass('current')
@@ -40,6 +79,12 @@ define(function (require, exports, module) {
         });
 
         $formObj.submit(function (ev) {
+            saveLog();
+            ev.preventDefault();
+        });
+
+        function saveLog() {
+            $('#more-detail-wrapper').removeClass('edit');
             var formData = $formObj.serialize();
             $.ajax('/save-log', {
                 type:'post',
@@ -52,7 +97,38 @@ define(function (require, exports, module) {
                         $addRecordLog.animate({left:left + 'px'}, 500, function () {
                             JRecordLog.removeClass('current')
                         });
-                        require('show-log').getData();
+                        //if it is in edit mode
+                        if (ele['type'] && ele['type'].value === 'edit') {
+                            showLog.getData({
+                                callback:function () {
+                                    showLog.updateCurrentInfo(ele['object_id'].value);
+                                    showLog.updateDiaryList();
+                                    var highLight = $('#calendar-panel span.front[data-id=' + ele['object_id'].value + ']');
+                                    //如果在当月更新了日期，则跳转到指定日期，并高亮之
+                                    if (highLight.size() > 0) {
+                                        showLog.checkedFrontDaily({target:highLight});
+                                    } else {
+                                        //如果将日志更改到了非当前所切换月份，则重新过滤当前用户
+                                        showLog.resetDescribe();
+                                        showLog.checkedFront();
+                                        showLog.filterData();
+                                        showLog.filterLogList();
+                                    }
+                                    $formObj[0].reset();
+                                    $formObj.find('.J-temp').remove();
+                                }
+                            });
+                        } else {
+                            showLog.getData({
+                                callback:function () {
+                                    showLog.updateDiaryList();
+                                    showLog.updateUserList();
+                                    showLog.checkedFront();
+                                    showLog.filterData();
+                                    showLog.filterLogList();
+                                }
+                            });
+                        }
                     } else {
                         alert('有错误！\r\n\r\n' + KISSY.JSON.stringify(data, undefined, '   '));
                         for (var i = 0; i < data.errorList.length; i++) {
@@ -65,9 +141,7 @@ define(function (require, exports, module) {
                     }
                 }
             });
-
-            ev.preventDefault();
-        });
+        }
 
         $loginFormObj.submit(function (ev) {
             $.ajax('/login', {
@@ -80,6 +154,11 @@ define(function (require, exports, module) {
                         $loginFormObj.hide();
                         $formObj.show();
                         $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
+                        showLog.getData({
+                            callback:function () {
+                                showLog.resetDescribe();
+                            }
+                        });
                         $('#record-log').append('<span>（' + $loginFormObj[0].elements['user'].value + '）</span>');
                         JRecordLog.after('<li class="separator"></li><li><a href="log-out">退出登陆</a></li>')
                     } else {

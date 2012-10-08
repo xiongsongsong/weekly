@@ -6,6 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
+"use strict";
+
 seajs.config({
     alias:{
         'calendar':'/home/calendar',
@@ -15,7 +17,7 @@ seajs.config({
 
 seajs.config({
         map:[
-            [/(.*\.(css|js))(?:.*)$/i, "$1?20120810.$2"]
+            [/(.*\.(css|js))(?:.*)$/i, "$1?201210.$2"]
         ]
     }
 );

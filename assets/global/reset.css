@@ -17,15 +17,16 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, /* structural elements 结构�
 dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
 pre, /* text formatting elements 文本格式元素 */
 form, fieldset, legend, button, input, textarea, /* form elements 表单元素 */
-th, td /* table elements 表格元素 */  {
+th, td {
     margin: 0;
     padding: 0;
 }
 
 /** 设置默认字体 **/
 body,
-button, input, select, textarea /* for ie */  {
-    font: 12px/1.5 tahoma, arial, \5b8b\4f53, sans-serif;
+button, input, select, textarea {
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 h1, h2, h3, h4, h5, h6 {

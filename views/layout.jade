@@ -3,11 +3,11 @@ html
     head
         meta(charset="utf-8")
         title= title
-        link(rel="stylesheet",href="/global/reset.css")
-        link(rel="stylesheet",href="/global/global.css?t=20120827.css")
+        link(rel="stylesheet",href="/global/reset.css?t=201210.css")
+        link(rel="stylesheet",href="/global/global.css?t=201210.css")
     body
         #header
-            h1 前端 de 业务日志
+            h1 前端 de 业务日志 ;-)
         #main-wrapper
             #calendar-header
                 h2#date
@@ -105,7 +105,7 @@ html
                                 th
                                 td
                                     input.cal.hidden-form(type="button",value="<<隐藏")
-                                    input.smt(type="submit",value="保存")
+                                    input.smt(type="submit",value="保存",name="smt")
         #sidebar-wrapper
             #sidebar-container
                 #sidebar-group
@@ -119,7 +119,6 @@ html
                             li.separator
                             li
                                 a(href="log-out") 退出登陆
-                    h2 过滤器
                     ul.user-filter
                         li#user-filter-container
                     #statistics
@@ -128,4 +127,4 @@ html
                         li
                             a(href="https://github.com/xiongsongsong/weekly") Weekly on Github
         script(src="/kissy-min.js")
-        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=20120827.js")
+        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=201210.js")

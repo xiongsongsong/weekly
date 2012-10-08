@@ -12,16 +12,15 @@ exports.userList = {"id_1":{"id":1, "name":"admin", "real-name":"admin"}, "id_2"
  * 记录业务日志
  * */
 
-var express = require('express');
-var app = module.exports = express.createServer();
-
-app.get('/node/user-list', function (req, res) {
+exports.tempUser = function (req, res) {
     res.header('Content-type', 'text/plain;charset=utf-8');
     setTimeout(function () {
         res.end(JSON.stringify(exports.userList, undefined, '\t'));
-    }, 6000);
-});
+    }, 0);
+};
 
-app.listen(9000, function () {
-    console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-});
+exports.check = function (req, res) {
+    res.end(JSON.stringify({"UID":168,status:true}));
+    req.session.username = req.body.user;
+    req.session.userid = 168;
+};

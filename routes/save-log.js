@@ -3,8 +3,10 @@
  * User: 松松
  * Date: 12-8-22
  * Time: 上午9:25
- * To change this template use File | Settings | File Templates.
+ * 负责记录日志和更新日志
  */
+
+'use strict';
 
 var DB = require('../helper/db');
 
@@ -16,6 +18,7 @@ exports.save_log = function (req, res) {
         res.end(JSON.stringify(errorMSG), undefined, '\t');
         return;
     }
+
     var data = Object.create(null), body = req.body;
     data['page-name'] = body['page-name'];
     data['level'] = parseInt(body['level'], 10);
@@ -29,6 +32,7 @@ exports.save_log = function (req, res) {
     data['date'] = parseInt(body['date'], 10);
     data['front'] = req.session.userid;
 
+    var isEdit = body['type'] === 'edit';
 
     if (!require('./login').isLogin(req)) {
         errorMSG.errorList.push({msg:'登陆过期，请刷新页面重新登陆'});
@@ -78,33 +82,38 @@ exports.save_log = function (req, res) {
         }
     }
 
+    if (isEdit && !body['object_id']) errorMSG.errorList.push('无法获取即将更新文档的必要信息');
 
     if (errorMSG.errorList.length > 0) {
         res.end(JSON.stringify(errorMSG), undefined, '\t');
-    } else {
-        var collection = new DB.mongodb.Collection(DB.client, 'log');
-        collection.insert(data, {safe:true},
-            function (err/*, objects*/) {
-                /*console.log(objects);*/
-                if (err) {
-                    console.warn(err.message);
-                    errorMSG.errorList.push({msg:'系统错误'});
-                    res.end(JSON.stringify(errorMSG), undefined, '    ');
-                } else {
-                    //如果当前用户是第一次添加日志，则立即更新用户列表的缓存
-                    if (require('../helper/user').frontList['id_' + req.session.userid] === undefined) {
-                        require('../helper/user').updateFrontList({
-                            callback:function () {
-                                res.end(JSON.stringify({'status':true}, undefined, '    '));
-                            }
-                        });
-                    } else {
-                        res.end(JSON.stringify({'status':true}, undefined, '    '));
-                    }
-                    //When adding a log, automatic backup of the database
-                    require('../helper/dump').dump(req);
+        return;
+    }
 
+    var collection = new DB.mongodb.Collection(DB.client, 'log');
+
+    if (isEdit) {
+        collection.update({
+            _id:DB.mongodb.ObjectID(body['object_id']),
+            front:req.session.userid
+        }, data, {}, function () {
+            res.end(JSON.stringify({'status':true}, undefined, '    '));
+        });
+    } else {
+        collection.insert(data, {safe:true},
+            function () {
+                //如果当前用户是第一次添加日志，则立即更新用户列表的缓存
+                if (require('../helper/user').frontList['id_' + req.session.userid] === undefined) {
+                    require('../helper/user').updateFrontList({
+                        callback:function () {
+                            res.end(JSON.stringify({'status':true}, undefined, '    '));
+                        }
+                    });
+                } else {
+                    res.end(JSON.stringify({'status':true}, undefined, '    '));
                 }
+                //When adding a log, automatic backup of the database
+                require('../helper/dump').dump(req);
+
             });
     }
 };

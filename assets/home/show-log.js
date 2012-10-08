@@ -5,9 +5,13 @@
  * Time: 下午5:22
  * 显示工作日志，并提供过滤，查看详情和简单统计等功能
  */
+
+'use strict';
+
 seajs.config({
     alias:{
-        'jquery':'/global/jquery'
+        'jquery':'/global/jquery',
+        'render-log':'/home/render-log'
     }
 });
 
@@ -18,8 +22,7 @@ define(function (require, exports, module) {
     /*初始化并显示数据*/
     var jsonData;
     var moreDetailWrapper = $('#more-detail-wrapper');
-    var front;
-    exports.getData = function () {
+    exports.getData = function (object) {
         $.ajax('/show_log/json', {
             type:'get',
             cache:false,
@@ -29,26 +32,21 @@ define(function (require, exports, module) {
                 month:$('#month-trigger').text()
             },
             success:function (data) {
-                jsonData = KISSY.JSON.parse(data);
-                data = jsonData;
-                $('#calendar-container').find('.work-diary-list').html('');
-                $(data.documents).each(function (index, item) {
-                    var id = '#date-' + item.year.toString() + item.month.toString() + item.date.toString();
-                    var $content = $(id);
-                    $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="' + item.front + '" data-id="' + item._id + '">' + beautifyName(data.user['id_' + item.front].name) + '</span>'));
-                });
-
-                front = exports.getCurrentFilterOfFront();
-                exports.updateUserList();
-                require('home/calendar.js').autoResetOffset();
+                exports.jsonData = KISSY.JSON.parse(data);
+                jsonData = exports.jsonData;
+                exports.front = exports.getCurrentFilterOfFront();
+                if (object && object.callback) {
+                    object.callback();
+                }
             }
         })
     };
 
 
+    //高亮对应的用户
     exports.checkedFront = function () {
-        front = parseInt(front, 10);
-        var $target = $('ul.user-filter span.front' + front);
+        exports.front = parseInt(exports.front, 10);
+        var $target = $('ul.user-filter span.front' + exports.front);
         var $frontObj = $('ul.user-filter span.front');
         if ($target.hasClass('show-all') || $target.size() < 1) {
             $frontObj.removeClass('weak highlight', 1);
@@ -56,17 +54,20 @@ define(function (require, exports, module) {
             $('ul.user-filter span.front').removeClass('highlight').addClass('weak');
             $target.removeClass('weak').addClass('highlight');
         }
-        exports.filterData();
     };
 
     /*添加事件，让用户可点击*/
-    exports.filterEvent = function () {
+    function filterEvent() {
         $('ul.user-filter span.front').live('mousedown', function (ev) {
-            front = $(ev.target).attr('front');
+            exports.front = $(ev.target).attr('front');
             exports.checkedFront();
+            exports.filterData();
+            exports.filterLogList();
+            moreDetailWrapper.scrollTop(0);
         });
         $('#statistics a.J-show-more').live('mousedown', function () {
             exports.filterLogList();
+            moreDetailWrapper.scrollTop(0);
             moreDetailWrapper.show();
             moreDetailWrapper.scrollTop(0);
             moreDetailWrapper.height($('#calendar-wrapper').height());
@@ -84,9 +85,11 @@ define(function (require, exports, module) {
                         $(document.body).toggleClass('show-amortization');
                         break;
                     case 27:
-                        front = null;
+                        exports.front = null;
                         exports.resetDescribe();
                         exports.checkedFront();
+                        exports.filterData();
+                        exports.filterLogList();
                         break;
                 }
             }
@@ -109,15 +112,23 @@ define(function (require, exports, module) {
 
 
         $('#calendar-panel span.front').live('mousedown', function (ev) {
+            exports.checkedFrontDaily(ev);
+        });
+
+        //显示某条日志的daily，须传入#calendar-panel span.front中的某个节点
+        exports.checkedFrontDaily = function (ev) {
             var target = $(ev.target);
-            front = target.attr('front');
+            exports.front = target.attr('front');
             var parentsNode = target.parents('div.work-diary');
             $('#calendar-panel div.work-describe').remove();
             $('#calendar-panel div.work-diary-list').stop().not(parentsNode.find('div.work-diary-list')).animate({top:0}, 300);
             var _id = target.attr('data-id');
-            var obj;
+            var data;
             for (var i = 0; i < jsonData.documents.length; i++) {
-                if (jsonData.documents[i]._id === _id) obj = jsonData.documents[i];
+                if (jsonData.documents[i]._id === _id) {
+                    data = jsonData.documents[i];
+                    break;
+                }
             }
             var id = 'tempNode' + new Date().getTime() + '' + parseInt(Math.random() * 1000000, 10);
 
@@ -125,37 +136,18 @@ define(function (require, exports, module) {
             tempContainer.id = id;
             tempContainer.className += ' work-describe';
 
-            var htmlArr = [
-                (function () {
-                    var level = ['简单】', '【一般】', '【常规】', '【复杂】'][obj['level'] - 1];
-                    return '<li title="' + level + obj['page-name'] + '">' +
-                        (function () {
-                            return obj['online-url'].length > 1 ?
-                                '<a href="' + obj['online-url'] + '" target="_blank">' + obj['page-name'] + '</a>'
-                                : obj['page-name'];
-                        })() +
-                        '</li>';
-                })(),
-                (function () {
-                    var str = '';
-                    obj['design'].length >= 1 ? str += '设计:' + obj['design'] + ' ' : '';
-                    obj['customer'].length >= 1 ? str += '需求:' + obj['customer'] : '';
-                    return str.length > 1 ? '<li title="' + str + '">' + str + '</li>' : '';
-                })(),
-                (function () {
-                    var str = '';
-                    obj['tms-url'].length >= 1 ? str += '<a href="' + obj['tms-url'] + '" target="_blank">TMS地址</a>' : '';
-                    return str.length > 1 ? '<li>' + str + '</li>' : '';
-                })()
-            ];
-            tempContainer.innerHTML = '<ul>' + htmlArr.join('') + '</ul>';
+            tempContainer.innerHTML = '<ul>' + require('render-log').workDescribe(data, _id).join('') + '</ul>';
             parentsNode.append(tempContainer);
             tempContainer = $('#' + id);
-            var workDiaryList = parentsNode.find('div.work-diary-list');
+
             exports.checkedFront();
+            exports.filterData();
+            exports.filterLogList();
+
+            var workDiaryList = parentsNode.find('div.work-diary-list');
             $(workDiaryList).animate({top:-workDiaryList.height() + 'px'}, 300);
             tempContainer.css({'border':'solid 1px ' + target.css('background-color')});
-        });
+        };
 
         var cl;
         $(window).resize(function () {
@@ -168,11 +160,23 @@ define(function (require, exports, module) {
             }, 300);
         })
 
-    };
+    }
 
     exports.getCurrentFilterOfFront = function () {
         var $frontObj = $('ul.user-filter span.front');
         return parseInt($frontObj.filter('.highlight').attr('front'), 10);
+    };
+
+    //更新日历上每一天的日志详情
+    exports.updateDiaryList = function () {
+        $('#calendar-container').find('.work-diary-list').html('');
+        $(jsonData.documents).each(function (index, item) {
+            var id = '#date-' + item.year.toString() + item.month.toString() + item.date.toString();
+            var $content = $(id);
+            $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="'
+                + item.front + '" data-id="' + item._id + '">'
+                + beautifyName(jsonData.user['id_' + item.front].name) + '</span>'));
+        });
     };
 
     /*根据条件过滤数据*/
@@ -182,90 +186,35 @@ define(function (require, exports, module) {
         var $target = $frontObj.filter('.highlight');
         if ($target.size() > 0) {
             $calendarWrapper.find('span.front').hide();
-            $calendarWrapper.find('.front' + front).each(function (index, item) {
+            $calendarWrapper.find('.front' + exports.front).each(function (index, item) {
                 $(item).show()
             });
         } else {
             $calendarWrapper.find('span.front').show();
         }
-        exports.filterLogList();
     };
 
     /*显示不同用户的页面记录*/
     exports.filterLogList = function () {
         if (jsonData == undefined)return;
         var moreDetail = $('#more-detail');
-        var html = [];
-        KISSY.each(jsonData.documents, function (item) {
-            if (isNaN(front)) {
-                html.push(item)
-            } else {
-                if (item.front === front) {
-                    html.push(item)
-                }
-            }
-        });
-        var htmlStr = [];
-        var count = {
-            level1:0,
-            level2:0,
-            level3:0,
-            level4:0
-        };
-        if (html.length > 0) {
-            KISSY.each(html, function (item) {
-                count['level' + item.level]++;
-                var str = '<h2>' + (function () {
-                    if ($.trim(item['online-url'].length) > 0) {
-                        return '<a href="' + $.trim(item['online-url']) + '" target="_blank">' + item['page-name'] + '</a>';
-                    } else {
-                        return  item['page-name'];
-                    }
-                })() + '</h2>' +
-                    '<ul>' +
-                    (function () {
-                        return $.trim(item['online-url']).length > 0 ? '<li>线上地址：' + item['online-url'] + '</a></li>' : '';
-                    })() +
-                    (function () {
-                        return $.trim(item['tms-url']).length > 0 ? '<li>TMS地址：<a href="' + $.trim(item['tms-url']) + '" target="_blank">' + item['tms-url'] + '</a></li>' : '';
-                    })() +
-                    (function () {
-                        return isNaN(front) ? '<li>前端：' + jsonData.user['id_' + item['front']]['name'] + '</li>' : '';
-                    })() +
-                    (function () {
-                        return $.trim(item['design']).length > 0 ? '<li>设计师：' + item['design'] + '</li>' : '';
-                    })() +
-                    (function () {
-                        return $.trim(item['customer']).length > 0 ? '<li>需求方：' + item['customer'] + '</li>' : '';
-                    })() +
-                    (function () {
-                        return '<li>页面等级：' + ['简单', '一般', '常规', '复杂'][item.level - 1] + '</li>';
-                    })() +
-                    '<li>完成日期：' + item['year'] + '-' + item['month'] + '-' + item['date'] + '</li>' +
-                    (function () {
-                        return $.trim(item['note']).length > 0 ? '<li>备注：' + item['note'] + '</li>' : '';
-                    })() +
-                    '</ul>';
-                htmlStr.push(str);
-            });
-        } else {
-            htmlStr.push('<h2>没有该月的记录</h2>')
-        }
-        moreDetail.html(htmlStr.join(''));
-        var currentUser = jsonData.user['id_' + front];
+        var logList = require('render-log').logList();
+        moreDetail.html(logList.list.join(''));
+        var currentUser = jsonData.user['id_' + exports.front];
+        var count = logList.count;
         var amortization = count.level1 * 20 + count.level2 * 30 + count.level3 * 50 + count.level4 * 100;
-        if (isNaN(front)) {
+        if (isNaN(exports.front)) {
             $('#log-list-control .J-username').html('全部页面');
         } else {
             $('#log-list-control .J-username').html(beautifyName(currentUser.name) + '（' + currentUser['real-name'] + '）');
         }
         $('#statistics').html('<h2>' + (function () {
-            if (!isNaN(front)) {
+            if (!isNaN(exports.front)) {
                 return '' + beautifyName(currentUser['name']) + ' - <span>' + currentUser['real-name'] + '</span>';
             } else {
                 return '统计 ';
             }
-        })() + '<span>（' + html.length + '）</span></h2>' +
+        })() + '<span>（' + logList.length + '）</span></h2>' +
             '<ul>' +
             '<li><span>简单：' + count.level1 + '</span><span>一般：' + count.level2 + '</span></li>' +
             '<li><span>常规：' + count.level3 + '</span><span>复杂：' + count.level4 + '</span></li>' +
@@ -281,7 +230,6 @@ define(function (require, exports, module) {
         })() + '</span>' +
             '</li>' +
             '</ul>');
-        moreDetailWrapper.scrollTop(0);
     };
 
     /*填充用户列表*/
@@ -295,8 +243,70 @@ define(function (require, exports, module) {
         }
         str.push('<span class="front show-all">所有 ESC</span>');
         userFilterContainer.html(str.join(''));
-        exports.checkedFront();
-        exports.filterData();
+    };
+
+    /*更新当前用户的信息*/
+    exports.updateCurrentInfo = function (_id) {
+        var currentObject;
+        for (var i = 0; i < jsonData.documents.length; i++) {
+            if (_id === jsonData.documents[i]._id) {
+                currentObject = jsonData.documents[i];
+                break;
+            }
+        }
+        if (currentObject === undefined) return;
+        var containerArr = [];
+        for (var key in currentObject) {
+            if (currentObject.hasOwnProperty(key)) containerArr.push(key);
+        }
+
+
+        KISSY.each(containerArr, function (item) {
+            $('body .J-' + item + '[data-id="' + currentObject._id + '"]').each(function (index, obj) {
+                var $obj = $(obj);
+                if (currentObject[item].length > 0) {
+                    $obj.html(currentObject[item]);
+                    $obj.parents('.J-container').removeClass('hidden');
+                } else {
+                    $obj.parents('.J-container').addClass('hidden');
+                }
+
+                var aNode = $obj.parents('a');
+                switch (item) {
+                    case 'tms-url':
+                        break;
+                    case 'page-name':
+                        break;
+                    case 'online-url':
+                        break;
+                }
+                if (item === 'tms-url' || item === 'page-name' || item === 'online-url') {
+                    if (aNode.size() === 0 && currentObject[item] && $.trim(currentObject[item]).length > 0) {
+                        if (item === 'page-name') {
+                            if ($.trim(currentObject['online-url']).length > 0) {
+                                $obj.wrap('<a href="' + currentObject['online-url'] + '" />');
+                            }
+                        } else {
+                            $obj.wrap('<a href="' + currentObject[item] + '" />');
+                        }
+                    } else {
+                        if (item === 'page-name') {
+                            if ($.trim(currentObject['online-url']).length > 0) {
+                                aNode.attr('href', currentObject['online-url']);
+                            } else {
+                                if ($obj.parents('a').size() > 0) $obj.unwrap();
+                            }
+                        } else {
+                            if (currentObject[item].length > 0) {
+                                aNode.attr('href', currentObject[item]);
+                            } else {
+                                if ($obj.parents('a').size() > 0)  $obj.unwrap();
+                            }
+                        }
+                    }
+                }
+            });
+        })
     };
 
     //尝试过滤花名中的非中文字符
@@ -310,7 +320,7 @@ define(function (require, exports, module) {
 
     }
 
-    exports.filterEvent();
+    filterEvent();
 
 });
 

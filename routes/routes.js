@@ -6,6 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
+'use strict';
+
 exports.init = function (app) {
 
     var mongodb = require('mongodb');

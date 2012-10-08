@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>静态分页的DEMO</title>
+    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js"></script>
+    <style>
+
+        .pagination {
+            padding: .5em;;
+        }
+
+        .hidden {
+            display: none;;
+        }
+    </style>
+</head>
+<body>
+<h1>静态分页</h1>
+
+<p><a href="dynamic.html">查看动态分页</a></p>
+<p><a href="static2.html">查看原生分页</a></p>
+
+<div id="result">
+    <!--默认隐藏除第一页外的所有元素-->
+    <div class="pagination">我是第1个</div>
+    <div class="pagination">我是第2个</div>
+    <div class="pagination hidden">我是第3个</div>
+    <div class="pagination hidden">我是第4个</div>
+    <div class="pagination hidden">我是第5个</div>
+    <div class="pagination hidden">我是第6个</div>
+    <div class="pagination hidden">我是第7个</div>
+    <div class="pagination hidden">我是第8个</div>
+    <div class="pagination hidden">我是第9个</div>
+</div>
+<div id="p">
+
+</div>
+<script type="text/template" id="pagination-tpl"><br>
+
+    {{#! 显示上一页 }}
+    {{#if currentPage === startPage }}
+    <a class="pg-prev pg-disabled">上一页</a>
+    {{#else}}
+    <a class="pg-prev" href="静态分页.html#" data-page="{{ currentPage - 1 }}">上一页</a>
+    {{/if}}
+
+    {{#! 显示下一页 }}
+    {{#if currentPage === endPage }}
+    <a class="pg-next pg-disabled">下一页</a>
+    {{#else}}
+    <a class="pg-next" href="静态分页.html#" data-page="{{ currentPage + 1 }}">下一页</a>
+    {{/if}}
+
+</script>
+<script>
+    KISSY.config({
+        packages:[
+            {
+                name:"gallery",
+                path:"http://a.tbcdn.cn/s/kissy/",
+                charset:"utf-8"
+            }
+        ]
+    });
+
+    KISSY.use('gallery/pagination/1.0/index', function (S, P) {
+
+        var num = 2;//每页显示多少条
+
+        var item = S.DOM.query('.pagination', '#result');//找到分页的所有容器
+
+        var pagination = new P({
+            //显示分页的容器
+            container:'#p',
+            //计算出总页数
+            totalPage:Math.ceil(item.length / num),
+            //获取分页的模板
+            template:S.DOM.get('#pagination-tpl').innerHTML,
+            callback:function (idx, pg, ready) {
+                S.DOM.addClass(item, 'hidden');
+                S.DOM.removeClass(item.slice((idx - 1) * num, (idx - 1) * num + num), 'hidden');
+                ready(idx);
+            }
+        });
+    });
+</script>
+</body>
+</html>

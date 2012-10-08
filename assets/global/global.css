@@ -13,6 +13,7 @@ a {
 
 body {
     position: relative;
+    font-family: Consolas, verdana, simsun, sans-serif;
 }
 
 #header {
@@ -33,7 +34,13 @@ body {
     color: #7fffd4;
     font-weight: bold;
     text-shadow: 1px 1px 1px #000;
-    font-family: simsun, simhei, arial, sans-serif;
+}
+
+#header h1 span {
+    font-size: 14px;
+    margin-left: 1em;
+    position: relative;
+    top: -80px;
 }
 
 #main-wrapper {
@@ -63,7 +70,6 @@ body {
 #calendar-header h2 {
     padding: 6px 0 0 .2em;
     font-weight: normal;
-    font-family: verdana, sans-serif;
     white-space: nowrap;
     float: left;
     font-size: 38px;
@@ -192,20 +198,32 @@ body {
     z-index: 2;
 }
 
+#more-detail-wrapper.edit #more-detail {
+    padding-left: 434px;
+}
+
 #more-detail {
     margin: 0 1em 0 0;
-    font-family: verdana, sans-serif;
 }
 
 #more-detail h2 {
-    padding: 1em 0 0 1em;
-    font-size: 16px;
+    padding: 2em 0 0 2em;
+    font-size: 14px;
     margin: 0
+}
+
+#more-detail h2 b.edit {
+    margin-left: 12px;
+    font-weight: normal;
+    font-size: 12px;
+    color: blue;
+    cursor: pointer;
+    font-family: verdana, sans-serif;
 }
 
 #more-detail ul {
     line-height: 180%;
-    margin: 1em 0 2em 2em;
+    margin: 1em 0 1em 2em;
     font-size: 14px;
 }
 
@@ -235,6 +253,12 @@ body {
     padding: .5em 1em;
 }
 
+#add-record-log td.edit-log {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
 #add-record-log th {
     width: 100px;
     text-align: right;
@@ -242,7 +266,6 @@ body {
 
 #add-record-log th b {
     font-weight: bold;
-    font-family: verdana, sans-serif;
     color: #a00;
     font-size: 14px;
 }
@@ -331,7 +354,6 @@ body {
 #calendar-container div.work-describe {
     background: #f9f9f9;
     overflow-y: auto;
-    font-family: verdana, simsun, sans-serif;
     margin-left: -1px;
     margin-top: -1px;
 }
@@ -340,6 +362,27 @@ body {
     width: 100%;
     padding-top: .5em;
     line-height: 170%;
+}
+
+#calendar-container div.work-describe ul li.edit {
+    position: absolute;
+    width: auto;
+    position: absolute;
+    right: .5em;
+    top: .5em;
+}
+
+#calendar-container div.work-describe ul li b {
+    font-weight: normal;
+    margin-right: .5em;
+}
+
+#calendar-container div.work-describe ul li.edit b {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #4454a7;
+    background: #f9f9f9;
+    padding: 0 .5em;
 }
 
 #calendar-container div.work-describe ul li {
@@ -493,12 +536,7 @@ body #sidebar-wrapper span.highlight {
     padding: 0 5px;
 }
 
-#statistics ul li span.download-csv {
-    display: none;
-}
-
-body.show-amortization #statistics ul li span.amortization,
-body.show-amortization #statistics ul li span.download-csv {
+body.show-amortization #statistics ul li span.amortization {
     display: inline-block;
 }
 

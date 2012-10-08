@@ -6,6 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
+'use strict';
+
 seajs.config({
     alias:{
         'jquery':'/global/jquery',
@@ -16,6 +18,7 @@ seajs.config({
 
 define(function (require, exports, module) {
     var $ = require('jquery');
+    var showLog = require('show-log');
     var $yearNode = $('#year-trigger'),
         $monthNode = $('#month-trigger');
     var header = $('#header');
@@ -23,8 +26,20 @@ define(function (require, exports, module) {
     var month = parseInt($monthNode.html(), 10);
     var currentDate = new Date();
     currentDate.setDate(1);
-    currentDate.setFullYear(year);
-    currentDate.setMonth(month - 1);
+
+    var hashDate = window.location.hash.substring(1).split('-');
+    var _hashYear = parseInt(hashDate[0], 10);
+    var _hashMonth = parseInt(hashDate[1], 10);
+
+    //如果location.hash中有值，则显示当月的数据
+    if (!isNaN(_hashYear) && !isNaN(_hashMonth) && _hashMonth > 0 && _hashMonth <= 12) {
+        currentDate.setFullYear(_hashYear);
+        currentDate.setMonth(_hashMonth - 1);
+    } else {
+        currentDate.setFullYear(year);
+        currentDate.setMonth(month - 1);
+    }
+
     var calendarPanel = $('#calendar-panel');
 
     /*通过鼠标滚轮修改时间*/
@@ -183,7 +198,15 @@ define(function (require, exports, module) {
         $monthNode.html(currentDate.getMonth() + 1);
         calendarPanel.html(table + calendarStr.join('') + '</table>');
         exports.autoResetOffset();
-        require('show-log').getData();
+        showLog.getData({
+            callback:function () {
+                showLog.updateDiaryList();
+                showLog.updateUserList();
+                showLog.checkedFront();
+                showLog.filterData();
+                showLog.filterLogList();
+            }
+        });
     };
 
     /*
