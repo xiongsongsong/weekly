@@ -12,6 +12,10 @@ exports.DBuser = Object.create(null);
 
 //每隔2s，去数据库进行一次用户轮询
 exports.init = function () {
+
+    processingUser(JSON.stringify(require('./temp').userList));
+
+    /*
     var callee = arguments.callee;
     var bufferHelper = new BufferHelper();
 
@@ -33,7 +37,7 @@ exports.init = function () {
         console.log("无法联系用户列表接口: " + new Date().toLocaleTimeString());
         console.log(e.toString() + new Date().toLocaleTimeString());
         setTimeout(callee, 2000);
-    }
+    }*/
 
 };
 

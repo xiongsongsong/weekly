@@ -30,6 +30,6 @@ app.configure('production', function () {
 
 require('./routes').init(app);
 
-app.listen(80, function () {
+app.listen(8000, function () {
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
