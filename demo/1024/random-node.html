@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>随机展示节点</title>
+</head>
+<body>
+<ul id="result">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>a</li>
+    <li>b</li>
+    <li>c</li>
+    <li>d</li>
+    <li>e</li>
+</ul>
+<button type="button" id="random" style="padding:1em;">随机</button>
+<script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js"></script>
+<script>
+
+    KISSY.ready(function (S) {
+        var DOM = S.DOM;
+        S.Event.on('#random', 'click', rand);
+
+        function rand() {
+            var resultObj = DOM.get('#result');
+            var liArr = DOM.query('li', resultObj);
+            var tempArr = [];
+
+            //保证打乱后的数组和原数组长度一致
+            while (tempArr.length < liArr.length) {
+                var rand = parseInt(Math.random() * liArr.length, 10);
+                //如果在临时数组中，发现节点不存在，则添加
+                if (liArr[rand] && S.indexOf(liArr[rand], tempArr) < 0)  tempArr.push(liArr[rand]);
+            }
+
+            //用一个容器来存储随机的节点，为了性能考虑
+            var frame = document.createDocumentFragment();
+            S.each(tempArr, function (li, index) {
+                frame.appendChild(li);
+            });
+            //清空所有内容
+            resultObj.innerHTML = '';
+            //将那些随机的节点，统一插入到ul中
+            resultObj.appendChild(frame)
+        }
+    });
+</script>
+</body>
+</html>
