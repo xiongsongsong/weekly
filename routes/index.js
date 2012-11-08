@@ -18,7 +18,8 @@ exports.init = function (app) {
 };
 
 function init(app) {
-    //首页
+
+//首页
     app.get('/', require('./home').index);
 
 //保存日志

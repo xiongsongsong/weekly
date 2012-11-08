@@ -11,7 +11,8 @@
 seajs.config({
     alias:{
         'calendar':'/home/calendar',
-        'record-log':'/home/record-log'
+        'record-log':'/home/record-log',
+        'socket':'/home/socket'
     }
 });
 
@@ -22,7 +23,7 @@ seajs.config({
     }
 );
 
-define([ 'calendar', 'record-log'], function (require) {
+define([ 'calendar', 'record-log', 'socket'], function (require) {
 
     /*构造日历界面*/
     require('calendar').init();
@@ -30,4 +31,5 @@ define([ 'calendar', 'record-log'], function (require) {
     /*写工作日志 */
     require('record-log').init();
 
+    require('socket');
 });
