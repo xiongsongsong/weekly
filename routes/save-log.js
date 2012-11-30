@@ -14,7 +14,7 @@ exports.save_log = function (req, res) {
     var errorMSG = Object.create(null);
     errorMSG.errorList = [];
     if (require('../helper').isDisabledRecord()) {
-        errorMSG.errorList.push({msg:'当前处于日志统计时段（每月最后一天16点后）\r\n系统暂时屏蔽此功能，请明天再来添加。'});
+        errorMSG.errorList.push({msg:'每月最后一天18点后，\r\n系统暂时屏蔽此功能，请明天再来添加。'});
         res.end(JSON.stringify(errorMSG), undefined, '\t');
         return;
     }

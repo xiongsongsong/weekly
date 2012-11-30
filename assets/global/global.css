@@ -337,6 +337,10 @@ body {
     margin: 0 8px;
 }
 
+input.hidden-form {
+    padding: 5px 12px;
+}
+
 #calendar-container div.work-diary {
     zoom: 1;
     text-align: left;
