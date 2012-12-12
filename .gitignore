@@ -4,3 +4,4 @@ test*.html
 storage/
 index.html
 *~*
+*.iml

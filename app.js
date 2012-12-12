@@ -13,7 +13,7 @@ app.configure(function () {
     app.set('view engine', 'jade');
     app.use(express.bodyParser());
     app.use(express.cookieParser());
-    app.use(express.session({ secret:"keyboard cat" }));
+    app.use(express.session({ secret: "keyboard cat" }));
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(__dirname + '/assets'));
@@ -21,7 +21,7 @@ app.configure(function () {
 });
 
 app.configure('development', function () {
-    app.use(express.errorHandler({ dumpExceptions:true, showStack:true }));
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function () {

@@ -20,7 +20,7 @@ define(function (require, exports, module) {
     var $addRecordLog = $('#add-record-log');
     var showLog = require('show-log');
     var $formObj = $(document.forms['add-record-log']);
-    var ele = $formObj[0].elements;
+    var ele = $formObj[0] && $formObj[0].elements;
     var $loginFormObj = $(document.forms['login']);
     var left = -480;
     var JRecordLog = $('.J-record-log,.J-edit');
@@ -28,38 +28,41 @@ define(function (require, exports, module) {
     exports.init = function () {
         JRecordLog.live('click', function (ev) {
             var $target = $(ev.currentTarget);
-            $formObj.find('.J-temp').remove();
-            $formObj[0].reset();
-            if ($target.hasClass('J-edit')) {
-                var id = $target.attr('data-id');
-                var currentDoc = undefined;
-                $(require('show-log').jsonData.documents).each(function (index, item) {
-                    if (id === item._id) {
-                        currentDoc = item;
-                        return false;
-                    }
-                });
-                if (currentDoc === undefined) return;
-                ele['page-name'].value = currentDoc['page-name'];
-                ele['design'].value = currentDoc['design'];
-                ele['customer'].value = currentDoc['customer'];
-                ele['level'].value = currentDoc['level'];
-                ele['online-url'].value = currentDoc['online-url'];
-                ele['tms-url'].value = currentDoc['tms-url'];
-                ele['note'].value = currentDoc['note'];
-                ele['year'].value = currentDoc['year'];
-                ele['month'].value = currentDoc['month'];
-                ele['date'].value = currentDoc['date'];
-                if (!ele['smt'].getAttribute('default-text')) ele['smt'].setAttribute('default-text', ele['smt'].value);
-                ele['smt'].value = '确定修改';
+            if ($formObj[0]) {
+                $formObj.find('.J-temp').remove();
+                $formObj[0].reset();
 
-                $formObj.find('tr:first').before('<tr class="J-temp"><td colspan="2" class="edit-log">修改：' + currentDoc['page-name'] + '</td></tr>');
-                $formObj.append($('<input type="hidden" name="type" value="edit" class="J-temp">'));
-                $formObj.append($('<input type="hidden" name="object_id" value="' + id + '" class="J-temp">'));
-                $('#more-detail-wrapper').addClass('edit');
-            } else {
-                if (ele['smt'].getAttribute('default-text')) ele['smt'].value = ele['smt'].getAttribute('default-text');
-                $('#more-detail-wrapper').removeClass('edit');
+                if ($target.hasClass('J-edit')) {
+                    var id = $target.attr('data-id');
+                    var currentDoc = undefined;
+                    $(require('show-log').jsonData.documents).each(function (index, item) {
+                        if (id === item._id) {
+                            currentDoc = item;
+                            return false;
+                        }
+                    });
+                    if (currentDoc === undefined) return;
+                    ele['page-name'].value = currentDoc['page-name'];
+                    ele['design'].value = currentDoc['design'];
+                    ele['customer'].value = currentDoc['customer'];
+                    ele['level'].value = currentDoc['level'];
+                    ele['online-url'].value = currentDoc['online-url'];
+                    ele['tms-url'].value = currentDoc['tms-url'];
+                    ele['note'].value = currentDoc['note'];
+                    ele['year'].value = currentDoc['year'];
+                    ele['month'].value = currentDoc['month'];
+                    ele['date'].value = currentDoc['date'];
+                    if (!ele['smt'].getAttribute('default-text')) ele['smt'].setAttribute('default-text', ele['smt'].value);
+                    ele['smt'].value = '确定修改';
+
+                    $formObj.find('tr:first').before('<tr class="J-temp"><td colspan="2" class="edit-log">修改：' + currentDoc['page-name'] + '</td></tr>');
+                    $formObj.append($('<input type="hidden" name="type" value="edit" class="J-temp">'));
+                    $formObj.append($('<input type="hidden" name="object_id" value="' + id + '" class="J-temp">'));
+                    $('#more-detail-wrapper').addClass('edit');
+                } else {
+                    if (ele['smt'].getAttribute('default-text')) ele['smt'].value = ele['smt'].getAttribute('default-text');
+                    $('#more-detail-wrapper').removeClass('edit');
+                }
             }
 
             $addRecordLog.stop();

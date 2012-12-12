@@ -6,10 +6,9 @@
  * To change this template use File | Settings | File Templates.
  */
 
-/*每个月最后一天，下午16点后，属于统计时段，将无法增添新日志记录*/
 exports.isDisabledRecord = function () {
     var date = new Date();
     var maxDate = require('./date').getMaxDays(date, date.getMonth());
-    return date.getDate() === maxDate && date.getHours() >= 16;
+    return date.getDate() === maxDate && date.getHours() >= 18;
 };
 

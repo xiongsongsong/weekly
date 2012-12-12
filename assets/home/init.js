@@ -9,25 +9,20 @@
 "use strict";
 
 seajs.config({
-    alias:{
-        'calendar':'/home/calendar',
-        'record-log':'/home/record-log'
-    }
-});
-
-seajs.config({
-        map:[
-            [/(.*\.(css|js))(?:.*)$/i, "$1?201210.$2"]
+        map: [
+            [/(.*\.(css|js))(?:.*)$/i, "$1?20121212.$2"]
         ]
     }
 );
 
-define([ 'calendar', 'record-log'], function (require) {
+define(function (require) {
 
     /*构造日历界面*/
-    require('calendar').init();
+    require('./calendar').init();
 
     /*写工作日志 */
-    require('record-log').init();
+    require('./record-log').init();
+
+    require('./tips');
 
 });
