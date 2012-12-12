@@ -57,7 +57,7 @@ exports.history = function (req, res) {
                             (p.design.trim() ? '<li>设计师：' + p.design + '</li>' : '') +
                             (p['online-url'].trim() ? '<li>线上地址：<a href="' + p['online-url'].trim() + '" target="_blank">' + p['online-url'] + '</a></li>' : '') +
                             (p['tms-url'].trim() ? '<li>TMS地址：<a href="' + p['tms-url'].trim() + '" target="_blank">' + p['tms-url'] + '</a></li>' : '') +
-                            (p['note'].trim() ? '<li>备注：' + p['note'] : '') +
+                            (p['note'].trim() ? '<li>备注：' + p['note'] + '</li>' : '') +
                             '</ul>';
                     });
                 })
