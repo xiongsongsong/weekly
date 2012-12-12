@@ -72,6 +72,7 @@ exports.history = function (req, res) {
                 title: '前端业务日志',
                 layout: false,
                 body: html,
+                docLength:length,
                 first: first,
                 end: end
             });
