@@ -24,16 +24,6 @@ exports.history = function (req, res) {
                 user: user
             };
 
-            var c = {
-                "李成宁": {
-                    "2012-07": [
-                        {},
-                        {},
-                        {}
-                    ]
-                }
-            };
-
             var r = Object.create(null);
 
             for (var u in user) {
