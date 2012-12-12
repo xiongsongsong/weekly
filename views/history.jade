@@ -1,0 +1,135 @@
+!!!5
+html
+    head
+        meta(charset="utf-8")
+        title history
+        style
+            div {
+                font-family: Consolas, verdana, simsun, sans-serif;
+                background: #fcfcff;
+                margin: 2em auto;
+                color: #555;
+                width: 1003px;
+                border: solid 1px #aaa;
+                padding: 1em 2em 2em 2em;
+                box-shadow: 8px 8px 0 #ddd;
+            }
+
+            h1 {
+                font-size: 28px;
+                border-bottom: dotted 1px #aaa;
+                padding: .3em 0;
+                margin-top: 1em;
+            }
+
+            h1 span {
+                font-size: 16px;
+                font-weight: normal;
+                margin-left: .5em;
+            }
+
+            h2 {
+                font-size: 22px;
+                margin: 1em auto;
+            }
+
+            h3 {
+                font-size: 14px;
+                margin-left: 1em;
+            }
+
+            ul {
+                margin-left: 3em;
+                line-height: 180%;;
+                margin-bottom: 2em;
+                padding-left: 0;
+            }
+
+            a {
+                text-decoration: none;
+                color: #6C97C2;
+            }
+
+            #nav {
+                position: fixed;
+                bottom: 0;
+                right: 1em;
+                border: solid 1px #aaa;
+                width: 180px;
+                padding: 1em;;
+                opacity: .5;
+                filter: alpha(opacity = 50);
+            }
+
+            #nav:hover {
+                opacity: 1;
+                filter: alpha(opacity = 100)
+            }
+
+            #nav a {
+                padding: 5px;
+                display: block;
+            }
+
+            #nav a:hover {
+                background: #9acd32;
+                color: #000;
+            }
+
+            #nav a span {
+                margin-left: 1em;
+                color: #ccc;
+            }
+
+            #nav a:hover span {
+                color: #000;
+            }
+
+            #nav.hide a {
+                display: none;
+            }
+
+            #nav em {
+                text-align: center;
+                display: block;
+                padding: 1em;
+                font-size: 14px;
+                font-style: normal;
+            }
+
+            p.tips {
+                color: #aaa;
+                text-align: right;
+                font-size: 12px;
+            }
+
+        body
+
+            div
+                p.tips    本部前端 !{first}  到 !{end} 的所有日志记录;
+                !{body}
+            #nav.hide
+                em#onoff   显示导航
+            script
+                var nav=document.getElementById('nav');
+                var h1=document.getElementsByTagName('h1');
+                var onoff=document.getElementById('onoff');
+                for(var i=0;i<h1.length;i++){
+                    var a=document.createElement('a');
+                    a.innerHTML=h1[i].innerHTML;
+                    (function(i){
+                    a.onmouseover=function(){
+                        h1[i].scrollIntoView();
+                    }
+                    })(i)
+                    nav.appendChild(a)
+                }
+                 nav.onclick=function(){
+                    if(nav.className=='hide'){
+                        nav.className='';
+                        onoff.innerHTML='隐藏导航'
+                    }else{
+                        nav.className='hide';
+                        onoff.innerHTML='显示导航'
+                    }
+                }
