@@ -30,6 +30,14 @@ app.configure('production', function () {
 
 require('./routes').init(app);
 
+//监控使用，返回服务器日志
+app.get('/server-log', function (req, res) {
+    res.header('content-type', 'text/plain;charset=gbk');
+    res.sendfile('./log.txt', function (err, data) {
+        res.end(data);
+    });
+});
+
 app.listen(80, function () {
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
