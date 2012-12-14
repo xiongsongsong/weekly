@@ -55,4 +55,13 @@ function init(app) {
 
     //本地测试使用 获取临时文件
     app.post('/node/check', require('../helper/temp').check);
+
+    //监控使用，返回服务器日志
+    app.get('/server-log', function (req, res) {
+        res.header('content-type', 'text/plain;charset=gbk');
+        res.sendfile('../log.txt', function (err, data) {
+            res.end(data);
+        });
+    });
+
 }
