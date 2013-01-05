@@ -1,9 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
     <title></title>
 </head>
 <body>
+<textarea rows="10" cols="60">
+2012 [face=happy,开心] [face=jiong,囧囧囧] 2013
+</textarea>
+<button>Convert</button>
+<textarea rows="10" cols="60">
 
+</textarea>
+
+<script>
+    var button = document.getElementsByTagName('button')[0];
+    var text = document.getElementsByTagName('textarea');
+
+    button.onclick = function () {
+        text[1].value = text[0].value.replace(/\[face=(\w+?),([^\]]+?)\]/gmi, '<img src="./images/$1.png" alt="$2" />');
+    };
+
+</script>
 </body>
 </html>
