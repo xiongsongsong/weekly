@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="http://a.tbcdn.cn/??s/kissy/1.2.0/kissy-min.js"></script>
+    <title>Delegate & Animation</title>
+    <style type="text/css">
+        div {
+            width: 200px;
+            height: 120px;
+            float: left;
+            position: relative;
+            background: #fff;
+            border-radius: 4px;
+            border: dotted 1px #000;
+            margin:4px;
+        }
+
+        div span {
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            padding: 1em;
+            color: #000;
+        }
+    </style>
+</head>
+<body id="parent">
+
+
+<div><span>Hello Kissy! </span></div>
+<div><span>Hello Kissy! </span></div>
+<div><span>Hello Kissy! </span></div>
+<div><span>Hello Kissy! </span></div>
+<div><span>Hello Kissy! </span></div>
+<div><span>Hello Kissy! </span></div>
+
+<script>
+    KISSY.ready(function (S) {
+
+        var DOM = S.DOM, Event = S.Event;
+
+        Event.delegate('#parent', 'mouseenter mouseleave', 'div', function (ev) {
+
+            var span = DOM.get('span', ev.currentTarget);
+
+            var isEnter = ev.type === 'mouseenter';
+
+            var spanAnimParam = {
+                bottom: isEnter ? 50 : '0',
+                color: isEnter ? '#fff' : '#000'
+            };
+
+            //停止span的动画
+            S.Anim.stop(span, false);
+
+            //停止父容器的动画
+            S.Anim.stop(ev.currentTarget, false);
+
+            //播放span的动画
+            S.Anim(span, spanAnimParam, isEnter ? .3 : .3, 'backIn').run();
+
+            //播放父容器的动画
+            S.Anim(ev.currentTarget, {background: isEnter ? '#3e9f57' : '#fff'}, isEnter ? .1 : .5).run();
+
+        });
+    })
+</script>
+
+</body>
+</html>
