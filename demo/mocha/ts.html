@@ -1,0 +1,75 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mocha Tests</title>
+    <link rel="stylesheet" href="mocha.css"/>
+</head>
+<body>
+<div id="mocha"></div>
+<script src="mocha.js"></script>
+<script>mocha.setup('bdd')</script>
+<script src="chai.js"></script>
+<script>chai.Should();</script>
+
+<script type="text/javascript" src="ts.js"></script>
+
+<script type="text/javascript">
+    describe('正向转换', function () {
+        describe('正整数', function () {
+            it('1', function () {
+                forward(1).should.to.equal('1')
+            });
+            it('12', function () {
+                forward(12).should.to.equal('12')
+            });
+            it('123', function () {
+                forward(123).should.to.equal('123')
+            });
+            it('1234', function () {
+                forward(1234).should.to.equal('1,234')
+            });
+            it('123456', function () {
+                forward(123456).should.to.equal('123,456')
+            });
+            it('1234567', function () {
+                forward(1234567).should.to.equal('1,234,567')
+            });
+        });
+
+        describe('带小数的转换', function () {
+            it('1.234', function () {
+                forward(1.234).should.to.equal('1.234')
+            });
+            it('123.567', function () {
+                forward(123.567).should.to.equal('123.567')
+            });
+
+            it('1234.567', function () {
+                forward(1234.567).should.to.equal('1,234.567')
+            });
+
+            it('容错的转换 1234.567px', function () {
+                forward('1234.567px').should.to.equal('1,234.567')
+            });
+
+            //TODO:待实现
+            it('容错的转换 1234px.567px', function () {
+                forward('1234px.567px').should.to.equal('1,234')
+            });
+        });
+    });
+
+    describe('反向转换', function () {
+        it('1,234,567', function () {
+            back('1,234,567').should.to.equal('1234567')
+        });
+        it('1,234,567.32359', function () {
+            back('1,234,567.32359').should.to.equal('1234567.32359')
+        });
+    });
+</script>
+<script>
+    mocha.run();
+</script>
+</body>
+</html>
