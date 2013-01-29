@@ -34,16 +34,16 @@ html
                             tr
                                 th 用户名
                                 td
-                                    input.text(type="text",name="user",disalbed="disabled",value="暂时禁用")
+                                    input.text(type="text",name="user",disabled="disabled",value="暂时禁用")
                             tr
                                 th 密码
                                 td
-                                    input.text(type="password",name="pwd",disalbed="disabled",value="暂时禁用")
+                                    input.text(type="password",name="pwd",disabled="disabled",value="暂时禁用")
                             tr.control
                                 th
                                 td
-                                    input.cal.hidden-form(type="button",value="取消")
-                                    input.login(type="submit",value="暂时禁用",id="Login",disalbed="disabled")
+                                    input.cal.hidden-form(type="button",value="取消",disabled="disabled")
+                                    input.login(type="submit",value="暂时禁用",id="Login",disabled="disabled")
                 -if(!isLogin)
                     style
                         form.add-record-log{display:none;}
