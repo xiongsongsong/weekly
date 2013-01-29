@@ -8,6 +8,7 @@ html
     body
         #header
             h1 前端 de 业务日志
+                span.tips 本月要提前进入财务结算期，故暂停记录功能。
         #main-wrapper
             #calendar-header
                 h2#date
@@ -33,16 +34,16 @@ html
                             tr
                                 th 用户名
                                 td
-                                    input.text(type="text",name="user")
+                                    input.text(type="text",name="user",disalbed="disabled",value="暂时禁用")
                             tr
                                 th 密码
                                 td
-                                    input.text(type="password",name="pwd")
+                                    input.text(type="password",name="pwd",disalbed="disabled",value="暂时禁用")
                             tr.control
                                 th
                                 td
                                     input.cal.hidden-form(type="button",value="取消")
-                                    input.login(type="submit",value="登陆",id="Login")
+                                    input.login(type="submit",value="暂时禁用",id="Login",disalbed="disabled")
                 -if(!isLogin)
                     style
                         form.add-record-log{display:none;}
