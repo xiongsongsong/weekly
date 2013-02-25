@@ -9,9 +9,9 @@
 'use strict';
 
 seajs.config({
-    alias:{
-        'jquery':'/global/jquery',
-        'render-log':'/home/render-log'
+    alias: {
+        'jquery': '/global/jquery',
+        'render-log': '/home/render-log'
     }
 });
 
@@ -24,14 +24,14 @@ define(function (require, exports, module) {
     var moreDetailWrapper = $('#more-detail-wrapper');
     exports.getData = function (object) {
         $.ajax('/show_log/json', {
-            type:'get',
-            cache:false,
-            dataType:'text',
-            data:{
-                year:$('#year-trigger').text(),
-                month:$('#month-trigger').text()
+            type: 'get',
+            cache: false,
+            dataType: 'text',
+            data: {
+                year: $('#year-trigger').text(),
+                month: $('#month-trigger').text()
             },
-            success:function (data) {
+            success: function (data) {
                 exports.jsonData = KISSY.JSON.parse(data);
                 jsonData = exports.jsonData;
                 exports.front = exports.getCurrentFilterOfFront();
@@ -45,7 +45,7 @@ define(function (require, exports, module) {
 
     //高亮对应的用户
     exports.checkedFront = function () {
-        exports.front = parseInt(exports.front, 10);
+        exports.front = exports.front;
         var $target = $('ul.user-filter span.front' + exports.front);
         var $frontObj = $('ul.user-filter span.front');
         if ($target.hasClass('show-all') || $target.size() < 1) {
@@ -97,7 +97,7 @@ define(function (require, exports, module) {
 
         //复位日历框为初始状态
         exports.resetDescribe = function () {
-            $('#calendar-panel div.work-diary-list').stop().animate({top:0}, 300);
+            $('#calendar-panel div.work-diary-list').stop().animate({top: 0}, 300);
             $('#calendar-panel div.work-describe').remove();
         };
 
@@ -121,7 +121,7 @@ define(function (require, exports, module) {
             exports.front = target.attr('front');
             var parentsNode = target.parents('div.work-diary');
             $('#calendar-panel div.work-describe').remove();
-            $('#calendar-panel div.work-diary-list').stop().not(parentsNode.find('div.work-diary-list')).animate({top:0}, 300);
+            $('#calendar-panel div.work-diary-list').stop().not(parentsNode.find('div.work-diary-list')).animate({top: 0}, 300);
             var _id = target.attr('data-id');
             var data;
             for (var i = 0; i < jsonData.documents.length; i++) {
@@ -145,8 +145,8 @@ define(function (require, exports, module) {
             exports.filterLogList();
 
             var workDiaryList = parentsNode.find('div.work-diary-list');
-            $(workDiaryList).animate({top:-workDiaryList.height() + 'px'}, 300);
-            tempContainer.css({'border':'solid 1px ' + target.css('background-color')});
+            $(workDiaryList).animate({top: -workDiaryList.height() + 'px'}, 300);
+            tempContainer.css({'border': 'solid 1px ' + target.css('background-color')});
         };
 
         var cl;
@@ -156,7 +156,7 @@ define(function (require, exports, module) {
             }
             cl = setTimeout(function () {
                 var workDiaryList = $('#calendar-panel div.work-describe').siblings('.work-diary-list');
-                $(workDiaryList).stop().animate({top:-workDiaryList.height() + 'px'}, 300);
+                $(workDiaryList).stop().animate({top: -workDiaryList.height() + 'px'}, 300);
             }, 300);
         })
 
@@ -164,7 +164,8 @@ define(function (require, exports, module) {
 
     exports.getCurrentFilterOfFront = function () {
         var $frontObj = $('ul.user-filter span.front');
-        return parseInt($frontObj.filter('.highlight').attr('front'), 10);
+        console.log($frontObj.filter('.highlight'))
+        return $frontObj.filter('.highlight').attr('front');
     };
 
     //更新日历上每一天的日志详情
@@ -203,13 +204,13 @@ define(function (require, exports, module) {
         var currentUser = jsonData.user['id_' + exports.front];
         var count = logList.count;
         var amortization = count.level1 * 20 + count.level2 * 30 + count.level3 * 50 + count.level4 * 100;
-        if (isNaN(exports.front)) {
+        if (!exports.front) {
             $('#log-list-control .J-username').html('全部页面');
         } else {
             $('#log-list-control .J-username').html(beautifyName(currentUser.name) + '（' + currentUser['real-name'] + '）');
         }
         $('#statistics').html('<h2>' + (function () {
-            if (!isNaN(exports.front)) {
+            if (exports.front) {
                 return '' + beautifyName(currentUser['name']) + ' - <span>' + currentUser['real-name'] + '</span>';
             } else {
                 return '统计 ';

@@ -27,6 +27,18 @@ function init(app) {
     //拉取日志信息
     app.get('/show_log/:date', require('./save-log').show_log);
 
+    app.get('/list/', function (req, res) {
+        var DB = require('../helper/db');
+        res.header('content-type', 'text/json;charset=utf-8');
+        var collection = new DB.mongodb.Collection(DB.client, 'log');
+        collection.find({ level: {'$gt': 0}}, {}).sort([
+                ['front', 1]
+            ]).toArray(function (err, docs) {
+                res.end(JSON.stringify({data: docs}, undefined, '\t'))
+            });
+
+    });
+
     //登陆
     app.post(/login(\/)?.*/, require('./login').login);
 
@@ -56,4 +68,7 @@ function init(app) {
     //本地测试使用 获取临时文件
     app.post('/node/check', require('../helper/temp').check);
 
+    require('../helper/updateDB');
+
 }
+

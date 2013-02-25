@@ -8,37 +8,61 @@
 var http = require('http');
 var BufferHelper = require('bufferhelper');
 
+var DB = require('./db');
+
+
 exports.DBuser = Object.create(null);
+
+var _init = false;
+
 
 //每隔2s，去数据库进行一次用户轮询
 exports.init = function () {
     var callee = arguments.callee;
     var bufferHelper = new BufferHelper();
 
-    try {
-        http.get("http://192.168.1.240/node/user-list/", function (res) {
-            res.on('data', function (chunk) {
-                bufferHelper.concat(chunk);
-            });
-            res.on('end', function () {
-                processingUser(bufferHelper.toBuffer().toString());
-                setTimeout(callee, 2000);
-            });
-            res.on('error', function (e) {
-                console.log("接口服务器错误: " + new Date().toLocaleTimeString());
-                console.log(e.toString());
-            });
+
+
+    var collection = new DB.mongodb.Collection(DB.client, 'user');
+    collection.find({}).toArray(function (err, docs) {
+        var user = {};
+        docs.forEach(function (item) {
+            user['id_' + item._id] = {
+                id: item._id,
+                name: item.name,
+                'real-name': item['real-name']
+            }
         });
-    } catch (e) {
-        console.log("无法联系用户列表接口: " + new Date().toLocaleTimeString());
-        console.log(e.toString() + new Date().toLocaleTimeString());
-        setTimeout(callee, 2000);
-    }
+        exports.DBuser = user;
+        if (_init === false) {
+            _init = true;
+            exports.updateFrontList();
+        }
+    });
+
+    /*try {
+     http.get("http://xxxxxx/node/user-list/", function (res) {
+     res.on('data', function (chunk) {
+     bufferHelper.concat(chunk);
+     });
+     res.on('end', function () {
+     processingUser(bufferHelper.toBuffer().toString());
+     console.log(bufferHelper.toBuffer().toString())
+     setTimeout(callee, 2000);
+     });
+     res.on('error', function (e) {
+     console.log("接口服务器错误: " + new Date().toLocaleTimeString());
+     console.log(e.toString());
+     });
+     });
+     } catch (e) {
+     console.log("无法联系用户列表接口: " + new Date().toLocaleTimeString());
+     console.log(e.toString() + new Date().toLocaleTimeString());
+     setTimeout(callee, 2000);
+     }*/
 
 };
 
-
-var _init = false;
 
 function processingUser(data) {
     try {
