@@ -9,55 +9,31 @@
 'use strict';
 
 var http = require('http');
-var BufferHelper = require('bufferhelper');
+var DB = require('../helper/db');
 
 exports.login = function (req, res) {
-    var content = {
-        "user":encodeURIComponent(req.body.user),
-        'pwd':encodeURIComponent(req.body.pwd)
-    };
+    var user = req.body.user;
+    var pwd = req.body.pwd;
+    var result = {};
 
-    var options = {
-        host:'192.168.1.240',
-        port:80,
-        path:'/node/check/',
-        method:'POST',
-        headers:{
-            'Content-Type':'application/x-www-form-urlencoded',
-            'Connection':'Close'
-        }
-    };
-
-    var request = http.request(options, function (response) {
-        var bufferHelper = new BufferHelper();
-        response.on('data', function (chunk) {
-            bufferHelper.concat(chunk);
-        });
-        response.on('end', function () {
-            try {
-                var result = bufferHelper.toBuffer().toString();
-                var obj = JSON.parse(result);
-                if (typeof obj['UID'] == 'number') {
-                    res.write(result);
-                    req.session.username = req.body.user;
-                    req.session.userid = obj['UID'];
-                } else {
-                    res.write('{"status":"UID is null"}');
-                }
-
-            } catch (err) {
-                console.log(err);
-                res.write('{"status":"Unable to link login authentication services."}');
+    var collection = new DB.mongodb.Collection(DB.client, 'user');
+    collection.findOne({'real-name': user}, {}, function (err, doc) {
+        if (doc) {
+            if (doc.pwd === pwd) {
+                //登陆成功
+                result.code = 1;
+                req.session.username = user;
+                req.session.userid = doc._id;
+            } else {
+                //密码不正确
+                result.code = -1;
             }
-            res.end();
-        });
+        } else {
+            //用户名不存在
+            result.code = -2;
+        }
+        res.end(JSON.stringify(result, undefined, '\t'));
     });
-
-    request.write(Object.keys(content).map(function (item) {
-        return item + '=' + content[item];
-    }).join('&'));
-    request.end();
-
 };
 
 //登出

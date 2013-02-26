@@ -45,7 +45,6 @@ define(function (require, exports, module) {
 
     //高亮对应的用户
     exports.checkedFront = function () {
-        exports.front = exports.front;
         var $target = $('ul.user-filter span.front' + exports.front);
         var $frontObj = $('ul.user-filter span.front');
         if ($target.hasClass('show-all') || $target.size() < 1) {
@@ -78,6 +77,7 @@ define(function (require, exports, module) {
             $('#more-detail-wrapper').hide();
             $('#log-list-control').hide();
         });
+
         $(document).bind('keydown', function (ev) {
             if (ev.target.nodeName !== 'INPUT') {
                 switch (ev.keyCode) {
@@ -164,7 +164,6 @@ define(function (require, exports, module) {
 
     exports.getCurrentFilterOfFront = function () {
         var $frontObj = $('ul.user-filter span.front');
-        console.log($frontObj.filter('.highlight'))
         return $frontObj.filter('.highlight').attr('front');
     };
 

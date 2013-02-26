@@ -9,9 +9,10 @@
 "use strict";
 
 seajs.config({
-    alias:{
-        'jquery':'/global/jquery',
-        'show-log':'/home/show-log'
+    alias: {
+        'jquery': '/global/jquery',
+        'show-log': '/home/show-log',
+        'sha512': '/crypto/sha'
     }
 });
 
@@ -66,7 +67,7 @@ define(function (require, exports, module) {
             }
 
             $addRecordLog.stop();
-            $addRecordLog.animate({left:'0px'}, 500);
+            $addRecordLog.animate({left: '0px'}, 500);
             $(ev.currentTarget).addClass('current');
             if ($formObj.size() > 0) {
                 $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
@@ -76,7 +77,7 @@ define(function (require, exports, module) {
         $('input.hidden-form').live('click', function () {
             $('#more-detail-wrapper').removeClass('edit');
             $addRecordLog.stop();
-            $addRecordLog.animate({left:left + 'px'}, 500, function () {
+            $addRecordLog.animate({left: left + 'px'}, 500, function () {
                 JRecordLog.removeClass('current')
             });
         });
@@ -90,26 +91,26 @@ define(function (require, exports, module) {
             $('#more-detail-wrapper').removeClass('edit');
             var formData = $formObj.serialize();
             $.ajax('/save-log', {
-                type:'post',
-                dataType:'json',
-                data:formData,
-                cache:false,
-                success:function (data) {
+                type: 'post',
+                dataType: 'json',
+                data: formData,
+                cache: false,
+                success: function (data) {
                     if (data.status) {
                         $formObj[0].reset();
-                        $addRecordLog.animate({left:left + 'px'}, 500, function () {
+                        $addRecordLog.animate({left: left + 'px'}, 500, function () {
                             JRecordLog.removeClass('current')
                         });
                         //if it is in edit mode
                         if (ele['type'] && ele['type'].value === 'edit') {
                             showLog.getData({
-                                callback:function () {
+                                callback: function () {
                                     showLog.updateCurrentInfo(ele['object_id'].value);
                                     showLog.updateDiaryList();
                                     var highLight = $('#calendar-panel span.front[data-id=' + ele['object_id'].value + ']');
                                     //如果在当月更新了日期，则跳转到指定日期，并高亮之
                                     if (highLight.size() > 0) {
-                                        showLog.checkedFrontDaily({target:highLight});
+                                        showLog.checkedFrontDaily({target: highLight});
                                     } else {
                                         //如果将日志更改到了非当前所切换月份，则重新过滤当前用户
                                         showLog.resetDescribe();
@@ -123,7 +124,7 @@ define(function (require, exports, module) {
                             });
                         } else {
                             showLog.getData({
-                                callback:function () {
+                                callback: function () {
                                     showLog.updateDiaryList();
                                     showLog.updateUserList();
                                     showLog.checkedFront();
@@ -147,25 +148,31 @@ define(function (require, exports, module) {
         }
 
         $loginFormObj.submit(function (ev) {
+            var sha = require('sha512');
             $.ajax('/login', {
-                type:'post',
-                dataType:'json',
-                data:$loginFormObj.serialize(),
-                cache:false,
-                success:function (data) {
-                    if (data.status === true) {
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    user: $loginFormObj[0].elements['user'].value,
+                    pwd: sha.hex_sha512($loginFormObj[0].elements['pwd'].value)
+                },
+                cache: false,
+                success: function (data) {
+                    if (data.code === 1) {
                         $loginFormObj.hide();
                         $formObj.show();
                         $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
                         showLog.getData({
-                            callback:function () {
+                            callback: function () {
                                 showLog.resetDescribe();
                             }
                         });
                         $('#record-log').append('<span>（' + $loginFormObj[0].elements['user'].value + '）</span>');
                         JRecordLog.after('<li class="separator"></li><li><a href="log-out">退出登陆</a></li>')
-                    } else {
-                        alert('用户名或密码不正确。');
+                    } else if (data.code === -1 || data.code === -2) {
+                        alert('用户名或密码错误')
+                    }else if(data.code===0){
+
                     }
                 }
             });
