@@ -23,6 +23,9 @@ define(function (require) {
     /*写工作日志 */
     require('./record-log').init();
 
+    /*登陆*/
+    require('./login');
+
     require('./tips');
 
 });

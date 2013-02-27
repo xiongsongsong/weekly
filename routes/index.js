@@ -45,6 +45,9 @@ function init(app) {
     //登出
     app.get('/log-out', require('./login').log_out);
 
+    //更改密码
+    app.post('/change-pwd', require('./login').changePwd);
+
     //下载报表
     app.get('/csv/:year/:month/:format?', require('./csv').download);
 

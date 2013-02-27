@@ -51,3 +51,38 @@ exports.isLogin = function (req) {
         return false;
     }
 };
+
+/*修改密码*/
+exports.changePwd = function (req, res) {
+    var userid = req.session.userid;
+    var collection = new DB.mongodb.Collection(DB.client, 'user');
+    var result = {};
+    var _id = DB.mongodb.ObjectID(userid);
+    collection.findOne({_id: _id}, {}, function (err, doc) {
+        if (doc) {
+            //原始密码正确
+            if (req.body.a === doc.pwd) {
+                //检测新密码合法性
+                if (/^[a-z0-9]{128}$/.test(req.body.b)) {
+                    //开始更新密码
+                    collection.update({ _id: _id }, {$set: {pwd: req.body.b}}, {}, function () {
+                        result.code = 1;
+                        res.end(JSON.stringify(result, undefined, '\t'))
+                    })
+                } else {
+                    //新密码不能通过效验
+                    result.code = -1;
+                    res.end(JSON.stringify(result, undefined, '\t'))
+                }
+            }
+            //原始密码不正确
+            else {
+                result.code = -5;
+                res.end(JSON.stringify(result, undefined, '\t'))
+            }
+        } else {
+            result.code = -4;
+            res.end(JSON.stringify(result, undefined, '\t'))
+        }
+    });
+}

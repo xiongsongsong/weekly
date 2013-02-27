@@ -11,8 +11,7 @@
 seajs.config({
     alias: {
         'jquery': '/global/jquery',
-        'show-log': '/home/show-log',
-        'sha512': '/crypto/sha'
+        'show-log': '/home/show-log'
     }
 });
 
@@ -147,36 +146,6 @@ define(function (require, exports, module) {
             });
         }
 
-        $loginFormObj.submit(function (ev) {
-            var sha = require('sha512');
-            $.ajax('/login', {
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    user: $loginFormObj[0].elements['user'].value,
-                    pwd: sha.hex_sha512($loginFormObj[0].elements['pwd'].value)
-                },
-                cache: false,
-                success: function (data) {
-                    if (data.code === 1) {
-                        $loginFormObj.hide();
-                        $formObj.show();
-                        $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
-                        showLog.getData({
-                            callback: function () {
-                                showLog.resetDescribe();
-                            }
-                        });
-                        $('#record-log').append('<span>（' + $loginFormObj[0].elements['user'].value + '）</span>');
-                        JRecordLog.after('<li class="separator"></li><li><a href="log-out">退出登陆</a></li>')
-                    } else if (data.code === -1 || data.code === -2) {
-                        alert('用户名或密码错误')
-                    }else if(data.code===0){
 
-                    }
-                }
-            });
-            ev.preventDefault();
-        })
     };
 });

@@ -118,7 +118,9 @@ html
                         if(isLogin)
                             li.separator
                             li
-                                a(href="log-out") 退出登陆
+                                a.change-pwd(href='#') 改密
+                                |
+                                a(href="log-out") 退出
                     ul.user-filter
                         li#user-filter-container
                     #statistics
