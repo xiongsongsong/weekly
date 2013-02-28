@@ -260,7 +260,6 @@ body {
 }
 
 #add-record-log th {
-    width: 100px;
     text-align: right;
 }
 
@@ -339,6 +338,10 @@ body {
 
 input.hidden-form {
     padding: 5px 12px;
+}
+
+.J-edit-pwd input{
+    display: block;
 }
 
 #calendar-container div.work-diary {
