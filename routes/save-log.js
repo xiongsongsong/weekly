@@ -102,10 +102,17 @@ exports.save_log = function (req, res) {
         collection.insert(data, {safe: true},
             function () {
                 //如果当前用户是第一次添加日志，则立即更新用户列表的缓存
-                res.end(JSON.stringify({'status': true}, undefined, '    '));
+                if (require('../helper/user').frontList['id_' + req.session.userid] === undefined) {
+                    require('../helper/user').updateFrontList({
+                        callback: function () {
+                            res.end(JSON.stringify({'status': true}, undefined, '    '));
+                        }
+                    });
+                } else {
+                    res.end(JSON.stringify({'status': true}, undefined, '    '));
+                }
                 //When adding a log, automatic backup of the database
                 require('../helper/dump').dump(req);
-
             });
     }
 };

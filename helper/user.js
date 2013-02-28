@@ -11,9 +11,7 @@ var DB = require('./db');
 
 exports.DBuser = Object.create(null);
 
-//每隔2s，去数据库进行一次用户轮询
-exports.init = function () {
-
+exports.updateFrontList = function (param) {
     var collection = new DB.mongodb.Collection(DB.client, 'user');
     collection.find({}).toArray(function (err, docs) {
         var user = {};
@@ -26,12 +24,15 @@ exports.init = function () {
         });
         exports.DBuser = user;
         exports.frontList = user;
+        if (param && param.callback) {
+            param.callback();
+        }
     });
-};
-
+}
 
 //检测一个用户是否已经(离职|转岗)
 exports.isLeave = function () {
 
 };
 
+//获取日志文档中，所有的front-id（即uid）
