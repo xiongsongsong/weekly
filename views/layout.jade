@@ -25,7 +25,7 @@ html
                 #more-detail-wrapper(style="display:none;")
                     #more-detail
             #add-record-log
-                if(!isLogin && !isDisabledRecord)
+                if(!isLogin)
                     form.login(name="login",action="/login",method="post")
                         table
                            tr
@@ -44,9 +44,6 @@ html
                 -if(!isLogin)
                     style
                         form.add-record-log{display:none;}
-                -if(isDisabledRecord)
-                    p 每月末最后一天的18点后，<br>暂时屏蔽保存日志功能，<br>请下月再来记录。
-                        input.cal.hidden-form(type="button",value="隐藏<<")
                 -else
                     form.add-record-log(name="add-record-log",action="/record-log",method="post")
                         table
@@ -86,10 +83,6 @@ html
                                 th 备注
                                 td
                                     textarea(name="note")
-                            -if(date.getDate()>=1 && date.getDate()<=7)
-                                tr.tips
-                                    th 提示：
-                                    td 因已过上月统计期，<br>故如有忘记添加的日志，请记录在本月。<br>
                             tr
                                 th 页面完成时间
                                     b *

@@ -14,7 +14,6 @@ exports.index = function (req, res) {
         isLogin: require('./login').isLogin(req),
         date: new Date(),
         username: req.session.username,
-        sessionID: req.sessionID,
-        isDisabledRecord: require('../helper').isDisabledRecord()
+        sessionID: req.sessionID
     });
 };
