@@ -25,7 +25,7 @@ html
                 #more-detail-wrapper(style="display:none;")
                     #more-detail
             #add-record-log
-                if(!isLogin)
+                -if(!isLogin)
                     form.login(name="login",action="/login",method="post")
                         table
                            tr
@@ -43,58 +43,58 @@ html
                                     input.login(type="submit",value="登录",id="Login")
                     style
                         form.add-record-log{display:none;}
-                    form.add-record-log(name="add-record-log",action="/record-log",method="post")
-                        table
-                            tr
-                                th 页面名称
-                                    b *
-                                td
-                                    input.text(type="text",name="page-name")
-                            tr
-                                th  页面等级
-                                    b *
-                                td
-                                    select(name="level")
-                                        option(value="") 请选择
-                                        option(value="1") 简单
-                                        option(value="2") 一般
-                                        option(value="3") 常规
-                                        option(value="4") 复杂
-                                    a(href="http://note.youdao.com/share/?id=958147041772e87d41bdfe60c6b7f6ab&type=note",target="_blank").level 评级标准
-                            tr
-                                th 设计师
-                                td
-                                    input.text(type="text",name="design")
-                            tr
-                                th 需求方
-                                td
-                                    input.text(type="text",name="customer")
-                            tr
-                                th 线上地址
-                                td
-                                    input.text(type="text",name="online-url")
-                            tr
-                               th TMS地址
-                               td
-                                   input.text(type="text",name="tms-url")
-                            tr
-                                th 备注
-                                td
-                                    textarea(name="note")
-                            tr
-                                th 页面完成时间
-                                    b *
-                                td
-                                    input.year(name='year',value='#{date.getFullYear()}')
-                                    |-
-                                    input.month(name='month',value='#{date.getMonth()+1}')
-                                    |-
-                                    input.date(name='date',value='#{date.getDate()}')
-                            tr.control
-                                th
-                                td
-                                    input.cal.hidden-form(type="button",value="<<隐藏")
-                                    input.smt(type="submit",value="保存",name="smt")
+                form.add-record-log(name="add-record-log",action="/record-log",method="post")
+                    table
+                        tr
+                            th 页面名称
+                                b *
+                            td
+                                input.text(type="text",name="page-name")
+                        tr
+                            th  页面等级
+                                b *
+                            td
+                                select(name="level")
+                                    option(value="") 请选择
+                                    option(value="1") 简单
+                                    option(value="2") 一般
+                                    option(value="3") 常规
+                                    option(value="4") 复杂
+                                a(href="http://note.youdao.com/share/?id=958147041772e87d41bdfe60c6b7f6ab&type=note",target="_blank").level 评级标准
+                        tr
+                            th 设计师
+                            td
+                                input.text(type="text",name="design")
+                        tr
+                            th 需求方
+                            td
+                                input.text(type="text",name="customer")
+                        tr
+                            th 线上地址
+                            td
+                                input.text(type="text",name="online-url")
+                        tr
+                           th TMS地址
+                           td
+                               input.text(type="text",name="tms-url")
+                        tr
+                            th 备注
+                            td
+                                textarea(name="note")
+                        tr
+                            th 页面完成时间
+                                b *
+                            td
+                                input.year(name='year',value='#{date.getFullYear()}')
+                                |-
+                                input.month(name='month',value='#{date.getMonth()+1}')
+                                |-
+                                input.date(name='date',value='#{date.getDate()}')
+                        tr.control
+                            th
+                            td
+                                input.cal.hidden-form(type="button",value="<<隐藏")
+                                input.smt(type="submit",value="保存",name="smt")
         #sidebar-wrapper
             #sidebar-container
                 #sidebar-group
