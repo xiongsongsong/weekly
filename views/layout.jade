@@ -115,9 +115,12 @@ html
                     ul.user-filter
                         li#user-filter-container
                     #statistics
-                    h2 一起改进
+                    h2 概况
                     ul
-                        li
-                            a(href="https://github.com/xiongsongsong/weekly") Weekly on Github
+                        li pid: #{process.pid}
+                        li uptime: #{parseInt(process.uptime(),10)}
+                        li(style="display:none;") memory#{JSON.stringify(process.memoryUsage(),undefined,'    ')}
+                        li(style="margin-top:.8em;")
+                            a(href="https://github.com/xiongsongsong/weekly") Github
         script(src="/kissy-min.js")
         script#seajsnode(src="/sea.js",data-main="/home/init.js?time=2013.js")
