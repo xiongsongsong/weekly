@@ -41,10 +41,8 @@ html
                                 td
                                     input.cal.hidden-form(type="button",value="取消")
                                     input.login(type="submit",value="登录",id="Login")
-                -if(!isLogin)
                     style
                         form.add-record-log{display:none;}
-                -else
                     form.add-record-log(name="add-record-log",action="/record-log",method="post")
                         table
                             tr
