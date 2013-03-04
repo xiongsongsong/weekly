@@ -13,10 +13,14 @@ html
             #calendar-header
                 h2#date
                     b#year-trigger(data-type="year") !{date.getFullYear()}
+                    b.trigger-panel.year
+                        span.add ▲
+                        span.reduce ▼
                     | -
                     b#month-trigger(data-type="month") !{ date.getMonth()+1}
-                    span.tips 用鼠标滚轮设定年月
-                        s
+                    b.trigger-panel.month
+                        span.add ▲
+                        span.reduce ▼
                 #log-list-control(style="display:none;")
                     span.J-username=username
                     b.close.J-close &times;
@@ -121,4 +125,4 @@ html
                         li(style="margin-top:.8em;")
                             a(href="https://github.com/xiongsongsong/weekly") Github
         script(src="/kissy-min.js")
-        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=2013.js")
+        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=20130304.js")

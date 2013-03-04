@@ -9,9 +9,9 @@
 'use strict';
 
 seajs.config({
-    alias:{
-        'jquery':'/global/jquery',
-        'show-log':'/home/show-log'
+    alias: {
+        'jquery': '/global/jquery',
+        'show-log': '/home/show-log'
     }
 });
 
@@ -42,30 +42,33 @@ define(function (require, exports, module) {
 
     var calendarPanel = $('#calendar-panel');
 
-    /*通过鼠标滚轮修改时间*/
-    KISSY.Event.on([$yearNode[0], $monthNode[0]], "mousewheel", function (ev) {
-        switch (ev.currentTarget.id) {
-            case  "year-trigger":
-                year = ev.deltaY > 0 ? year + 1 : year - 1;
-                $yearNode.html(year);
-                break;
-            case "month-trigger":
-                if (ev.deltaY > 0) {
-                    month += 1;
-                    if (month > 12) {
-                        month = 1;
-                        year += 1;
-                    }
-                } else {
-                    month -= 1;
-                    if (month < 1) {
-                        month = 12;
-                        year -= 1;
-                    }
+    /*
+     * 更改日期
+     * */
+    KISSY.Event.on('#date b.trigger-panel', "click", function (ev) {
+        var $currentTarget = $(ev.currentTarget);
+        var $target = $(ev.target);
+        var add = $target.hasClass('add');
+
+        if ($currentTarget.hasClass('year')) {
+            year = add ? year + 1 : year - 1;
+            $yearNode.html(year);
+        } else if ($currentTarget.hasClass('month')) {
+            if (add) {
+                month += 1;
+                if (month > 12) {
+                    month = 1;
+                    year += 1;
                 }
-                $yearNode.html(year);
-                $monthNode.html(month);
-                break;
+            } else {
+                month -= 1;
+                if (month < 1) {
+                    month = 12;
+                    year -= 1;
+                }
+            }
+            $yearNode.html(year);
+            $monthNode.html(month);
         }
         //更新日历界面
         var _tempDate = new Date();
@@ -75,6 +78,9 @@ define(function (require, exports, module) {
         currentDate = _tempDate;
         ev.preventDefault();
         exports.createTableView();
+    });
+    KISSY.Event.on('#date', "selectstart ", function (ev) {
+        ev.preventDefault();
     });
 
     var tipsCl;
@@ -157,18 +163,18 @@ define(function (require, exports, module) {
         var prevMaxDays = exports.getMaxDays(lastMonth, lastMonth.getMonth());
 
         for (var i = 0; i < leftDate; i++) {
-            dateArr.push({type:'prev', date:prevMaxDays - i});
+            dateArr.push({type: 'prev', date: prevMaxDays - i});
         }
         dateArr.reverse();
 
         for (i = 1; i < currentMaxDays + 1; i++) {
-            dateArr.push({type:'current', date:i});
+            dateArr.push({type: 'current', date: i});
         }
 
         //获取月末是星期几
         _tempDate.setDate(currentMaxDays);
         for (i = 1; i <= 7 - _tempDate.getDay() - 1; i++) {
-            dateArr.push({type:'next', date:i});
+            dateArr.push({type: 'next', date: i});
         }
 
         //补足月末的天数
@@ -199,7 +205,7 @@ define(function (require, exports, module) {
         calendarPanel.html(table + calendarStr.join('') + '</table>');
         exports.autoResetOffset();
         showLog.getData({
-            callback:function () {
+            callback: function () {
                 showLog.updateDiaryList();
                 showLog.updateUserList();
                 showLog.checkedFront();

@@ -75,44 +75,39 @@ body {
     font-size: 38px;
 }
 
-#calendar-header h2 span.tips {
-    position: absolute;
-    top: 80px;
-    left: 6em;
-    padding: .5em 1em;
-    font-size: 12px;
-    background: #16A765;
-    color: #fff;
-    letter-spacing: 2px;
-    display: none;
-}
-
-#calendar-header h2 span.tips s {
-    position: absolute;
-    width: 28px;
-    height: 24px;
-    left: 50%;
-    top: -16px;
-    background: url(/images/cire.png);
-    margin-left: -14px;
-}
-
 #calendar-header h2 b {
-    color: #444;
-    display: inline-block;
-    padding: 0 1em 0 .2em;
     font-weight: normal;
-    cursor: pointer;
-    background: #eee url(/images/sprites.png) 88% 16px no-repeat;
-    border-bottom: solid 1px #eee;
-
 }
 
-#calendar-header h2 b:hover,
-#calendar-header h2 b.hover {
-    background-color: #ddd;
-    background-position: 88% -41px;
-    border-bottom: solid 1px #bbb;
+#calendar-header h2 b.trigger-panel {
+    position: relative;
+    width: 30px;
+    display: inline-block;
+    height: 30px;
+}
+
+#calendar-header h2 b span {
+    font-size: 15px;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    line-height: normal;
+    height: 50%;
+    cursor: pointer;
+    color: #555;
+}
+
+#calendar-header h2 b span:hover {
+    color: red;
+}
+
+#calendar-header h2 b span.add {
+    top: 0;
+}
+
+#calendar-header h2 b span.reduce {
+    bottom: 0;
 }
 
 #log-list-control span {
@@ -340,7 +335,7 @@ input.hidden-form {
     padding: 5px 12px;
 }
 
-.J-edit-pwd input{
+.J-edit-pwd input {
     display: block;
 }
 
