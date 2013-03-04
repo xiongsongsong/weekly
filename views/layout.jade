@@ -17,7 +17,7 @@ html
                         span.add ▲
                         span.reduce ▼
                     | -
-                    b#month-trigger(data-type="month") !{ date.getMonth()+1}
+                    b#month-trigger(data-type="month") !{ (date.getMonth()+1).toString.length<2 ? '0'+(date.getMonth()+1).toString():date.getMonth()+1}
                     b.trigger-panel.month
                         span.add ▲
                         span.reduce ▼

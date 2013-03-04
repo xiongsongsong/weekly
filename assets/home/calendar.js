@@ -67,8 +67,6 @@ define(function (require, exports, module) {
                     year -= 1;
                 }
             }
-            $yearNode.html(year);
-            $monthNode.html(month);
         }
         //更新日历界面
         var _tempDate = new Date();
@@ -201,7 +199,8 @@ define(function (require, exports, module) {
         }
 
         $yearNode.html(currentDate.getFullYear());
-        $monthNode.html(currentDate.getMonth() + 1);
+        var month = (currentDate.getMonth() + 1).toString();
+        $monthNode.html(month.length < 2 ? '0' + month : month);
         calendarPanel.html(table + calendarStr.join('') + '</table>');
         exports.autoResetOffset();
         showLog.getData({
