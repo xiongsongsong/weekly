@@ -17,27 +17,25 @@ exports.download = function (req, res) {
     res.header('Content-Type', 'text/csv;charset=utf-8');
     var filename = '本部前端' + year + '年' + month + '月业务统计报表';
     //IE中文件名要encodeURL，下载时方能正确显示文件名
-    if (/(msie)/gi.test(req.headers['user-agent'])) {
-        filename = encodeURIComponent(filename);
-    }
+    filename = encodeURIComponent(filename);
     var date = new Date();
-    res.header('Content-Disposition', 'attachment; filename=' + filename + '.csv');
-
+    res.header('Content-Disposition', 'attachment; filename=' + year + '-' + month + '.csv');
 
     var user = require('../helper/user').frontList;
     Object.keys(user).forEach(function (item) {
         r['id_' + user[item].id] = {
-            name:user[item].name,
-            "real-name":user[item]['real-name'],
-            level1:0,
-            level2:0,
-            level3:0,
-            level4:0
+            name: user[item].name,
+            "real-name": user[item]['real-name'],
+            level1: 0,
+            level2: 0,
+            level3: 0,
+            level4: 0
         }
     });
 
     var logCollection = new DB.mongodb.Collection(DB.client, 'log');
-    logCollection.find({year:year, month:month, level:{'$gt':0}}, {}).toArray(function (err, result) {
+    logCollection.find({year: year, month: month, level: {'$gt': 0}}, {}).toArray(function (err, result) {
+
         result.forEach(function (item) {
             if (item.leave === undefined) r['id_' + item.front]['level' + item.level]++;
         });
@@ -64,6 +62,5 @@ exports.download = function (req, res) {
             list.arr.push('错误，您要求下载' + year + '年' + month + '月份的统计数据，但该月份还未到来。')
         }
         res.end(require('iconv-lite').encode(list.arr.join('\r\n'), 'GBK'));
-
     });
 };

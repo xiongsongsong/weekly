@@ -75,44 +75,39 @@ body {
     font-size: 38px;
 }
 
-#calendar-header h2 span.tips {
-    position: absolute;
-    top: 80px;
-    left: 6em;
-    padding: .5em 1em;
-    font-size: 12px;
-    background: #16A765;
-    color: #fff;
-    letter-spacing: 2px;
-    display: none;
-}
-
-#calendar-header h2 span.tips s {
-    position: absolute;
-    width: 28px;
-    height: 24px;
-    left: 50%;
-    top: -16px;
-    background: url(/images/cire.png);
-    margin-left: -14px;
-}
-
 #calendar-header h2 b {
-    color: #444;
-    display: inline-block;
-    padding: 0 1em 0 .2em;
     font-weight: normal;
-    cursor: pointer;
-    background: #eee url(/images/sprites.png) 88% 16px no-repeat;
-    border-bottom: solid 1px #eee;
-
 }
 
-#calendar-header h2 b:hover,
-#calendar-header h2 b.hover {
-    background-color: #ddd;
-    background-position: 88% -41px;
-    border-bottom: solid 1px #bbb;
+#calendar-header h2 b.trigger-panel {
+    position: relative;
+    width: 30px;
+    display: inline-block;
+    height: 30px;
+}
+
+#calendar-header h2 b span {
+    font-size: 15px;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    line-height: normal;
+    height: 50%;
+    cursor: pointer;
+    color: #555;
+}
+
+#calendar-header h2 b span:hover {
+    color: red;
+}
+
+#calendar-header h2 b span.add {
+    top: 0;
+}
+
+#calendar-header h2 b span.reduce {
+    bottom: 0;
 }
 
 #log-list-control span {
@@ -260,7 +255,6 @@ body {
 }
 
 #add-record-log th {
-    width: 100px;
     text-align: right;
 }
 
@@ -341,6 +335,10 @@ input.hidden-form {
     padding: 5px 12px;
 }
 
+.J-edit-pwd input {
+    display: block;
+}
+
 #calendar-container div.work-diary {
     zoom: 1;
     text-align: left;
@@ -413,55 +411,55 @@ span.front {
     cursor: default;
 }
 
-span.front60 {
+span.front512dd866ef6c767f4c000001 {
     background: #AC725E;
 }
 
-span.front62 {
+span.front512dd866ef6c767f4c000002 {
     background: #F83A22;
 }
 
-span.front54 {
+span.front512dd866ef6c767f4c000003 {
     background: #D06B64;
 }
 
-span.front53 {
+span.front512dd866ef6c767f4c000004 {
     background: #FA573C;
 }
 
-span.front56 {
+span.front512dd866ef6c767f4c000005 {
     background: #FF7537;
 }
 
-span.front47 {
+span.front512dd866ef6c767f4c000006 {
     background: #FFAD46;
 }
 
-span.front51 {
+span.front512dd866ef6c767f4c000007 {
     background: #42D692;
 }
 
-span.front63 {
+span.front512dd866ef6c767f4c000008 {
     background: #16A765;
 }
 
-span.front57 {
+span.front512dd866ef6c767f4c000009 {
     background: #7BD148;
 }
 
-span.front49 {
+span.front512dd866ef6c767f4c00000a {
     background: #B3DC6C;
 }
 
-span.front61 {
+span.front512dd866ef6c767f4c00000b {
     background: #9acd32;
 }
 
-span.front59 {
+span.front512dd866ef6c767f4c00000c {
     background: #92E1C0;
 }
 
-span.front52 {
+span.front512dd866ef6c767f4c00000d {
     background: #9FC6E7;
 }
 

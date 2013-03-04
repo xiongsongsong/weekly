@@ -12,7 +12,7 @@ function start() {
     var spawn = require('child_process').spawn;
     var exec = require('child_process').exec;
 
-    exec('echo "------------Mother process is running.' + (new Date()).toLocaleString() + '---------------" >>log.txt');
+    exec('echo "------------Mother process is running.' + (new Date()).toLocaleString() + '--pid:' + process.pid + '-------------" >>log.txt');
 
     var ls = spawn('node', ['app']);
 

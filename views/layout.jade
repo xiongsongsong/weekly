@@ -3,19 +3,24 @@ html
     head
         meta(charset="utf-8")
         title= title
-        link(rel="stylesheet",href="/global/reset.css?t=201210.css")
-        link(rel="stylesheet",href="/global/global.css?t=201210.css")
+        link(rel="stylesheet",href="/global/reset.css?t=2013.css")
+        link(rel="stylesheet",href="/global/global.css?t=2013.css")
     body
         #header
             h1 前端 de 业务日志
+                span.tips(style="color:yellow;") OA验证即将不可用，故迁移。登陆密码为VPN密码，而后务必在左侧改密。
         #main-wrapper
             #calendar-header
                 h2#date
                     b#year-trigger(data-type="year") !{date.getFullYear()}
+                    b.trigger-panel.year
+                        span.add ▲
+                        span.reduce ▼
                     | -
-                    b#month-trigger(data-type="month") !{date.getMonth()+1}
-                    span.tips 用鼠标滚轮设定年月
-                        s
+                    b#month-trigger(data-type="month") !{ (date.getMonth()+1).toString.length<2 ? '0'+(date.getMonth()+1).toString():date.getMonth()+1}
+                    b.trigger-panel.month
+                        span.add ▲
+                        span.reduce ▼
                 #log-list-control(style="display:none;")
                     span.J-username=username
                     b.close.J-close &times;
@@ -24,13 +29,10 @@ html
                 #more-detail-wrapper(style="display:none;")
                     #more-detail
             #add-record-log
-                if(!isLogin && !isDisabledRecord)
+                -if(!isLogin)
                     form.login(name="login",action="/login",method="post")
                         table
-                            tr
-                                th
-                                td 使用 OA 帐号登入
-                            tr
+                           tr
                                 th 用户名
                                 td
                                     input.text(type="text",name="user")
@@ -43,69 +45,60 @@ html
                                 td
                                     input.cal.hidden-form(type="button",value="取消")
                                     input.login(type="submit",value="登录",id="Login")
-                -if(!isLogin)
                     style
                         form.add-record-log{display:none;}
-                -if(isDisabledRecord)
-                    p 每月末最后一天的18点后，<br>暂时屏蔽保存日志功能，<br>请下月再来记录。
-                        input.cal.hidden-form(type="button",value="隐藏<<")
-                -else
-                    form.add-record-log(name="add-record-log",action="/record-log",method="post")
-                        table
-                            tr
-                                th 页面名称
-                                    b *
-                                td
-                                    input.text(type="text",name="page-name")
-                            tr
-                                th  页面等级
-                                    b *
-                                td
-                                    select(name="level")
-                                        option(value="") 请选择
-                                        option(value="1") 简单
-                                        option(value="2") 一般
-                                        option(value="3") 常规
-                                        option(value="4") 复杂
-                                    a(href="http://note.youdao.com/share/?id=958147041772e87d41bdfe60c6b7f6ab&type=note",target="_blank").level 评级标准
-                            tr
-                                th 设计师
-                                td
-                                    input.text(type="text",name="design")
-                            tr
-                                th 需求方
-                                td
-                                    input.text(type="text",name="customer")
-                            tr
-                                th 线上地址
-                                td
-                                    input.text(type="text",name="online-url")
-                            tr
-                               th TMS地址
-                               td
-                                   input.text(type="text",name="tms-url")
-                            tr
-                                th 备注
-                                td
-                                    textarea(name="note")
-                            -if(date.getDate()>=1 && date.getDate()<=7)
-                                tr.tips
-                                    th 提示：
-                                    td 因已过上月统计期，<br>故如有忘记添加的日志，请记录在本月。<br>
-                            tr
-                                th 页面完成时间
-                                    b *
-                                td
-                                    input.year(name='year',value='#{date.getFullYear()}')
-                                    |-
-                                    input.month(name='month',value='#{date.getMonth()+1}')
-                                    |-
-                                    input.date(name='date',value='#{date.getDate()}')
-                            tr.control
-                                th
-                                td
-                                    input.cal.hidden-form(type="button",value="<<隐藏")
-                                    input.smt(type="submit",value="保存",name="smt")
+                form.add-record-log(name="add-record-log",action="/record-log",method="post")
+                    table
+                        tr
+                            th 页面名称
+                                b *
+                            td
+                                input.text(type="text",name="page-name")
+                        tr
+                            th  页面等级
+                                b *
+                            td
+                                select(name="level")
+                                    option(value="") 请选择
+                                    option(value="1") 简单
+                                    option(value="2") 一般
+                                    option(value="3") 常规
+                                    option(value="4") 复杂
+                                a(href="http://note.youdao.com/share/?id=958147041772e87d41bdfe60c6b7f6ab&type=note",target="_blank").level 评级标准
+                        tr
+                            th 设计师
+                            td
+                                input.text(type="text",name="design")
+                        tr
+                            th 需求方
+                            td
+                                input.text(type="text",name="customer")
+                        tr
+                            th 线上地址
+                            td
+                                input.text(type="text",name="online-url")
+                        tr
+                           th TMS地址
+                           td
+                               input.text(type="text",name="tms-url")
+                        tr
+                            th 备注
+                            td
+                                textarea(name="note")
+                        tr
+                            th 页面完成时间
+                                b *
+                            td
+                                input.year(name='year',value='#{date.getFullYear()}')
+                                |-
+                                input.month(name='month',value='#{date.getMonth()+1}')
+                                |-
+                                input.date(name='date',value='#{date.getDate()}')
+                        tr.control
+                            th
+                            td
+                                input.cal.hidden-form(type="button",value="<<隐藏")
+                                input.smt(type="submit",value="保存",name="smt")
         #sidebar-wrapper
             #sidebar-container
                 #sidebar-group
@@ -118,13 +111,18 @@ html
                         if(isLogin)
                             li.separator
                             li
-                                a(href="log-out") 退出登陆
+                                a.change-pwd(href='#') 改密
+                                |
+                                a(href="log-out") 退出
                     ul.user-filter
                         li#user-filter-container
                     #statistics
-                    h2 一起改进
+                    h2 概况
                     ul
-                        li
-                            a(href="https://github.com/xiongsongsong/weekly") Weekly on Github
+                        li pid: #{process.pid}
+                        li uptime: #{parseInt(process.uptime(),10)}
+                        li(style="display:none;") memory#{JSON.stringify(process.memoryUsage(),undefined,'    ')}
+                        li(style="margin-top:.8em;")
+                            a(href="https://github.com/xiongsongsong/weekly") Github
         script(src="/kissy-min.js")
-        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=20121212.js")
+        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=20130304.js")

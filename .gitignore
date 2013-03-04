@@ -6,3 +6,5 @@ index.html
 *~*
 *.iml
 log.txt
+database/*
+!database/readme.md

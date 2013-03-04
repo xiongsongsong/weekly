@@ -11,18 +11,18 @@ var exec = require('child_process').exec;
 exports.dump = function (req) {
     var date = new Date();
     var username = req.session.username;
-    exec('mongodump -d fed -o ~/Ubuntu\\ One/Database/' +
+    exec('mongodump -d fed -o ./../database/' +
         date.getFullYear() + '-' +
         (date.getMonth() + 1) + '-' +
         date.getDate() + '-' +
         date.getHours() + '-' +
         date.getMinutes() + '-' +
         date.getSeconds() + '-' +
-        date.getMilliseconds() +'_of_'+ username, function (err, stdout) {
+        date.getMilliseconds() + '_of_' + username,{cwd:__dirname}, function (err, stdout) {
         if (err) {
             console.log(err);
         } else {
-            console.log('Backup database success!'+ username +'\t'+new Date().toLocaleTimeString());
+            console.log('Backup database success!' + username + '\t' + new Date().toLocaleTimeString());
         }
     });
 };

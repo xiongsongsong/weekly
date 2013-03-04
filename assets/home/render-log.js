@@ -9,9 +9,9 @@
 "use strict";
 
 seajs.config({
-    alias:{
-        'jquery':'/global/jquery',
-        'show-log':'/home/show-log'
+    alias: {
+        'jquery': '/global/jquery',
+        'show-log': '/home/show-log'
     }
 });
 
@@ -64,21 +64,19 @@ define(function (require, exports, module) {
         var html = [];
         var front = require('show-log').front;
         KISSY.each(jsonData.documents, function (item) {
-            if (isNaN(front)) {
-                html.push(item)
+            if (front) {
+                if (item.front === front) html.push(item)
             } else {
-                if (item.front === front) {
-                    html.push(item)
-                }
+                html.push(item)
             }
         });
 
         var list = [];
         var count = {
-            level1:0,
-            level2:0,
-            level3:0,
-            level4:0
+            level1: 0,
+            level2: 0,
+            level3: 0,
+            level4: 0
         };
         if (html.length > 0) {
             KISSY.each(html, function (item) {
@@ -123,9 +121,9 @@ define(function (require, exports, module) {
             list.push('<h2>没有该月的记录</h2>')
         }
         return {
-            list:list,
-            count:count,
-            length:html.length
+            list: list,
+            count: count,
+            length: html.length
         };
     };
 

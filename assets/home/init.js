@@ -10,7 +10,7 @@
 
 seajs.config({
         map: [
-            [/(.*\.(css|js))(?:.*)$/i, "$1?20121212.$2"]
+            [/(.*\.(css|js))(?:.*)$/i, "$1?20130304.$2"]
         ]
     }
 );
@@ -22,6 +22,9 @@ define(function (require) {
 
     /*写工作日志 */
     require('./record-log').init();
+
+    /*登陆*/
+    require('./login');
 
     require('./tips');
 
