@@ -10,6 +10,16 @@ exports.init = function (app) {
             require('../helper/user').updateFrontList();
             console.log('数据库连接成功，开始启动路由');
             init(app);
+
+
+            /*升级*/
+
+            var DB = require('../helper/db');
+            var collection = new DB.mongodb.Collection(DB.client, 'log');
+            collection.find({ level: {'$gt': 0}}, {}).toArray(function (err, docs) {
+                console.log(docs.length);
+            });
+
         },
         error: function () {
             console.log('请检查数据库是否启动');
@@ -49,7 +59,7 @@ function init(app) {
     app.post('/change-pwd', require('./login').changePwd);
 
     //下载报表
-    app.get('/csv/:year/:month/:format?', require('./csv').download);
+    app.get(/^\/csv\/(\d{4})-(\d?[1-9]|1[0-2])\/to\/(\d{4})-(\d?[1-9]|1[0-2])$/, require('./csv').download);
 
     //茶歇会的DEMO接口服务
     app.get('/demo/:which?', require('../helper/demo').init);
