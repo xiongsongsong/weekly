@@ -16,7 +16,6 @@ exports.history = function (req, res) {
     collection.find({level: {'$gt': 0}}, {}).sort([
             ['_id', 1]
         ]).toArray(function (err, docs) {
-            console.log(docs.length)
             var first = docs[0].year + '年' + docs[0].month + '月' + docs[0].date + '日';
             var length = docs.length;
             var end = docs[length - 1].year + '年' + docs[length - 1].month + '月' + docs[length - 1].date + '日';

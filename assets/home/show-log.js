@@ -171,7 +171,8 @@ define(function (require, exports, module) {
     exports.updateDiaryList = function () {
         $('#calendar-container').find('.work-diary-list').html('');
         $(jsonData.documents).each(function (index, item) {
-            var id = '#date-' + item.year.toString() + item.month.toString() + item.date.toString();
+            var date = new Date(item.completion_date);
+            var id = '#date-' + date.getFullYear().toString() + (date.getMonth() + 1).toString() + date.getDate().toString();
             var $content = $(id);
             $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="'
                 + item.front + '" data-id="' + item._id + '">'
