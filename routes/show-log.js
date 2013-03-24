@@ -45,7 +45,6 @@ exports.show_log = function (req, res) {
                 Object.keys(item).forEach(function (k) {
                     if (typeof item[k] === 'string') item[k] = sanitize(item[k]).xss();
                 })
-                var _date = new Date(item.completion_date);
             });
             result.documents = docs;
             result.user = require('../helper/user').frontList;
