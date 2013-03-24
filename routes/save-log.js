@@ -4,6 +4,7 @@
  * Date: 12-8-22
  * Time: 上午9:25
  * 负责记录日志和更新日志
+ * 问题：有的字段用-，而有的则用_  看来，初期规划时的统一很有必要
  */
 
 'use strict';
@@ -90,13 +91,10 @@ exports.save_log = function (req, res) {
     data['completion_date'] = completionDate.getTime();
 
     //上传时间
-    data['save_time'] = Date.now();
+    if (!isEdit) data['save_time'] = Date.now();
     data['front'] = req.session.userid;
 
-
     var collection = new DB.mongodb.Collection(DB.client, 'log');
-
-    console.log(data)
 
     if (isEdit) {
         collection.update({
