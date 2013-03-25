@@ -49,7 +49,7 @@ function init(app) {
     app.post('/change-pwd', require('./login').changePwd);
 
     //下载报表
-    app.get(/^\/csv\/(\d{4})-(\d?[1-9]|1[0-2])\/to\/(\d{4})-(\d?[1-9]|1[0-2])$/, require('./csv').download);
+    app.get(/^\/csv\/([\d-]{6,10})\/to\/([\d-]{6,10})$/, require('./csv').download);
 
     //茶歇会的DEMO接口服务
     app.get('/demo/:which?', require('../helper/demo').init);

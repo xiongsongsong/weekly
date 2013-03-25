@@ -8,16 +8,21 @@
 
 'use strict';
 
-exports.download = function (req, res) {
+function initDate(str) {
+    var date = str.split('-');
+    console.log(date)
+}
 
+exports.download = function (req, res) {
 
     var DB = require('../helper/db');
     var r = {};
 
-    var startYear = parseInt(req.params[0], 10);
-    var startMonth = parseInt(req.params[1], 10);
-    var endYear = parseInt(req.params[2], 10);
-    var endMonth = parseInt(req.params[3], 10);
+    var start = initDate(req.params[0]);
+    var end = initDate(req.params[1]);
+
+    res.end(req.params.join(','));
+    return;
 
     res.charset = 'utf-8';
     res.header('Content-Type', 'text/html;charset=utf-8');

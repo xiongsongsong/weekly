@@ -19,21 +19,17 @@ function update() {
                 return;
             }
             var obj = result.shift();
+            var date = new Date();
+            date.setHours(0, 0, 0, 0);
+            date.setYear(obj.year);
+            date.setMonth(obj.month - 1);
+            date.setDate(obj.date);
+            logCollection.findAndModify({_id: obj._id}, [
+            ],
+                {$set: {completion_date: date.getTime()}}, {}, function (err, doc) {
+                    _update()
+                });
 
-            if (obj.leave === undefined) {
-                var date = new Date();
-                date.setHours(0, 0, 0, 0);
-                date.setYear(obj.year);
-                date.setMonth(obj.month - 1);
-                date.setDate(obj.date);
-                logCollection.findAndModify({_id: obj._id}, [
-                ],
-                    {$set: {completion_date: date.getTime()}}, {}, function (err, doc) {
-                        _update()
-                    });
-            } else {
-                _update()
-            }
         };
 
         _update();
