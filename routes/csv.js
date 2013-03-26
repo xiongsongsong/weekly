@@ -10,7 +10,30 @@
 
 function initDate(str) {
     var date = str.split('-');
-    console.log(date)
+    var _date = new Date();
+    var year = parseInt(date[0], 10);
+
+    if (!isNaN(year) && year.toString().length === 4) {
+        _date.setFullYear(year);
+    } else {
+        return false;
+    }
+
+    var month = parseInt(date[1], 10);
+    if (month >= 1 && month <= 12) {
+        _date.setMonth(month - 1)
+    } else {
+        return false;
+    }
+
+    var date = parseInt(date[2], 10);
+    if (date >= 1 && date <= require('../helper/date').getMaxDays(_date, _date.getMonth())) {
+        _date.setDate(date);
+    } else {
+        _date.setDate(1);
+    }
+    _date.setHours(0, 0, 0, 0);
+    return _date;
 }
 
 exports.download = function (req, res) {
@@ -21,11 +44,16 @@ exports.download = function (req, res) {
     var start = initDate(req.params[0]);
     var end = initDate(req.params[1]);
 
-    res.end(req.params.join(','));
-    return;
-
-    res.charset = 'utf-8';
     res.header('Content-Type', 'text/html;charset=utf-8');
+
+    if (!start) {
+        res.render('table-error', {layout: false, host: req.headers.host})
+        return;
+    }
+
+    var filter = {completion_date: {'$gte': start.getTime()}, level: {'$gt': 0} }
+
+    if (end) filter.completion_date.$lte = end.getTime();
 
     var user = require('../helper/user').frontList;
 
@@ -40,21 +68,20 @@ exports.download = function (req, res) {
         }
     });
 
-    var a = {year: {'$gte': startYear, '$lte': endYear}, month: {$gte: startMonth, $lte: endMonth}, level: {'$gt': 0}}
 
     var logCollection = new DB.mongodb.Collection(DB.client, 'log');
 
-    logCollection.find(a, {}).toArray(function (err, result) {
+    logCollection.find(filter, {}).toArray(function (err, result) {
 
         result.forEach(function (item) {
             if (item.leave === undefined) r['id_' + item.front]['level' + item.level]++;
         });
 
-
         Object.keys(r).forEach(function (key) {
             r[key].levelCount = r[key].level1 + r[key].level2 + r[key].level3 + r[key].level4;
             r[key].oh = r[key].level1 * 20 + r[key].level2 * 30 + r[key].level3 * 50 + r[key].level4 * 100;
         });
+
         var list = {};
         list.arr = [];
         Object.keys(r).forEach(function (k) {
