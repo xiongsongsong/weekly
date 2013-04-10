@@ -30,7 +30,7 @@ function initDate(str) {
     if (date >= 1 && date <= require('../helper/date').getMaxDays(_date, _date.getMonth())) {
         _date.setDate(date);
     } else {
-        _date.setDate(1);
+        return false;
     }
     _date.setHours(0, 0, 0, 0);
     return _date;
@@ -46,14 +46,20 @@ exports.download = function (req, res) {
 
     res.header('Content-Type', 'text/html;charset=utf-8');
 
-    if (!start) {
-        res.render('table-error', {layout: false, host: req.headers.host})
+    if (!start || !end) {
+        res.render('table-error', {layout: false, host: req.headers.host, msg: "起始结束日期不正确"})
+        return;
+    }
+    if (start.getTime() > end.getTime()) {
+        res.render('table-error', {layout: false, host: req.headers.host, msg: "起始日期不能大于结束日期"})
         return;
     }
 
     var filter = {completion_date: {'$gte': start.getTime()}, level: {'$gt': 0} }
 
-    if (end) filter.completion_date.$lte = end.getTime();
+    if (end) {
+        filter.completion_date.$lte = end.getTime()
+    }
 
     var user = require('../helper/user').frontList;
 
@@ -89,6 +95,6 @@ exports.download = function (req, res) {
             list.arr.push([o['real-name'], o.name, o.level1, o.level2, o.level3, o.level4, o.levelCount, o.oh]);
         });
 
-        res.render('table', {layout: false, arr: list.arr})
+        res.render('table', {layout: false, arr: list.arr, start: start, end: end})
     });
 };

@@ -2,11 +2,9 @@
 html
     head
         meta(charset='utf-8')
+        title = msg
+        link(rel="stylesheet",charset="utf-8",href="/global/reset.css")
     body
-        h1 地址格式有误，请参考下方例子
-        h2 2012年7月
-        p http://#{host}/csv/2012-7
-        h2 2012年7 到 2012年9月
-        p http://#{host}/csv/2012-7/to/2012-9
-        h2 2012年7月3日 到 2012年9月13日
-        p http://#{host}/csv/2012-7-3/to/2012-9-13
+        h1 地址格式有误，
+            span(style="color:red") #{msg}
+        p http://#{host}/csv/2012-7-3/to/2012-9-13，将返回2012年7月3日到2012年9月13日的所有记录
