@@ -15,7 +15,6 @@ function update() {
 
         function _update() {
             if (result.length < 1) {
-                console.log('请运行db.log.update({},{$unset:{year:1,month:1,date:1}},false,true)');
                 return;
             }
             var obj = result.shift();
@@ -26,7 +25,7 @@ function update() {
             date.setDate(obj.date);
             logCollection.findAndModify({_id: obj._id}, [
             ],
-                {$set: {completion_date: date.getTime()}}, {}, function (err, doc) {
+                {$unset: {year: 1, month: 1, date: 1}, $set: {completion_date: date.getTime(), save_time: date.getTime()}}, {}, function (err, doc) {
                     _update()
                 });
 
@@ -37,4 +36,4 @@ function update() {
 
 }
 
-//update();
+//upte();

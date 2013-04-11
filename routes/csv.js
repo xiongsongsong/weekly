@@ -43,6 +43,7 @@ exports.download = function (req, res) {
 
     var start = initDate(req.params[0]);
     var end = initDate(req.params[1]);
+    end.setHours(23, 59, 59, 999);
 
     res.header('Content-Type', 'text/html;charset=utf-8');
 
@@ -55,11 +56,7 @@ exports.download = function (req, res) {
         return;
     }
 
-    var filter = {completion_date: {'$gte': start.getTime()}, level: {'$gt': 0} }
-
-    if (end) {
-        filter.completion_date.$lte = end.getTime()
-    }
+    var filter = {completion_date: {'$gte': start.getTime(),'$lte':end.getTime()}, level: {'$gt': 0} }
 
     var user = require('../helper/user').frontList;
 

@@ -2,13 +2,14 @@
 html
     head
         meta(charset="utf-8")
+        meta(name="robots",content="nofollow")
         title= title
-        link(rel="stylesheet",href="/global/reset.css?t=2013.css")
-        link(rel="stylesheet",href="/global/global.css?t=2013.css")
+        link(rel="stylesheet",href="/global/reset.css?t=201304.css")
+        link(rel="stylesheet",href="/global/global.css?t=201304.css")
     body
         #header
             h1 前端 de 业务日志
-                span.tips(style="color:yellow;") OA验证即将不可用，故迁移。登陆密码为VPN密码，而后务必在左侧改密。
+                span.tips(style="color:#cef;") 当页面完成后，请务必即刻记录
         #main-wrapper
             #calendar-header
                 h2#date
@@ -32,21 +33,23 @@ html
                 -if(!isLogin)
                     form.login(name="login",action="/login",method="post")
                         table
-                           tr
+                            tr
                                 th 用户名
                                 td
                                     input.text(type="text",name="user")
-                            tr
-                                th 密码
-                                td
-                                    input.text(type="password",name="pwd")
-                            tr.control
-                                th
-                                td
-                                    input.cal.hidden-form(type="button",value="取消")
-                                    input.login(type="submit",value="登录",id="Login")
+                                tr
+                                    th 密码
+                                    td
+                                        input.text(type="password",name="pwd")
+                                tr.control
+                                    th
+                                    td
+                                        input.cal.hidden-form(type="button",value="取消")
+                                        input.login(type="submit",value="登录",id="Login")
                     style
-                        form.add-record-log{display:none;}
+                        form.add-record-log {
+                            display: none;
+                        }
                 form.add-record-log(name="add-record-log",action="/record-log",method="post")
                     table
                         tr
@@ -78,9 +81,9 @@ html
                             td
                                 input.text(type="text",name="online-url")
                         tr
-                           th TMS地址
-                           td
-                               input.text(type="text",name="tms-url")
+                            th TMS地址
+                            td
+                                input.text(type="text",name="tms-url")
                         tr
                             th 备注
                             td
@@ -90,10 +93,11 @@ html
                                 b *
                             td
                                 input.year(name='year',value='#{date.getFullYear()}')
-                                |-
+                                | -
                                 input.month(name='month',value='#{date.getMonth()+1}')
-                                |-
+                                | -
                                 input.date(name='date',value='#{date.getDate()}')
+                                .info
                         tr.control
                             th
                             td
@@ -117,12 +121,13 @@ html
                     ul.user-filter
                         li#user-filter-container
                     #statistics
-                    h2 概况
-                    ul
+                    h2(style="display:none") 概况
+                    ul(style="display:none")
                         li pid: #{process.pid}
                         li uptime: #{parseInt(process.uptime(),10)}
                         li(style="display:none;") memory#{JSON.stringify(process.memoryUsage(),undefined,'    ')}
+                    ul(style="margin-left:0;")
                         li(style="margin-top:.8em;")
                             a(href="https://github.com/xiongsongsong/weekly") Github
         script(src="/kissy-min.js")
-        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=20130304.js")
+        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=201304.js")

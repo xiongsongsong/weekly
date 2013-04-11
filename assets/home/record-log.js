@@ -52,6 +52,9 @@ define(function (require, exports, module) {
                     ele['year'].value = currentDoc['year'];
                     ele['month'].value = currentDoc['month'];
                     ele['date'].value = currentDoc['date'];
+                    ele['year'].disabled = true;
+                    ele['month'].disabled = true;
+                    ele['date'].disabled = true;
                     if (!ele['smt'].getAttribute('default-text')) ele['smt'].setAttribute('default-text', ele['smt'].value);
                     ele['smt'].value = '确定修改';
 
@@ -62,6 +65,9 @@ define(function (require, exports, module) {
                 } else {
                     if (ele['smt'].getAttribute('default-text')) ele['smt'].value = ele['smt'].getAttribute('default-text');
                     $('#more-detail-wrapper').removeClass('edit');
+                    ele['year'].disabled = false;
+                    ele['month'].disabled = false;
+                    ele['date'].disabled = false;
                 }
             }
 

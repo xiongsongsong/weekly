@@ -24,11 +24,12 @@ exports.save_log = function (req, res) {
     data['tms-url'] = body['tms-url'];
     data['note'] = body['note'];
 
+    var isEdit = body['type'] === 'edit';
+
+
     var year = parseInt(body['year'], 10);
     var month = parseInt(body['month'], 10);
     var date = parseInt(body['date'], 10);
-
-    var isEdit = body['type'] === 'edit';
 
     if (!require('./login').isLogin(req)) {
         errorMSG.errorList.push({msg: '登陆过期，请刷新页面重新登陆'});
@@ -42,41 +43,48 @@ exports.save_log = function (req, res) {
         errorMSG.errorList.push({name: 'level', msg: '需要页面对应的等级'});
     }
 
-    if (isNaN(year) || isNaN(month) || isNaN(date)) {
-        isNaN(year) ? errorMSG.errorList.push({name: 'year', msg: '年份填写错误'}) : undefined;
-        isNaN(month) ? errorMSG.errorList.push({name: 'month', msg: '月份填写错误'}) : undefined;
-        isNaN(date) ? errorMSG.errorList.push({name: 'date', msg: '日期填写错误'}) : undefined;
-    } else {
-        if (year < 1949 || year > 2100) {
-            errorMSG.errorList.push({name: 'year', msg: '年份越界'});
-        }
+    if (!isEdit) {
+        if (isNaN(year) || isNaN(month) || isNaN(date)) {
+            isNaN(year) ? errorMSG.errorList.push({name: 'year', msg: '年份填写错误'}) : undefined;
+            isNaN(month) ? errorMSG.errorList.push({name: 'month', msg: '月份填写错误'}) : undefined;
+            isNaN(date) ? errorMSG.errorList.push({name: 'date', msg: '日期填写错误'}) : undefined;
+        } else {
+            if (year < 1949 || year > 2100) {
+                errorMSG.errorList.push({name: 'year', msg: '年份越界'});
+            }
 
-        if (month < 1 || month > 12) {
-            errorMSG.errorList.push({name: 'month', msg: '月份越界'});
-        }
+            if (month < 1 || month > 12) {
+                errorMSG.errorList.push({name: 'month', msg: '月份越界'});
+            }
 
-        if (month == 2) {
-            if (year % 4 == 0) {
-                if (date > 29 || date < 1) {
-                    errorMSG.errorList.push({name: 'date', msg: '闰年2月日期无效'});
+            if (month == 2) {
+                if (year % 4 == 0) {
+                    if (date > 29 || date < 1) {
+                        errorMSG.errorList.push({name: 'date', msg: '闰年2月日期无效'});
+                    }
+                } else {
+                    if (date > 28 || date < 1) {
+                        errorMSG.errorList.push({name: 'date', msg: '2月日期无效'});
+                    }
                 }
             } else {
-                if (date > 28 || date < 1) {
-                    errorMSG.errorList.push({name: 'date', msg: '2月日期无效'});
-                }
-            }
-        } else {
-            if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) >= 0) {
-                if (date < 1 || date > 31) {
-                    errorMSG.errorList.push({name: 'date', msg: '日期无效'});
-                }
-            } else if ([4, 6, 9, 11].indexOf(month) >= 0) {
-                if (date < 1 || date > 30) {
-                    errorMSG.errorList.push({name: 'date', msg: '日期无效'});
+                if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) >= 0) {
+                    if (date < 1 || date > 31) {
+                        errorMSG.errorList.push({name: 'date', msg: '日期无效'});
+                    }
+                } else if ([4, 6, 9, 11].indexOf(month) >= 0) {
+                    if (date < 1 || date > 30) {
+                        errorMSG.errorList.push({name: 'date', msg: '日期无效'});
+                    }
                 }
             }
         }
+        //非编辑模式下，才保存“完成时间”
+        var completionDate = new Date();
+        completionDate.setFullYear(year, month - 1, date);
+        data['completion_date'] = completionDate.getTime();
     }
+
 
     if (isEdit && !body['object_id']) errorMSG.errorList.push('无法获取即将更新文档的必要信息');
 
@@ -84,11 +92,6 @@ exports.save_log = function (req, res) {
         res.end(JSON.stringify(errorMSG), undefined, '\t');
         return;
     }
-
-    //页面完成的时间
-    var completionDate = new Date();
-    completionDate.setFullYear(year, month - 1, date);
-    data['completion_date'] = completionDate.getTime();
 
     //上传时间
     if (!isEdit) data['save_time'] = Date.now();

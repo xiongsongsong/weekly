@@ -2,17 +2,18 @@
 html
     head
         meta(charset='utf-8')
+        meta(name="robots",content="nofollow")
         style
             table {
                 border-spacing: 0;
                 border-collapse: collapse;
                 font-family: Consolas, verdana, simsun, sans-serif;
                 text-align: center;
-                font-size: 10px;
+                color: #555;
             }
 
             td, th {
-                border: solid 1px #aaa;
+                border: solid 1px #cde;
                 padding: .5em 1em;
             }
 
@@ -22,6 +23,11 @@ html
 
             .money {
                 color: red;
+                text-align: right;
+            }
+
+            .money span:before {
+                content: "￥";
             }
     body
         table
@@ -43,11 +49,7 @@ html
                     td= item[4]
                     td= item[5]
                     td= item[6]
-                    td.money ￥#{item[7]}
+                    td.money
+                        span #{item[7]}
             -})
-        p 统计时间段 :  #{start.getFullYear()}年#{start.getMonth()+1}月#{start.getDate()}日至
-            -if(typeof end!=='undefined')
-                | #{end.getFullYear()}年#{end.getMonth()+1}月#{end.getDate()}日
-
-            -else
-                | 至今
+        p 统计时间段 :  #{start.getFullYear()}年#{start.getMonth()+1}月#{start.getDate()}日#{start.getHours()}时#{start.getMinutes()}分#{start.getSeconds()}秒 至 #{end.getFullYear()}年#{end.getMonth()+1}月#{end.getDate()}日#{end.getHours()}时#{end.getMinutes()}分#{end.getSeconds()}秒

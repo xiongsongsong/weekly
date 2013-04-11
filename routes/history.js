@@ -16,9 +16,11 @@ exports.history = function (req, res) {
     collection.find({level: {'$gt': 0}}, {}).sort([
             ['_id', 1]
         ]).toArray(function (err, docs) {
-            var first = docs[0].year + '年' + docs[0].month + '月' + docs[0].date + '日';
             var length = docs.length;
-            var end = docs[length - 1].year + '年' + docs[length - 1].month + '月' + docs[length - 1].date + '日';
+            var firstDate = new Date(docs[0]['completion_date']);
+            var lastDate = new Date(docs[length - 1]['completion_date']);
+            var first = firstDate.getFullYear() + '年' + (firstDate.getMonth() + 1) + '月' + firstDate.getDate() + '日';
+            var end = lastDate.getFullYear() + '年' + (lastDate.getMonth() + 1) + '月' + lastDate.getDate() + '日';
             var user = require('../helper/user').frontList;
             var result = {
                 docs: docs,
@@ -35,10 +37,13 @@ exports.history = function (req, res) {
 
                 var _user = r[user['id_' + item.front]['real-name']];
                 if (_user) {
-                    if (_user[item.year + '-' + item.month]) {
-                        _user[item.year + '-' + item.month].push(item)
+                    var date = new Date(item['completion_date']);
+                    var year = date.getFullYear();
+                    var month = date.getMonth() + 1;
+                    if (_user[year + '-' + month]) {
+                        _user[year + '-' + month].push(item)
                     } else {
-                        _user[item.year + '-' + item.month] = [item];
+                        _user[year + '-' + month] = [item];
                     }
                 }
             });

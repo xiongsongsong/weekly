@@ -213,7 +213,7 @@ define(function (require, exports, module) {
             if (exports.front) {
                 return '' + beautifyName(currentUser['name']) + ' - <span>' + currentUser['real-name'] + '</span>';
             } else {
-                return '统计 ';
+                return '当月统计 ';
             }
         })() + '<span>（' + logList.length + '）</span></h2>' +
             '<ul>' +
@@ -227,7 +227,14 @@ define(function (require, exports, module) {
             '<span style="width:100%;" class="download-csv">' + (function () {
             var year = parseInt($('#year-trigger').text(), 10);
             var month = parseInt($('#month-trigger').text(), 10);
-            return '<a href="/csv/' + year + '/' + month + '">下载' + year + '年' + month + '月报表</a>'
+            var endMonth = month;
+            var endYear = year;
+            month -= 1;
+            if (month < 1) {
+                month = 12
+                year -= 1;
+            }
+            return '<a href="/csv/' + year + '-' + month + '-21/to/' + endYear + '-' + endMonth + '-20">查看' + month + '月21号到' + endMonth + '月20号</a>'
         })() + '</span>' +
             '</li>' +
             '</ul>');
