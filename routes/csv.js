@@ -43,12 +43,11 @@ exports.download = function (req, res) {
 
     var start = initDate(req.params[0]);
     var end = initDate(req.params[1]);
-    end.setHours(23, 59, 59, 999);
 
     res.header('Content-Type', 'text/html;charset=utf-8');
 
     if (!start || !end) {
-        res.render('table-error', {layout: false, host: req.headers.host, msg: "起始结束日期不正确"})
+        res.render('table-error', {layout: false, host: req.headers.host, msg: "起始或结束日期不正确"})
         return;
     }
     if (start.getTime() > end.getTime()) {
@@ -56,7 +55,9 @@ exports.download = function (req, res) {
         return;
     }
 
-    var filter = {completion_date: {'$gte': start.getTime(),'$lte':end.getTime()}, level: {'$gt': 0} }
+    end.setHours(23, 59, 59, 999);
+
+    var filter = {completion_date: {'$gte': start.getTime(), '$lte': end.getTime()}, level: {'$gt': 0} }
 
     var user = require('../helper/user').frontList;
 

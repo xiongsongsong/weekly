@@ -4,8 +4,19 @@ html
         meta(charset='utf-8')
         meta(name="robots",content="nofollow")
         title = msg
-        link(rel="stylesheet",charset="utf-8",href="/global/reset.css")
+    link(rel="stylesheet",charset="utf-8",href="/global/reset.css")
+    style
+        div {
+            margin: 2em;
+            background: #eee;
+            padding: 1em;
+            font-size: 14px;
+            border: solid 1px #aaa;
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, .2);
+            line-height: 210%;
+        }
     body
-        h1 地址格式有误，
-            span(style="color:red") #{msg}
-        p http://#{host}/csv/2012-7-3/to/2012-9-13，将返回2012年7月3日到2012年9月13日的所有记录
+        div
+            h1 地址格式有误，
+                span(style="color:red") #{msg}
+            p 请按照类似格式： http://#{host}/csv/2012-7-3/to/2012-9-13，访问该地址，将返回2012年7月3日到2012年9月13日的所有记录
