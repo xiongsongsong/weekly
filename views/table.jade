@@ -36,14 +36,14 @@ html
             }
 
     body
-        p 统计时间段 :  #{start.getFullYear()}年#{start.getMonth()+1}月#{start.getDate()}日#{start.getHours()}时#{start.getMinutes()}分#{start.getSeconds()}秒 至 #{end.getFullYear()}年#{end.getMonth()+1}月#{end.getDate()}日#{end.getHours()}时#{end.getMinutes()}分#{end.getSeconds()}秒
+        p 统计时间段 :  #{start.getFullYear()}年#{start.getMonth()+1}月#{start.getDate()}日(包含当天) 至 #{end.getFullYear()}年#{end.getMonth()+1}月#{end.getDate()}日（包含当天）
         table
             tr
                 th 姓名
                 th 旺旺
                 th 简单
                 th 一般
-                th 普通
+                th 常规
                 th 复杂
                 th 合计
                 th 津贴
