@@ -9,7 +9,9 @@ html
     body
         #header
             h1 前端 de 业务日志
-                span.tips(style="color:#cef;") 当页面完成后，请务必即刻记录
+                span.tips(style="color:#cef;")
+                -if(date.getDate()>20 && date.getDate()<28)
+                    | 当月
         #main-wrapper
             #calendar-header
                 h2#date

@@ -222,7 +222,7 @@ define(function (require, exports, module) {
             '<li>' +
             '<span class="amortization">￥' + amortization + '</span>' +
 
-            '<span><a class="J-show-more show-more">查看详情 &gt;&gt;</a></span></li>' +
+            '<span><a class="J-show-more show-more">该月详情 &gt;&gt;</a></span></li>' +
             '<li>' +
             '<span style="width:100%;" class="download-csv">' + (function () {
             var year = parseInt($('#year-trigger').text(), 10);
@@ -234,7 +234,7 @@ define(function (require, exports, module) {
                 month = 12
                 year -= 1;
             }
-            return '<a href="/csv/' + year + '-' + month + '-21/to/' + endYear + '-' + endMonth + '-20">查看' + month + '月21号到' + endMonth + '月20号</a>'
+            return '<a href="/csv/' + year + '-' + month + '-21/to/' + endYear + '-' + endMonth + '-20">' + month + '月21号到' + endMonth + '月20号 &gt;&gt;</a>'
         })() + '</span>' +
             '</li>' +
             '</ul>');
