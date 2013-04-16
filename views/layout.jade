@@ -123,13 +123,12 @@ html
                     ul.user-filter
                         li#user-filter-container
                     #statistics
-                    h2(style="display:none") 概况
                     ul(style="display:none")
                         li pid: #{process.pid}
                         li uptime: #{parseInt(process.uptime(),10)}
                         li(style="display:none;") memory#{JSON.stringify(process.memoryUsage(),undefined,'    ')}
-                    ul(style="margin-left:0;")
-                        li(style="margin-top:.8em;")
-                            a(href="https://github.com/xiongsongsong/weekly") Github
+                    h2 WTP最近文章
+                    ul
+                        li 加载中...
         script(src="/kissy-min.js")
         script#seajsnode(src="/sea.js",data-main="/home/init.js?time=201304.js")

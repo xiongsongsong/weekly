@@ -26,6 +26,11 @@ body {
     z-index: 6;
 }
 
+#header a {
+    color: #b0d2ff;
+    text-decoration: underline;
+}
+
 #header h1 {
     position: absolute;
     left: 25px;
@@ -235,7 +240,7 @@ body {
     background: #EEE;
     background: -webkit-gradient(linear, left bottom, left top, color-stop(0.11, rgb(219, 219, 219)), color-stop(0.21, rgb(217, 217, 217)), color-stop(0.99, rgb(255, 255, 255)));
     background: -moz-linear-gradient(center bottom, rgb(219, 219, 219) 11%, rgb(217, 217, 217) 21%, rgb(255, 255, 255) 99%);
-    filter: progid:DXImageTransform.Microsoft.Shadow(Strength = 10, Direction = 145, color = #CCCCCC);
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=10, Direction=145, color=#CCCCCC);
 }
 
 #add-record-log p {
@@ -472,7 +477,7 @@ span.front512dd866ef6c767f4c00000d {
 
 body #sidebar-wrapper span.weak {
     opacity: .7;
-    filter: alpha(opacity = 70);
+    filter: alpha(opacity=70);
 }
 
 body #sidebar-wrapper span.highlight {
