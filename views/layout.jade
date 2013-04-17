@@ -129,6 +129,11 @@ html
                         li(style="display:none;") memory#{JSON.stringify(process.memoryUsage(),undefined,'    ')}
                     h2 WTP最近文章
                     ul
-                        li 加载中...
+                        - if(typeof wtp !=='undefined')
+                            - wtp.forEach(function(item,index){
+                                - if(index<7)
+                                    li
+                                        a(href="#{item.html_url}",title="#{item.created_at}")=item.title
+                            - })
         script(src="/kissy-min.js")
         script#seajsnode(src="/sea.js",data-main="/home/init.js?time=201304.js")
