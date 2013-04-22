@@ -101,7 +101,6 @@ html
             p.tips {
                 color: #aaa;
                 text-align: right;
-                font-style: italic;
             }
 
         body
@@ -109,6 +108,8 @@ html
             div
                 p.tips !{first}(包含当天)  到 !{end}(包含当天) 的日志记录，共 !{docLength} 条。
                     a(href="#{path}") 查看汇总信息
+                    |
+                    a(href="/") 到首页
                 !{body}
             #nav.hide
                 em#onoff   显示导航
