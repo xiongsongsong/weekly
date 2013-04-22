@@ -93,6 +93,6 @@ exports.download = function (req, res) {
             list.arr.push([o['real-name'], o.name, o.level1, o.level2, o.level3, o.level4, o.levelCount, o.oh]);
         });
 
-        res.render('table', {layout: false, arr: list.arr, start: start, end: end})
+        res.render('table', {layout: false, arr: list.arr, start: start, end: end, path: req.path.replace('csv', 'history')})
     });
 };

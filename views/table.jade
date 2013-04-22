@@ -35,8 +35,14 @@ html
                 background: #eee;
             }
 
+            a {
+                color: #6C97C2;
+                text-decoration: none;
+            }
+
     body
         p 统计时间段 :  #{start.getFullYear()}年#{start.getMonth()+1}月#{start.getDate()}日(包含当天) 至 #{end.getFullYear()}年#{end.getMonth()+1}月#{end.getDate()}日（包含当天）
+            a(href="#{path}",style="font-size:12px;") 查看明细
         table
             tr
                 th 姓名
