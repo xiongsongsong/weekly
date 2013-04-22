@@ -57,6 +57,9 @@ exports.history = function (req, res) {
         return;
     }
 
+
+    console.log(req.params,end)
+
     end.setHours(23, 59, 59, 999);
 
     var filter = {completion_date: {'$gte': start.getTime(), '$lte': end.getTime()}, level: {'$gt': 0} }
@@ -67,10 +70,8 @@ exports.history = function (req, res) {
             ['_id', 1]
         ]).toArray(function (err, docs) {
             var length = docs.length;
-            var firstDate = new Date(docs[0]['completion_date']);
-            var lastDate = new Date(docs[length - 1]['completion_date']);
-            var first = firstDate.getFullYear() + '年' + (firstDate.getMonth() + 1) + '月' + firstDate.getDate() + '日';
-            var end = lastDate.getFullYear() + '年' + (lastDate.getMonth() + 1) + '月' + lastDate.getDate() + '日';
+            var firstDate = start.getFullYear() + '年' + (start.getMonth() + 1) + '月' + start.getDate() + '日';
+            var endDate = end.getFullYear() + '年' + (end.getMonth() + 1) + '月' + end.getDate() + '日';
             var user = require('../helper/user').frontList;
             var result = {
                 docs: docs,
@@ -131,8 +132,8 @@ exports.history = function (req, res) {
                 layout: false,
                 body: html,
                 docLength: length,
-                first: first,
-                end: end,
+                first: firstDate,
+                end: endDate,
                 path: req.path.replace('history', 'csv')
             });
         }
