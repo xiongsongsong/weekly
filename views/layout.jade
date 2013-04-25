@@ -129,7 +129,7 @@ html
                         li(style="display:none;") memory#{JSON.stringify(process.memoryUsage(),undefined,'    ')}
                     h2 WTP最近文章
                     ul
-                        - if(typeof wtp !=='undefined')
+                        - if(wtp instanceof Array)
                             - wtp.forEach(function(item,index){
                                 - if(index<7)
                                     li
