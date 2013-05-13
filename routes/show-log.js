@@ -23,11 +23,25 @@ exports.show_log = function (req, res) {
     }
 
     var result = Object.create(null);
+
+    var startDate = new Date();
+    startDate.setDate(1);
+    startDate.setHours(0, 0, 0, 0);
+    startDate.setYear(year);
+    startDate.setMonth(month - 1);
+
+    var endDate = new Date(startDate.getTime());
+    endDate.setDate(require('../helper/date').getMaxDays(startDate, month - 1));
+    endDate.setHours(23, 59, 59, 999)
+
+
     var collection = new DB.mongodb.Collection(DB.client, 'log');
-    collection.find({year:year, month:month, level:{'$gt':0}}, {}).sort([
-        ['_id', 1]
-    ]).toArray(function (err, docs) {
-            docs.forEach(function (item) {
+
+
+    collection.find({completion_date: {$gte: startDate.getTime(), $lte: endDate.getTime()}, level: {'$gt': 0}}, {}).sort([
+            ['_id', 1]
+        ]).toArray(function (err, docs) {
+            docs.forEach(function (item, index) {
                 Object.keys(item).forEach(function (k) {
                     if (typeof item[k] === 'string') item[k] = sanitize(item[k]).xss();
                 })

@@ -52,6 +52,9 @@ define(function (require, exports, module) {
                     ele['year'].value = currentDoc['year'];
                     ele['month'].value = currentDoc['month'];
                     ele['date'].value = currentDoc['date'];
+                    ele['year'].disabled = true;
+                    ele['month'].disabled = true;
+                    ele['date'].disabled = true;
                     if (!ele['smt'].getAttribute('default-text')) ele['smt'].setAttribute('default-text', ele['smt'].value);
                     ele['smt'].value = '确定修改';
 
@@ -62,11 +65,14 @@ define(function (require, exports, module) {
                 } else {
                     if (ele['smt'].getAttribute('default-text')) ele['smt'].value = ele['smt'].getAttribute('default-text');
                     $('#more-detail-wrapper').removeClass('edit');
+                    ele['year'].disabled = false;
+                    ele['month'].disabled = false;
+                    ele['date'].disabled = false;
                 }
             }
 
             $addRecordLog.stop();
-            $addRecordLog.animate({left: '0px'}, 500);
+            $addRecordLog.show();
             $(ev.currentTarget).addClass('current');
             if ($formObj.size() > 0) {
                 $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
@@ -76,9 +82,8 @@ define(function (require, exports, module) {
         $('input.hidden-form').live('click', function () {
             $('#more-detail-wrapper').removeClass('edit');
             $addRecordLog.stop();
-            $addRecordLog.animate({left: left + 'px'}, 500, function () {
-                JRecordLog.removeClass('current')
-            });
+            $addRecordLog.hide();
+            JRecordLog.removeClass('current')
         });
 
         $formObj.submit(function (ev) {
@@ -97,9 +102,8 @@ define(function (require, exports, module) {
                 success: function (data) {
                     if (data.status) {
                         $formObj[0].reset();
-                        $addRecordLog.animate({left: left + 'px'}, 500, function () {
-                            JRecordLog.removeClass('current')
-                        });
+                        $addRecordLog.hide();
+                        JRecordLog.removeClass('current')
                         //if it is in edit mode
                         if (ele['type'] && ele['type'].value === 'edit') {
                             showLog.getData({

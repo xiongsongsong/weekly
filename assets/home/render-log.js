@@ -81,6 +81,10 @@ define(function (require, exports, module) {
         if (html.length > 0) {
             KISSY.each(html, function (item) {
                 count['level' + item.level]++;
+                var date = new Date(item.completion_date);
+                item.year = date.getFullYear();
+                item.month = date.getMonth() + 1;
+                item.date = date.getDate();
                 var str = '<h2>' + (function () {
                     if ($.trim(item['online-url']).length > 0) {
                         return '<a href="' + $.trim(item['online-url']) + '" target="_blank">' + createTpl(item, 'page-name') + '</a>';

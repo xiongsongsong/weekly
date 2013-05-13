@@ -10,10 +10,12 @@
 
 exports.index = function (req, res) {
     res.render('index', {
-        title: '前端业务日志',
-        isLogin: require('./login').isLogin(req),
-        date: new Date(),
-        username: req.session.username,
-        sessionID: req.sessionID
-    });
+            title: '前端业务日志',
+            isLogin: require('./login').isLogin(req),
+            date: new Date(),
+            username: req.session.username,
+            sessionID: req.sessionID
+        }
+    )
+
 };

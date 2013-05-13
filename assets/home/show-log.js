@@ -171,7 +171,8 @@ define(function (require, exports, module) {
     exports.updateDiaryList = function () {
         $('#calendar-container').find('.work-diary-list').html('');
         $(jsonData.documents).each(function (index, item) {
-            var id = '#date-' + item.year.toString() + item.month.toString() + item.date.toString();
+            var date = new Date(item.completion_date);
+            var id = '#date-' + date.getFullYear().toString() + (date.getMonth() + 1).toString() + date.getDate().toString();
             var $content = $(id);
             $content.find('.work-diary-list').append($('<span class="front front' + item.front + '" front="'
                 + item.front + '" data-id="' + item._id + '">'
@@ -212,7 +213,7 @@ define(function (require, exports, module) {
             if (exports.front) {
                 return '' + beautifyName(currentUser['name']) + ' - <span>' + currentUser['real-name'] + '</span>';
             } else {
-                return '统计 ';
+                return '当月统计 ';
             }
         })() + '<span>（' + logList.length + '）</span></h2>' +
             '<ul>' +
@@ -221,12 +222,19 @@ define(function (require, exports, module) {
             '<li>' +
             '<span class="amortization">￥' + amortization + '</span>' +
 
-            '<span><a class="J-show-more show-more">查看详情 &gt;&gt;</a></span></li>' +
+            '<span><a class="J-show-more show-more">该月详情 &gt;&gt;</a></span></li>' +
             '<li>' +
             '<span style="width:100%;" class="download-csv">' + (function () {
             var year = parseInt($('#year-trigger').text(), 10);
             var month = parseInt($('#month-trigger').text(), 10);
-            return '<a href="/csv/' + year + '/' + month + '">下载' + year + '年' + month + '月报表</a>'
+            var endMonth = month;
+            var endYear = year;
+            month -= 1;
+            if (month < 1) {
+                month = 12
+                year -= 1;
+            }
+            return '<a href="/csv/' + year + '-' + month + '-21/to/' + endYear + '-' + endMonth + '-20">' + month + '月21号到' + endMonth + '月20号 &gt;&gt;</a>'
         })() + '</span>' +
             '</li>' +
             '</ul>');
@@ -241,7 +249,7 @@ define(function (require, exports, module) {
                 str.push('<span class="front front' + jsonData.user[a].id + '" front="' + jsonData.user[a].id + '">' + beautifyName(jsonData.user[a].name) + '</span>');
             }
         }
-        str.push('<span class="front show-all">所有 ESC</span>');
+        str.push('<span class="front show-all esc">所有</span>');
         userFilterContainer.html(str.join(''));
     };
 

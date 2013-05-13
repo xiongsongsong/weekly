@@ -1,0 +1,69 @@
+!!!5
+html
+    head
+        meta(charset='utf-8')
+        meta(name="robots",content="nofollow")
+        style
+            table {
+                border-spacing: 0;
+                border-collapse: collapse;
+                font-family: Consolas, verdana, simsun, sans-serif;
+                text-align: center;
+                color: #555;
+            }
+
+            td, th {
+                border: solid 1px #cde;
+                padding: .5em 1em;
+            }
+
+            tr:hover {
+                background: #eee;
+            }
+
+            .money {
+                color: red;
+                text-align: right;
+            }
+
+            .money span:before {
+                content: "￥";
+            }
+
+            p {
+                padding: 1em;
+                background: #eee;
+            }
+
+            a {
+                color: #6C97C2;
+                text-decoration: none;
+            }
+
+    body
+        p 统计时间段 :  #{start.getFullYear()}年#{start.getMonth()+1}月#{start.getDate()}日(包含当天) 至 #{end.getFullYear()}年#{end.getMonth()+1}月#{end.getDate()}日（包含当天）
+            a(href="#{path}") 查看明细
+            |
+            a(href="/") 到首页
+        table
+            tr
+                th 姓名
+                th 旺旺
+                th 简单
+                th 一般
+                th 常规
+                th 复杂
+                th 合计
+                th 津贴
+            - arr.forEach(function(item){
+                tr
+                    td= item[0]
+                    td= item[1]
+                    td= item[2]
+                    td= item[3]
+                    td= item[4]
+                    td= item[5]
+                    td= item[6]
+                    td.money
+                        span #{item[7]}
+            -})

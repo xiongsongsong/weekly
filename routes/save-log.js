@@ -4,6 +4,7 @@
  * Date: 12-8-22
  * Time: 上午9:25
  * 负责记录日志和更新日志
+ * 问题：有的字段用-，而有的则用_  看来，初期规划时的统一很有必要
  */
 
 'use strict';
@@ -22,12 +23,13 @@ exports.save_log = function (req, res) {
     data['online-url'] = body['online-url'];
     data['tms-url'] = body['tms-url'];
     data['note'] = body['note'];
-    data['year'] = parseInt(body['year'], 10);
-    data['month'] = parseInt(body['month'], 10);
-    data['date'] = parseInt(body['date'], 10);
-    data['front'] = req.session.userid;
 
     var isEdit = body['type'] === 'edit';
+
+
+    var year = parseInt(body['year'], 10);
+    var month = parseInt(body['month'], 10);
+    var date = parseInt(body['date'], 10);
 
     if (!require('./login').isLogin(req)) {
         errorMSG.errorList.push({msg: '登陆过期，请刷新页面重新登陆'});
@@ -41,41 +43,48 @@ exports.save_log = function (req, res) {
         errorMSG.errorList.push({name: 'level', msg: '需要页面对应的等级'});
     }
 
-    if (isNaN(data['year']) || isNaN(data['month']) || isNaN(data['date'])) {
-        isNaN(data['year']) ? errorMSG.errorList.push({name: 'year', msg: '年份填写错误'}) : undefined;
-        isNaN(data['month']) ? errorMSG.errorList.push({name: 'month', msg: '月份填写错误'}) : undefined;
-        isNaN(data['date']) ? errorMSG.errorList.push({name: 'date', msg: '日期填写错误'}) : undefined;
-    } else {
-        if (data['year'] < 1949 || data['year'] > 2100) {
-            errorMSG.errorList.push({name: 'year', msg: '年份越界'});
-        }
+    if (!isEdit) {
+        if (isNaN(year) || isNaN(month) || isNaN(date)) {
+            isNaN(year) ? errorMSG.errorList.push({name: 'year', msg: '年份填写错误'}) : undefined;
+            isNaN(month) ? errorMSG.errorList.push({name: 'month', msg: '月份填写错误'}) : undefined;
+            isNaN(date) ? errorMSG.errorList.push({name: 'date', msg: '日期填写错误'}) : undefined;
+        } else {
+            if (year < 1949 || year > 2100) {
+                errorMSG.errorList.push({name: 'year', msg: '年份越界'});
+            }
 
-        if (data['month'] < 1 || data['month'] > 12) {
-            errorMSG.errorList.push({name: 'month', msg: '月份越界'});
-        }
+            if (month < 1 || month > 12) {
+                errorMSG.errorList.push({name: 'month', msg: '月份越界'});
+            }
 
-        if (data['month'] == 2) {
-            if (data['year'] % 4 == 0) {
-                if (data['date'] > 29 || data['date'] < 1) {
-                    errorMSG.errorList.push({name: 'date', msg: '闰年2月日期无效'});
+            if (month == 2) {
+                if (year % 4 == 0) {
+                    if (date > 29 || date < 1) {
+                        errorMSG.errorList.push({name: 'date', msg: '闰年2月日期无效'});
+                    }
+                } else {
+                    if (date > 28 || date < 1) {
+                        errorMSG.errorList.push({name: 'date', msg: '2月日期无效'});
+                    }
                 }
             } else {
-                if (data['date'] > 28 || data['date'] < 1) {
-                    errorMSG.errorList.push({name: 'date', msg: '2月日期无效'});
-                }
-            }
-        } else {
-            if ([1, 3, 5, 7, 8, 10, 12].indexOf(data['month']) >= 0) {
-                if (data['date'] < 1 || data['date'] > 31) {
-                    errorMSG.errorList.push({name: 'date', msg: '日期无效'});
-                }
-            } else if ([4, 6, 9, 11].indexOf(data['month']) >= 0) {
-                if (data['date'] < 1 || data['date'] > 30) {
-                    errorMSG.errorList.push({name: 'date', msg: '日期无效'});
+                if ([1, 3, 5, 7, 8, 10, 12].indexOf(month) >= 0) {
+                    if (date < 1 || date > 31) {
+                        errorMSG.errorList.push({name: 'date', msg: '日期无效'});
+                    }
+                } else if ([4, 6, 9, 11].indexOf(month) >= 0) {
+                    if (date < 1 || date > 30) {
+                        errorMSG.errorList.push({name: 'date', msg: '日期无效'});
+                    }
                 }
             }
         }
+        //非编辑模式下，才保存“完成时间”
+        var completionDate = new Date();
+        completionDate.setFullYear(year, month - 1, date);
+        data['completion_date'] = completionDate.getTime();
     }
+
 
     if (isEdit && !body['object_id']) errorMSG.errorList.push('无法获取即将更新文档的必要信息');
 
@@ -84,13 +93,19 @@ exports.save_log = function (req, res) {
         return;
     }
 
+    //上传时间
+    if (!isEdit) data['save_time'] = Date.now();
+    data['front'] = req.session.userid;
+
     var collection = new DB.mongodb.Collection(DB.client, 'log');
 
     if (isEdit) {
         collection.update({
             _id: DB.mongodb.ObjectID(body['object_id']),
             front: req.session.userid
-        }, data, {}, function () {
+        }, {
+            $set: data
+        }, {}, function () {
             res.end(JSON.stringify({'status': true}, undefined, '    '));
         });
     } else {

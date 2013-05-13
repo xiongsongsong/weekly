@@ -49,7 +49,7 @@ function init(app) {
     app.post('/change-pwd', require('./login').changePwd);
 
     //下载报表
-    app.get('/csv/:year/:month/:format?', require('./csv').download);
+    app.get(/^\/csv\/([\d-]{6,10})\/to\/([\d-]{6,10})$/, require('./csv').download);
 
     //茶歇会的DEMO接口服务
     app.get('/demo/:which?', require('../helper/demo').init);
@@ -63,7 +63,7 @@ function init(app) {
     //拉取日志信息
     app.get('/show_log/:date', require('./show-log').show_log);
 
-    app.get('/history', require('./history').history);
+    app.get(/^\/history\/([\d-]{6,10})\/to\/([\d-]{6,10})$/, require('./history').history);
 
     //本地测试使用 获取用户列表
     app.get('/node/user-list', require('../helper/temp').tempUser);
