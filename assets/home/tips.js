@@ -8,8 +8,6 @@
 
 define(function (require, exports, module) {
     var S = KISSY, span = S.DOM.get('span', '#header');
-    S.Anim(S.DOM.get('span', '#header'), {top: '0px'}, 1.2, 'elasticBoth').run();
-
     var link = [];
     link.push('<li><a target="_blank" href="https://github.com/lifesinger/lifesinger.github.com/issues/105">最难的HTML+CSS</a></li>');
     link.push('<li><a target="_blank" href="http://msdn.microsoft.com/zh-cn/magazine/cc163419.aspx">JavaScript 基础</a></li>');

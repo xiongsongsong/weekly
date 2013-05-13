@@ -249,7 +249,7 @@ define(function (require, exports, module) {
                 str.push('<span class="front front' + jsonData.user[a].id + '" front="' + jsonData.user[a].id + '">' + beautifyName(jsonData.user[a].name) + '</span>');
             }
         }
-        str.push('<span class="front show-all">所有 ESC</span>');
+        str.push('<span class="front show-all esc">所有</span>');
         userFilterContainer.html(str.join(''));
     };
 

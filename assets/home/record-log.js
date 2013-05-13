@@ -72,7 +72,7 @@ define(function (require, exports, module) {
             }
 
             $addRecordLog.stop();
-            $addRecordLog.animate({left: '0px'}, 500);
+            $addRecordLog.show();
             $(ev.currentTarget).addClass('current');
             if ($formObj.size() > 0) {
                 $formObj.add($loginFormObj).filter(':visible')[0].elements[0].select();
@@ -82,9 +82,8 @@ define(function (require, exports, module) {
         $('input.hidden-form').live('click', function () {
             $('#more-detail-wrapper').removeClass('edit');
             $addRecordLog.stop();
-            $addRecordLog.animate({left: left + 'px'}, 500, function () {
-                JRecordLog.removeClass('current')
-            });
+            $addRecordLog.hide();
+            JRecordLog.removeClass('current')
         });
 
         $formObj.submit(function (ev) {
@@ -103,9 +102,8 @@ define(function (require, exports, module) {
                 success: function (data) {
                     if (data.status) {
                         $formObj[0].reset();
-                        $addRecordLog.animate({left: left + 'px'}, 500, function () {
-                            JRecordLog.removeClass('current')
-                        });
+                        $addRecordLog.hide();
+                        JRecordLog.removeClass('current')
                         //if it is in edit mode
                         if (ele['type'] && ele['type'].value === 'edit') {
                             showLog.getData({

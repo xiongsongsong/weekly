@@ -21,7 +21,6 @@ define(function (require, exports, module) {
     var showLog = require('show-log');
     var $yearNode = $('#year-trigger'),
         $monthNode = $('#month-trigger');
-    var header = $('#header');
     var year = parseInt($yearNode.html(), 10);
     var month = parseInt($monthNode.html(), 10);
     var currentDate = new Date();
@@ -251,7 +250,6 @@ define(function (require, exports, module) {
 
     /*调优日历界面*/
     exports.autoResetOffset = function () {
-        var header = $('#header');
         var tdObj = $('#calendar-container td');
         var trObj = $('#calendar-container tr');
         var calendarContainer = $('#calendar-container');
@@ -259,15 +257,15 @@ define(function (require, exports, module) {
         var sidebarObj = $('#sidebar-wrapper');
         var mainWrapper = $('#main-wrapper');
         if (tdObj.size() > 0) {
-            $([sidebarObj, mainWrapper]).height($(window).height() - header.height() + 'px');
+            $([sidebarObj, mainWrapper]).height($(window).height() + 'px');
             mainWrapper.width(document.body.offsetWidth - sidebarObj[0].offsetWidth + 'px');
 
             var calendarWrapperHeight = mainWrapper[0].offsetHeight - calendarHeader.height();
             var calendarWrapperWidth = mainWrapper[0].offsetWidth;
             $('#calendar-wrapper').height(calendarWrapperHeight + 'px');
             $('#more-detail-wrapper').height(calendarWrapperHeight + 'px');
-            calendarContainer.width(calendarWrapperWidth - 24 + 'px');
-            var calendarContainerHeight = $(window).height() - header.height() - calendarHeader.height() - trObj.eq(0).height() - 24 - trObj.size();
+            calendarContainer.width(calendarWrapperWidth - 12 + 'px');
+            var calendarContainerHeight = $(window).height() - calendarHeader.height() - trObj.eq(0).height() - 76 - trObj.size();
             trObj.each(function (index, item) {
                 if (index > 0) {
                     $(item).find('div.wrapper').height(parseInt(calendarContainerHeight / (trObj.size() - 1), 10) + 'px');

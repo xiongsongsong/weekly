@@ -5,13 +5,8 @@ html
         meta(name="robots",content="nofollow")
         title= title
         link(rel="stylesheet",href="/global/reset.css?t=201304.css")
-        link(rel="stylesheet",href="/global/global.css?t=201304.css")
+        link(rel="stylesheet",href="/global/global.css?t=201305.css")
     body
-        #header
-            h1 前端 de 业务日志
-                span.tips(style="color:#cef;")
-                    -if(date.getDate()>20 && date.getDate()<27)
-                        | 由于已过结算期，请不要把日志记录在当月21日之前。
         #main-wrapper
             #calendar-header
                 h2#date
@@ -103,13 +98,12 @@ html
                         tr.control
                             th
                             td
-                                input.cal.hidden-form(type="button",value="<<隐藏")
+                                input.cal.hidden-form(type="button",value="取消")
                                 input.smt(type="submit",value="保存",name="smt")
         #sidebar-wrapper
             #sidebar-container
                 #sidebar-group
-                    h2 控制台
-                    ul
+                    ul(style="margin-top:.5em;margin-bottom:.5em;")
                         li.J-record-log
                             b#record-log 记录日志
                                 if(isLogin)
@@ -127,7 +121,6 @@ html
                         li pid: #{process.pid}
                         li uptime: #{parseInt(process.uptime(),10)}
                         li(style="display:none;") memory#{JSON.stringify(process.memoryUsage(),undefined,'    ')}
-                    h2 资料
-                    ul
+                    ul(style="margin-top:1em")
         script(src="/kissy-min.js")
-        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=201304.js")
+        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=201305.js")

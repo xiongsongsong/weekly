@@ -71,8 +71,5 @@ function init(app) {
     //本地测试使用 获取临时文件
     app.post('/node/check', require('../helper/temp').check);
 
-    /*更新*/
-    require('./update');
-
 }
 
