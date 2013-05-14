@@ -81,9 +81,6 @@ define(function (require, exports, module) {
         $(document).bind('keydown', function (ev) {
             if (ev.target.nodeName !== 'INPUT') {
                 switch (ev.keyCode) {
-                    case 113:
-                        $(document.body).toggleClass('show-amortization');
-                        break;
                     case 27:
                         exports.front = null;
                         exports.resetDescribe();
@@ -203,7 +200,6 @@ define(function (require, exports, module) {
         moreDetail.html(logList.list.join(''));
         var currentUser = jsonData.user['id_' + exports.front];
         var count = logList.count;
-        var amortization = count.level1 * 20 + count.level2 * 30 + count.level3 * 50 + count.level4 * 100;
         if (!exports.front) {
             $('#log-list-control .J-username').html('全部页面');
         } else {
@@ -220,8 +216,6 @@ define(function (require, exports, module) {
             '<li><span>简单：' + count.level1 + '</span><span>一般：' + count.level2 + '</span></li>' +
             '<li><span>常规：' + count.level3 + '</span><span>复杂：' + count.level4 + '</span></li>' +
             '<li>' +
-            '<span class="amortization">￥' + amortization + '</span>' +
-
             '<span><a class="J-show-more show-more">该月详情 &gt;&gt;</a></span></li>' +
             '<li>' +
             '<span style="width:100%;" class="download-csv">' + (function () {
