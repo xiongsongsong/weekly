@@ -39,6 +39,7 @@ body {
     background: #fff;
     width: 100%;
     top: 54px;
+    left: 0;
 }
 
 #calendar-panel {
