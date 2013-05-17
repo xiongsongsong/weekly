@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>setTimeout</title>
+</head>
+<h1>在4秒内，切换到其他标签页等待通知</h1>
+
+<p id="p" style="position: absolute;left:0px;padding: 1em;background: red;"></p>
+
+
+<body>
+<script>
+    var p = document.getElementById('p');
+    setInterval(function () {
+        p.style.left = parseInt(p.style.left, 10) + 1 + 'px';
+    }, 10);
+
+    setTimeout(function () {
+        alert('请切换回去，Chrome中setTimeout精度变为1秒了？');
+    }, 4500);
+</script>
+</body>
+</html>
