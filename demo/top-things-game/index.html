@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport"
+          content="target-densitydpi=device-dpi, width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>顶东西</title>
+    <link rel="stylesheet" href="css.css"/>
+    <link rel="prefetch" href="1.png"/>
+    <link rel="prefetch" href="2.png"/>
+    <link rel="prefetch" href="3.png"/>
+    <link rel="prefetch" href="4.png"/>
+    <link rel="prefetch" href="5.png"/>
+</head>
+<body>
+<div id="game-wrapper">
+    <div id="game-hit-container">
+        <img id="game-thins-container"/>
+    </div>
+    <img src="guys.png" id="game-guys">
+
+    <div id="game-time-container">
+        <div id="game-time-tips"><span id="game-time-left">20</span><b style="font-size: 42px">秒</b></div>
+    </div>
+
+    <div id="game-Bingo-list">
+
+    </div>
+
+    <div class="game-dialog" id="game-dialog-success">
+        <img src="success.png">
+
+        <div class="text">哇哦，<br>3枚芒果集齐啦!!<br><a class="share" href="">分享</a> <b class="btn reset-game">再来一次</b>
+        </div>
+    </div>
+
+    <div class="game-dialog" id="game-dialog-fail">
+        <img src="fail.png">
+
+        <div class="text">时间到，<br>
+            未能完成任务！<br>
+            <b class="btn reset-game">重来</b>
+        </div>
+    </div>
+
+    <div class="game-dialog" id="game-dialog-start" style="z-index: 1">
+        <img src="success.png">
+
+        <div class="text">20秒内<br>集齐3个芒果<br><b class="btn" id="game-start-btn">点击开始</b>
+        </div>
+    </div>
+
+</div>
+
+<script src="./kissy.js"></script>
+<script>
+
+    var arr = [
+        {"name": "芒果", img: "1.png"},
+        {"name": "大白兔奶糖", img: "2.png"},
+        {"name": "大大泡泡堂", img: "3.png"},
+        {"name": "无花果", img: "4.png"},
+        {"name": "雪糕", img: "5.png"},
+        {"name": "小浣熊", img: "6.png"}
+    ];
+
+    KISSY.ready(function (S) {
+        var DOM = S.DOM, Event = S.Event;
+        var wrapper = DOM.get('#game-wrapper');
+        var guys = DOM.get('#game-guys');
+        var hit = DOM.get('#game-hit-container');
+        var thins = DOM.get('#game-thins-container');
+        var bingo = DOM.get('#bingo');
+        var bingoContainer = DOM.get('#game-Bingo-list');
+        var gameTimeLeft = DOM.get('#game-time-left');
+        var bingoImg = document.getElementById('game-Bingo-list').getElementsByTagName('img');
+        var timerDefault = 20;
+        var timer = timerDefault;
+        var timer_cl;
+        var resetGame = DOM.query('b.reset-game');
+
+        var obj = new switchThins();
+
+        var isRuning = false;
+
+        function switchBingo() {
+            if (isRuning) return;
+            isRuning = true;
+            DOM.css(guys, 'width', '165px');
+            DOM.css(guys, 'height', '180px');
+            DOM.css(guys, 'margin-top', '20px');
+            setTimeout(function () {
+                DOM.css(guys, 'margin-top', '0');
+                DOM.css(guys, 'height', '200px');
+                S.Anim(guys, {top: 160}, .2, 'easeIn',function () {
+                    Bingo();
+                    S.Anim(hit, {marginTop: '-20px'}, .1, 'easeNone',function () {
+                        S.Anim(hit, {marginTop: '-0'}, .1, 'easeNone').run();
+                    }).run();
+                    S.Anim(guys, {top: 510}, .2, 'easeInStrong',function () {
+                        //每次要间隔2秒方可再次点击
+                        setTimeout(function () {
+                            isRuning = false;
+                        }, 200);
+                    }).run()
+                }).run()
+            }, 100);
+        }
+
+        //切换各种道具
+        function switchThins() {
+            this.index = 0;
+            var self = this;
+            var cl;
+            this.run = function () {
+                self.index++;
+                if (self.index >= arr.length - 1) self.index = 0;
+                thins.src = arr[self.index].img;
+                cl = setTimeout(self.run, 480);
+            };
+
+            this.getIndex = function () {
+                return self.index;
+            }
+
+            this.stop = function () {
+                clearTimeout(cl);
+            }
+        }
+
+        //当点击开始游戏按钮时
+        Event.on('#game-start-btn', 'touchstart', function () {
+            //隐藏所有浮层
+            DOM.css('.game-dialog ', 'z-index', '-1');
+            obj.run();
+            Event.on(wrapper, 'touchstart', switchBingo);
+            timeLeft();
+        });
+
+        //当点击重来的时候
+        Event.on(resetGame, 'touchstart', function () {
+            DOM.css('.game-dialog ', 'z-index', '-1');
+
+            //一些必要的清理
+            clear();
+            bingoContainer.innerHTML = '';
+
+            //重新开始切换道具
+            obj.run();
+
+            //重新绑定事件
+            Event.on(wrapper, 'touchstart', switchBingo);
+
+            //重新设定倒计时
+            timer = timerDefault;
+            timeLeft();
+        });
+
+        //倒计时
+        function timeLeft() {
+            if (timer >= 0) timer_cl = setTimeout(timeLeft, 1000);
+            gameTimeLeft.innerHTML = timer.toString();
+            timer--;
+            if (timer < 0) {
+                clear();
+                if (bingoImg.length < 3) {
+                    DOM.css('#game-dialog-fail', 'z-index', '1');
+                }
+            }
+        }
+
+        function clear() {
+            obj.stop();
+            clearTimeout(timer_cl);
+            Event.detach(wrapper, 'touchstart', switchBingo);
+        }
+
+
+        //显示当前中了什么奖励
+        function Bingo() {
+            var index = obj.getIndex();
+            if (arr[index].name === '芒果') addBingoList();
+            var img = document.createElement('img');
+            img.className = 'Bingo';
+            var id = 'Bingo' + parseInt(Math.random() * 1000000, 10);
+            img.id = id;
+            img.src = arr[index].img;
+            wrapper.appendChild(img);
+            img = DOM.get('#' + id);
+            S.Anim(img, {top: '30px'}, .2, 'easeIn',function () {
+                S.Anim(img, {
+                    top: '600',
+                    width: 180,
+                    height: 180,
+                    marginLeft: -60,
+                    marginTop: -60
+                }, .4, 'easeInStrong',function () {
+                    DOM.remove(img);
+                }).run()
+            }).run()
+
+        }
+
+        function addBingoList() {
+            if (bingoImg.length < 3) {
+                bingoContainer.innerHTML += '<img src="1.png">';
+                if (bingoImg.length >= 3) {
+                    clear();
+                    DOM.css('#game-dialog-success', 'z-index', '1');
+                }
+            }
+        }
+
+
+        Event.on(document, 'selectstart', function (ev) {
+            ev.preventDefault();
+        });
+
+    })
+</script>
+</body>
+</html>
