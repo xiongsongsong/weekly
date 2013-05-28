@@ -65,6 +65,10 @@ html, body {
     white-space: nowrap;
 }
 
+#game-Bingo-list img {
+    margin-right: 6px;
+}
+
 .game-dialog {
     position: absolute;
     left: 42%;
@@ -78,7 +82,7 @@ html, body {
 }
 
 .game-dialog img {
-    margin-left: -130px;
+    margin-left: -110px;
 }
 
 .game-dialog div.text {
@@ -96,13 +100,6 @@ html, body {
     color: #a00;
     cursor: pointer;
     border-radius: 4px;
-}
-
-.game-dialog a.share {
-    background: yellow;
-    padding: 8px 12px;
-    color: #a00;
-    font-size: 20px;
-    cursor: pointer;
-    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
 }

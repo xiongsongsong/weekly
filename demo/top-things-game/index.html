@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="viewport"
+          content="target-densitydpi=device-dpi, width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>顶东西</title>
     <link rel="stylesheet" href="css.css"/>
     <link rel="prefetch" href="1.png"/>
@@ -29,7 +30,7 @@
     <div class="game-dialog" id="game-dialog-success">
         <img src="success.png">
 
-        <div class="text">哇哦，<br>3枚芒果集齐啦!!<br><a class="share" href="">分享</a> <b class="btn reset-game">再来一次</b>
+        <div class="text">哇哦，<br>3枚芒果集齐啦!!<br><a class="btn" href="">分享</a> <b class="btn reset-game">再来一次</b>
         </div>
     </div>
 
@@ -86,8 +87,8 @@
             if (isRuning) return;
             isRuning = true;
             DOM.css(guys, 'width', '165px');
-            DOM.css(guys, 'height', '180px');
-            DOM.css(guys, 'margin-top', '20px');
+            DOM.css(guys, 'height', '170px');
+            DOM.css(guys, 'margin-top', '30px');
             setTimeout(function () {
                 DOM.css(guys, 'margin-top', '0');
                 DOM.css(guys, 'height', '200px');
@@ -100,13 +101,13 @@
                         //每次要间隔2秒方可再次点击
                         setTimeout(function () {
                             isRuning = false;
-                        }, 200);
+                        }, 150);
                     }).run()
                 }).run()
             }, 100);
         }
 
-        //切换各种道具
+        //切换各种道具，时间越快难度越大
         function switchThins() {
             this.index = 0;
             var self = this;
@@ -115,7 +116,7 @@
                 self.index++;
                 if (self.index >= arr.length - 1) self.index = 0;
                 thins.src = arr[self.index].img;
-                cl = setTimeout(self.run, 480);
+                cl = setTimeout(self.run, 460);
             };
 
             this.getIndex = function () {
@@ -128,16 +129,16 @@
         }
 
         //当点击开始游戏按钮时
-        Event.on('#game-start-btn', 'touchstart', function () {
+        Event.on('#game-start-btn', 'mousedown', function () {
             //隐藏所有浮层
             DOM.css('.game-dialog ', 'z-index', '-1');
             obj.run();
-            Event.on(wrapper, 'touchstart', switchBingo);
+            Event.on(wrapper, 'mousedown', switchBingo);
             timeLeft();
         });
 
         //当点击重来的时候
-        Event.on(resetGame, 'touchstart', function () {
+        Event.on(resetGame, 'mousedown', function () {
             DOM.css('.game-dialog ', 'z-index', '-1');
 
             //一些必要的清理
@@ -148,7 +149,7 @@
             obj.run();
 
             //重新绑定事件
-            Event.on(wrapper, 'touchstart', switchBingo);
+            Event.on(wrapper, 'mousedown', switchBingo);
 
             //重新设定倒计时
             timer = timerDefault;
@@ -171,7 +172,7 @@
         function clear() {
             obj.stop();
             clearTimeout(timer_cl);
-            Event.detach(wrapper, 'touchstart', switchBingo);
+            Event.detach(wrapper, 'mousedown', switchBingo);
         }
 
 
@@ -180,6 +181,7 @@
             var index = obj.getIndex();
             if (arr[index].name === '芒果') addBingoList();
             var img = document.createElement('img');
+            img.height = img.width = 100;
             img.className = 'Bingo';
             var id = 'Bingo' + parseInt(Math.random() * 1000000, 10);
             img.id = id;
@@ -193,7 +195,7 @@
                     height: 180,
                     marginLeft: -60,
                     marginTop: -60
-                }, .4, 'easeInStrong',function () {
+                }, .6, 'easeInStrong',function () {
                     DOM.remove(img);
                 }).run()
             }).run()
