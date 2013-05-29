@@ -177,6 +177,7 @@ html, body {
         opacity: 0;
     }
     10% {
+        opacity: 1;
         left: 10%;
     }
 
@@ -199,6 +200,7 @@ html, body {
         opacity: 0;
     }
     10% {
+        opacity: 1;
         left: 10%;
     }
 
