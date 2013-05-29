@@ -3,22 +3,20 @@
 <head>
     <meta charset="utf-8">
     <title>顶东西</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+    <meta name="viewport" content="target-densitydpi=device-width"/>
     <link rel="stylesheet" href="css.css"/>
-    <link rel="prefetch" href="1.png"/>
-    <link rel="prefetch" href="2.png"/>
-    <link rel="prefetch" href="3.png"/>
-    <link rel="prefetch" href="4.png"/>
-    <link rel="prefetch" href="5.png"/>
 </head>
 <body>
 <div id="game-wrapper">
     <div id="game-hit-container">
-        <img id="game-thins-container"/>
+        <span id="game-thins-container"></span>
     </div>
-    <img src="guys.png" id="game-guys">
+
+    <span id="game-guys"></span>
 
     <div id="game-time-container">
-        <div id="game-time-tips"><span id="game-time-left">20</span><b style="font-size: 42px">秒</b></div>
+        <div id="game-time-tips"><span id="game-time-left">15</span><b style="font-size: 42px">秒</b></div>
     </div>
 
     <div id="game-Bingo-list">
@@ -26,14 +24,14 @@
     </div>
 
     <div class="game-dialog" id="game-dialog-success">
-        <img src="success.png">
+        <div class="sprites-success"></div>
 
         <div class="text">哇哦，<br>3枚芒果集齐啦!!<br><a class="btn" href="">分享</a> <b class="btn reset-game">再来一次</b>
         </div>
     </div>
 
     <div class="game-dialog" id="game-dialog-fail">
-        <img src="fail.png">
+        <div class="sprites_fail"></div>
 
         <div class="text">时间到，<br>
             未能完成任务！<br>
@@ -42,24 +40,24 @@
     </div>
 
     <div class="game-dialog" id="game-dialog-start" style="z-index: 1">
-        <img src="success.png">
+        <div class="sprites-success"></div>
 
-        <div class="text">20秒内<br>集齐3个芒果<br><b class="btn" id="game-start-btn">点击开始</b>
+        <div class="text">15秒内<br>集齐3个芒果<br><b class="btn" id="game-start-btn">点击开始</b>
         </div>
     </div>
 
 </div>
 
-<script src="./kissy.js"></script>
+<script src="http://a.tbcdn.cn/s/kissy/1.3.0/kissy-min.js"></script>
 <script>
 
     var arr = [
-        {"name": "芒果", img: "1.png"},
-        {"name": "大白兔奶糖", img: "2.png"},
-        {"name": "大大泡泡堂", img: "3.png"},
-        {"name": "无花果", img: "4.png"},
-        {"name": "雪糕", img: "5.png"},
-        {"name": "小浣熊", img: "6.png"}
+        {"name": "芒果"},
+        {"name": "大白兔奶糖"},
+        {"name": "大大泡泡堂"},
+        {"name": "雪糕"},
+        {"name": "无花果"},
+        {"name": "小浣熊"}
     ];
 
     KISSY.ready(function (S) {
@@ -71,11 +69,13 @@
         var bingo = DOM.get('#bingo');
         var bingoContainer = DOM.get('#game-Bingo-list');
         var gameTimeLeft = DOM.get('#game-time-left');
-        var bingoImg = document.getElementById('game-Bingo-list').getElementsByTagName('img');
-        var timerDefault = 20;
+        var bingoImg = document.getElementById('game-Bingo-list').getElementsByTagName('span');
+        var timerDefault = 15;
         var timer = timerDefault;
         var timer_cl;
         var resetGame = DOM.query('b.reset-game');
+        //集齐多少个芒果
+        var sum = 3;
 
         var obj = new switchThins();
 
@@ -84,25 +84,15 @@
         function switchBingo() {
             if (isRuning) return;
             isRuning = true;
-            DOM.css(guys, 'width', '165px');
-            DOM.css(guys, 'height', '170px');
-            DOM.css(guys, 'margin-top', '30px');
-            setTimeout(function () {
-                DOM.css(guys, 'margin-top', '0');
-                DOM.css(guys, 'height', '200px');
-                S.Anim(guys, {top: 160}, .2, 'easeIn',function () {
-                    Bingo();
-                    S.Anim(hit, {marginTop: '-20px'}, .1, 'easeNone',function () {
-                        S.Anim(hit, {marginTop: '-0'}, .1, 'easeNone').run();
-                    }).run();
-                    S.Anim(guys, {top: 510}, .2, 'easeInStrong',function () {
-                        //每次要间隔2秒方可再次点击
-                        setTimeout(function () {
-                            isRuning = false;
-                        }, 150);
-                    }).run()
+            S.Anim(guys, {top: 160}, .2, 'easeIn',function () {
+                Bingo();
+                S.Anim(hit, {marginTop: '-20px'}, .1, 'easeNone',function () {
+                    S.Anim(hit, {marginTop: '-0'}, .1, 'easeNone').run();
+                }).run();
+                S.Anim(guys, {top: 495}, .2, 'easeInStrong',function () {
+                    isRuning = false;
                 }).run()
-            }, 100);
+            }).run()
         }
 
         //切换各种道具，时间越快难度越大
@@ -112,14 +102,14 @@
             var cl;
             this.run = function () {
                 self.index++;
-                if (self.index >= arr.length - 1) self.index = 0;
-                thins.src = arr[self.index].img;
-                cl = setTimeout(self.run, 460);
+                if (self.index > arr.length - 1) self.index = 0;
+                thins.className = "sprites_binggo_" + (self.index + 1);
+                cl = setTimeout(self.run, 500);
             };
 
             this.getIndex = function () {
                 return self.index;
-            }
+            };
 
             this.stop = function () {
                 clearTimeout(cl);
@@ -161,7 +151,7 @@
             timer--;
             if (timer < 0) {
                 clear();
-                if (bingoImg.length < 3) {
+                if (bingoImg.length < sum) {
                     DOM.css('#game-dialog-fail', 'z-index', '1');
                 }
             }
@@ -178,32 +168,36 @@
         function Bingo() {
             var index = obj.getIndex();
             if (arr[index].name === '芒果') addBingoList();
-            var img = document.createElement('img');
-            img.height = img.width = 200;
-            img.className = 'Bingo';
-            var id = 'Bingo' + parseInt(Math.random() * 1000000, 10);
-            img.id = id;
-            img.src = arr[index].img;
-            wrapper.appendChild(img);
-            img = DOM.get('#' + id);
-            S.Anim(img, {top: '30px'}, .2, 'easeIn',function () {
-                S.Anim(img, {
-                    top: '600',
-                    width: 180,
-                    height: 180,
-                    marginLeft: -100,
-                    marginTop: -60
-                }, .6, 'easeInStrong',function () {
-                    DOM.remove(img);
-                }).run()
-            }).run()
+            var a = 40;
+            for (var i = 0; i < 10; i++) {
+                (function (i) {
+                    var img = document.createElement('span');
+                    img.className = 'current_things sprites_binggo_' + (index + 1);
+                    var id = 'Bingo' + parseInt(Math.random() * 1000000, 10);
+                    img.id = id;
+                    img.style.transform = "rotate(12deg,33deg)";
 
+                    var a = 20;
+                    var b = 80;
+
+                    DOM.css(img, {'-webkit-transform': 'rotate(' + parseInt(Math.random() * 360, 10) + 'deg) scale(1.3)'})
+                    wrapper.appendChild(img);
+                    img = DOM.get('#' + id);
+                    S.Anim(img, {top: '0', left: parseInt(Math.random() * 100, 10) % (b - a + 1) + a + '%'}, .4, 'easeOut',function () {
+                        S.Anim(img, {
+                            top: '600'
+                        }, .6, 'easeInStrong',function () {
+                            DOM.remove(img);
+                        }).run();
+                    }).run();
+                })(i);
+            }
         }
 
         function addBingoList() {
-            if (bingoImg.length < 3) {
-                bingoContainer.innerHTML += '<img src="1.png">';
-                if (bingoImg.length >= 3) {
+            if (bingoImg.length < sum) {
+                bingoContainer.innerHTML += '<span class="sprites_binggo_1"></span>';
+                if (bingoImg.length >= sum) {
                     clear();
                     DOM.css('#game-dialog-success', 'z-index', '1');
                 }
@@ -212,6 +206,10 @@
 
 
         Event.on(document, 'selectstart', function (ev) {
+            ev.preventDefault();
+        });
+        Event.on(document, 'doubleTap', function (ev) {
+            ev.halt();
             ev.preventDefault();
         });
 

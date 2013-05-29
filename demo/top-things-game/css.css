@@ -21,7 +21,7 @@ html, body {
 
 #game-hit-container {
     margin: 0 auto;
-    background: url(qiang.png) center 0 no-repeat;
+    background: url(sprites.png) -667px -300px no-repeat;
     width: 300px;
     height: 103px;
     position: relative;
@@ -32,7 +32,10 @@ html, body {
     position: absolute;
     left: 50%;
     margin-left: -82px;
-    top: 510px;
+    top: 495px;
+    background: url(sprites.png) -234px -253px no-repeat;
+    height: 216px;
+    width: 165px;
 }
 
 #game-thins-container {
@@ -65,8 +68,8 @@ html, body {
     white-space: nowrap;
 }
 
-#game-Bingo-list img {
-    margin-right: 6px;
+#game-Bingo-list span {
+    float: left;
 }
 
 .game-dialog {
@@ -75,7 +78,7 @@ html, body {
     top: 50%;
     margin-top: -171px;
     margin-left: -172px;
-    background: url("dialog-bg.png") 0 0 no-repeat;
+    background: url("sprites.png") 0 -555px no-repeat;
     width: 600px;
     height: 347px;
     z-index: -1;
@@ -87,7 +90,7 @@ html, body {
 
 .game-dialog div.text {
     position: absolute;
-    left: 118px;
+    left: 138px;
     top: 61px;
     color: #fff;
     font-size: 44px;
@@ -102,4 +105,63 @@ html, body {
     border-radius: 4px;
     font-weight: bold;
     text-decoration: none;
+}
+
+.sprites_binggo_1,
+.sprites_binggo_2,
+.sprites_binggo_3,
+.sprites_binggo_4,
+.sprites_binggo_5,
+.sprites_binggo_6 {
+    background: url(sprites.png);
+    display: block;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+
+}
+
+.sprites_binggo_1 {
+    background-position: 0 0;
+}
+
+.sprites_binggo_2 {
+    background-position: -166px 0;
+}
+
+.sprites_binggo_3 {
+    background-position: -344px 0;
+}
+
+.sprites_binggo_4 {
+    background-position: -538px 0;
+}
+
+.sprites_binggo_5 {
+    background-position: -672px 0;
+}
+
+.sprites_binggo_6 {
+    background-position: -817px 0;
+}
+
+.current_things {
+    position: absolute;
+    left: 50%;
+    margin-left: -50px;
+}
+
+.sprites_fail,
+.sprites-success,
+.sprites_fail {
+    background: url(sprites.png) 0 -253px no-repeat;
+    position: absolute;
+    left: -77px;
+    top: 65px;
+    width: 167px;
+    height: 218px;
+}
+
+.sprites-success {
+    background-position: -431px -253px;
 }
