@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=600"/>
     <meta name="viewport"
-          content="width=600px,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=device-dpi">
+          content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densitydpi=device-dpi">
     <title>顶东西</title>
     <link rel="stylesheet" href="css.css"/>
 </head>
@@ -205,6 +206,16 @@
                     DOM.css('#game-dialog-success', 'z-index', '1');
                 }
             }
+        }
+    });
+
+    KISSY.io({
+        url: "http://count.tbcdn.cn/counter3",
+        dataType: 'jsonp',
+        data: {
+            inc: "JUCENTER_779_juact528m",
+            sign: '99158e59d4b79d305e5ddd0c9ca019d926c',
+            keys: 'JUCENTER_779_juact528m'
         }
     })
 </script>
