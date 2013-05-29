@@ -171,9 +171,7 @@ html, body {
 }
 
 @-webkit-keyframes cloud {
-    0% {
-        left: -10%;
-    }
+
 
     10% {
         left: 10%;
@@ -193,9 +191,7 @@ html, body {
 }
 
 @keyframes cloud {
-    0% {
-        left: -10%;
-    }
+
 
     10% {
         left: 10%;
