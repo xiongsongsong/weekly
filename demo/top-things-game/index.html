@@ -90,7 +90,9 @@
                     S.Anim(hit, {marginTop: '-0'}, .1, 'easeNone').run();
                 }).run();
                 S.Anim(guys, {top: 495}, .2, 'easeInStrong',function () {
-                    isRuning = false;
+                    setTimeout(function () {
+                        isRuning = false;
+                    }, 200);
                 }).run()
             }).run()
         }
