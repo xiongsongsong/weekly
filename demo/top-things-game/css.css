@@ -167,4 +167,50 @@ html, body {
     width: 84px;
     height: 59px;
     position: absolute;
+    left: -300px;
+}
+
+@-webkit-keyframes cloud {
+    0% {
+        left: -100px;
+    }
+    50% {
+        left: 50%;
+    }
+
+    100% {
+        left: 140%;
+    }
+}
+
+@keyframes cloud {
+    0% {
+        left: -10%;
+    }
+
+    10% {
+        left: 10%;
+    }
+
+    50% {
+        left: 50%;
+    }
+
+    90% {
+        left: 90%;
+    }
+
+    100% {
+        left: 120%;
+    }
+}
+
+.cloud {
+    -webkit-animation: cloud 23s 1 linear;
+    animation: cloud 23s 1 linear;
+    position: absolute;
+    background: url(yun.png);
+    width: 84px;
+    height: 59px;
+    left: -100px;
 }

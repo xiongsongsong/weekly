@@ -210,15 +210,18 @@
         }
 
         Event.on(window, 'load', function () {
-            for (var i = 0; i < 5; i++) {
+            setInterval(function () {
+                var id = 'cloud' + Date.now();
+                var cloud = document.createElement('div');
+                cloud.id = id;
+                cloud.className = 'cloud';
+                cloud.style.zoom = Math.random() > .5 ? 1 : 2 + '.' + parseInt(Math.random() * 10, 10);
+                cloud.style.top = parseInt(Math.random() * 50, 10) + 'px';
+                wrapper.appendChild(cloud)
                 setTimeout(function () {
-                    var cloud = document.createElement('div');
-                    cloud.className = 'cloud yun';
-                    cloud.style.zoom = Math.random() > .5 ? 1 : 2 + '.' + parseInt(Math.random() * 10, 10);
-                    cloud.style.top = parseInt(Math.random() * 50, 10) + 'px';
-                    wrapper.appendChild(cloud)
-                }, i * 2800)
-            }
+                    DOM.remove('#' + id);
+                }, 23000)
+            }, 5000)
         })
     });
 
@@ -234,38 +237,5 @@
 
 
 </script>
-<style>
-    @-webkit-keyframes yun {
-
-        50% {
-            left: 50%;
-        }
-
-        100% {
-            left: 140%;
-        }
-    }
-
-    @keyframes yun {
-        0% {
-            left: -10%;
-        }
-
-        50% {
-            left: 50%;
-        }
-
-        100% {
-            left: 120%;
-        }
-    }
-
-    .yun {
-        -webkit-animation: yun 23s infinite linear;
-        animation: yun 23s infinite linear;
-        position: absolute;
-        left: -100px;
-    }
-</style>
 </body>
 </html>
