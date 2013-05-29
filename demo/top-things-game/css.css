@@ -1,16 +1,14 @@
 html, body {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
     overflow: hidden;
     background: #ffcb51;
 }
 
 #game-wrapper {
-    width: 100%;
+    width: 700px;
     margin: 0 auto;
-    height: 100%;
+    height: 760px;
     position: relative;
     background: url(bg.jpg) center 0 repeat-x;
     overflow: hidden;
