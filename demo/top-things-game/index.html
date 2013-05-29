@@ -185,7 +185,8 @@
                     img = DOM.get('#' + id);
                     S.Anim(img, {top: '0', left: parseInt(Math.random() * 100, 10) % (b - a + 1) + a + '%'}, .4, 'easeOut',function () {
                         S.Anim(img, {
-                            top: '600'
+                            top: '600',
+                            opacity: 0
                         }, .6, 'easeInStrong',function () {
                             DOM.remove(img);
                         }).run();
