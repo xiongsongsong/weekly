@@ -6,7 +6,7 @@ html, body {
 }
 
 #game-wrapper {
-    width: 700px;
+    width: 600px;
     margin: 0 auto;
     height: 760px;
     position: relative;
@@ -72,7 +72,7 @@ html, body {
 
 .game-dialog {
     position: absolute;
-    left: 42%;
+    left: 33%;
     top: 50%;
     margin-top: -171px;
     margin-left: -172px;
@@ -82,13 +82,9 @@ html, body {
     z-index: -1;
 }
 
-.game-dialog img {
-    margin-left: -110px;
-}
-
 .game-dialog div.text {
     position: absolute;
-    left: 138px;
+    left: 146px;
     top: 61px;
     color: #fff;
     font-size: 44px;
@@ -154,7 +150,7 @@ html, body {
 .sprites_fail {
     background: url(sprites.png) 0 -253px no-repeat;
     position: absolute;
-    left: -77px;
+    left: -24px;
     top: 65px;
     width: 167px;
     height: 218px;
