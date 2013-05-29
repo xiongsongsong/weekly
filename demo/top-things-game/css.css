@@ -174,19 +174,9 @@ html, body {
 @-webkit-keyframes cloud {
     0% {
         left: -220px;
-        opacity: 0;
     }
-    10% {
-        opacity: 1;
-        left: 10%;
-    }
-
     50% {
         left: 50%;
-    }
-
-    90% {
-        left: 90%;
     }
 
     100% {
@@ -197,19 +187,10 @@ html, body {
 @keyframes cloud {
     0% {
         left: -220px;
-        opacity: 0;
-    }
-    10% {
-        opacity: 1;
-        left: 10%;
     }
 
     50% {
         left: 50%;
-    }
-
-    90% {
-        left: 90%;
     }
 
     100% {
@@ -225,5 +206,4 @@ html, body {
     background: url(yun.png);
     width: 84px;
     height: 59px;
-    left: -220px;
 }
