@@ -145,6 +145,7 @@ html, body {
     position: absolute;
     left: 50%;
     margin-left: -50px;
+    z-index: 4;
 }
 
 .sprites_fail,
@@ -171,8 +172,10 @@ html, body {
 }
 
 @-webkit-keyframes cloud {
-
-
+    0% {
+        left: -220px;
+        opacity: 0;
+    }
     10% {
         left: 10%;
     }
@@ -191,8 +194,10 @@ html, body {
 }
 
 @keyframes cloud {
-
-
+    0% {
+        left: -220px;
+        opacity: 0;
+    }
     10% {
         left: 10%;
     }
@@ -214,6 +219,7 @@ html, body {
     -webkit-animation: cloud 23s 1 linear;
     animation: cloud 23s 1 linear;
     position: absolute;
+    top: 0;
     background: url(yun.png);
     width: 84px;
     height: 59px;
