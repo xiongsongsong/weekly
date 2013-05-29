@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=600, initial-scale=1, maximum-scale=1,user-scalable=no,target-densitydpi=device-dpi">
+    <meta name="viewport"
+          content="width=600, initial-scale=1, maximum-scale=1,user-scalable=no,target-densitydpi=device-dpi">
     <title>顶东西</title>
     <link rel="stylesheet" href="css.css"/>
 </head>
@@ -116,16 +117,16 @@
         }
 
         //当点击开始游戏按钮时
-        Event.on('#game-start-btn', 'mousedown', function () {
+        Event.on('#game-start-btn', 'touchstart', function () {
             //隐藏所有浮层
             DOM.css('.game-dialog ', 'z-index', '-1');
             obj.run();
-            Event.on(wrapper, 'mousedown', switchBingo);
+            Event.on(document.body, 'touchstart', switchBingo);
             timeLeft();
         });
 
         //当点击重来的时候
-        Event.on(resetGame, 'mousedown', function () {
+        Event.on(resetGame, 'touchstart', function () {
             DOM.css('.game-dialog ', 'z-index', '-1');
 
             //一些必要的清理
@@ -136,7 +137,7 @@
             obj.run();
 
             //重新绑定事件
-            Event.on(wrapper, 'mousedown', switchBingo);
+            Event.on(document.body, 'touchstart', switchBingo);
 
             //重新设定倒计时
             timer = timerDefault;
@@ -159,7 +160,7 @@
         function clear() {
             obj.stop();
             clearTimeout(timer_cl);
-            Event.detach(wrapper, 'mousedown', switchBingo);
+            Event.detach(document.body, 'touchstart', switchBingo);
         }
 
 
@@ -202,17 +203,6 @@
                 }
             }
         }
-
-
-        Event.on(document, 'selectstart', function (ev) {
-            ev.preventDefault();
-        });
-
-        Event.on(document, 'doubleTap', function (ev) {
-            ev.halt();
-            ev.preventDefault();
-        });
-
     })
 </script>
 </body>
