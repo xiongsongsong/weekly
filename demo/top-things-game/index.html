@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    <div class="game-dialog" id="game-dialog-start" style="z-index: 1">
+    <div class="game-dialog" id="game-dialog-start" style="z-index: 3">
         <div class="sprites-success"></div>
 
         <div class="text">15秒内<br>集齐3个芒果<br><b class="btn" id="game-start-btn">点击开始</b>
@@ -156,7 +156,7 @@
             if (timer < 0) {
                 clear();
                 if (bingoImg.length < sum) {
-                    DOM.css('#game-dialog-fail', 'z-index', '1');
+                    DOM.css('#game-dialog-fail', 'z-index', '3');
                 }
             }
         }
@@ -204,7 +204,7 @@
                 bingoContainer.innerHTML += '<span class="sprites_binggo_1"></span>';
                 if (bingoImg.length >= sum) {
                     clear();
-                    DOM.css('#game-dialog-success', 'z-index', '1');
+                    DOM.css('#game-dialog-success', 'z-index', '3');
                 }
             }
         }
@@ -236,9 +236,6 @@
 </script>
 <style>
     @-webkit-keyframes yun {
-        0% {
-            left: -100px;
-        }
 
         50% {
             left: 50%;
@@ -267,6 +264,7 @@
         -webkit-animation: yun 23s infinite linear;
         animation: yun 23s infinite linear;
         position: absolute;
+        left: -100px;
     }
 </style>
 </body>
