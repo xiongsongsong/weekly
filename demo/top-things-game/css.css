@@ -24,6 +24,7 @@ html, body {
     height: 103px;
     position: relative;
     top: 130px;
+    z-index: 3;
 }
 
 #game-guys {
@@ -56,6 +57,7 @@ html, body {
     color: yellow;
     font-family: verdana, "Microsoft Yahei", sans-serif;
     font-size: 82px;
+    z-index: 3;
 }
 
 #game-Bingo-list {
@@ -158,4 +160,11 @@ html, body {
 
 .sprites-success {
     background-position: -431px -253px;
+}
+
+.cloud {
+    background: url(yun.png);
+    width: 84px;
+    height: 59px;
+    position: absolute;
 }

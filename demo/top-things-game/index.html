@@ -10,6 +10,7 @@
 </head>
 <body>
 <div id="game-wrapper">
+
     <div id="game-hit-container">
         <span id="game-thins-container"></span>
     </div>
@@ -207,6 +208,18 @@
                 }
             }
         }
+
+        Event.on(window, 'load', function () {
+            for (var i = 0; i < 5; i++) {
+                setTimeout(function () {
+                    var cloud = document.createElement('div');
+                    cloud.className = 'cloud yun';
+                    cloud.style.zoom = Math.random() > .5 ? 1 : 2 + '.' + parseInt(Math.random() * 10, 10);
+                    cloud.style.top = parseInt(Math.random() * 50, 10) + 'px';
+                    wrapper.appendChild(cloud)
+                }, i * 2800)
+            }
+        })
     });
 
     KISSY.io({
@@ -218,6 +231,43 @@
             keys: 'JUCENTER_779_juact528m'
         }
     })
+
+
 </script>
+<style>
+    @-webkit-keyframes yun {
+        0% {
+            left: -100px;
+        }
+
+        50% {
+            left: 50%;
+        }
+
+        100% {
+            left: 140%;
+        }
+    }
+
+    @keyframes yun {
+        0% {
+            left: -10%;
+        }
+
+        50% {
+            left: 50%;
+        }
+
+        100% {
+            left: 120%;
+        }
+    }
+
+    .yun {
+        -webkit-animation: yun 23s infinite linear;
+        animation: yun 23s infinite linear;
+        position: absolute;
+    }
+</style>
 </body>
 </html>
