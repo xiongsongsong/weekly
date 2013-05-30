@@ -232,7 +232,7 @@ html, body {
     <div class="game-dialog" id="game-dialog-success">
         <div class="sprites-success"></div>
 
-        <div class="text" style="font-size: 26px;width: 360px;">3枚芒果集齐啦!!<br><span id="J-flash-tips">这次游戏将会为雅安的孩子，<b
+        <div class="text" style="font-size: 26px;width: 360px;">3枚芒果集齐啦!!<br><br><span id="J-flash-tips">这次游戏将会为雅安的孩子，<b
                 style="color:yellow;">募得芒果V基金会提供的5元资金，谢谢您。</b></span><b
                 onclick="document.getElementById('J-flash-tips').style.display='none'" class="btn reset-game">再来一次</b>
         </div>
@@ -317,7 +317,7 @@ html, body {
                 self.index++;
                 if (self.index > arr.length - 1) self.index = 0;
                 thins.className = "sprites_binggo_" + (self.index + 1);
-                cl = setTimeout(self.run, 450);
+                cl = setTimeout(self.run, 420);
             };
 
             this.getIndex = function () {
