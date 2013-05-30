@@ -423,12 +423,12 @@ html, body {
                 var cloud = document.createElement('div');
                 cloud.id = id;
                 cloud.className = 'cloud';
-                cloud.style.zoom = Math.random() > .5 ? 1 : 2 + '.' + parseInt(Math.random() * 10, 10);
+                cloud.style.zoom = (Math.random() > .3 ? 1 + '.' + parseInt(Math.random() * 10, 10) : 2);
                 cloud.style.top = parseInt(Math.random() * 50, 10) + 'px';
                 wrapper.appendChild(cloud)
                 setTimeout(function () {
                     DOM.remove('#' + id);
-                }, 20000)
+                }, 14000)
             }
 
             cloud();
