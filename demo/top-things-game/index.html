@@ -222,7 +222,7 @@ html, body {
     <span id="game-guys"></span>
 
     <div id="game-time-container">
-        <div id="game-time-tips"><span id="game-time-left">15</span><b style="font-size: 42px">秒</b></div>
+        <div id="game-time-tips"><span id="game-time-left">30</span><b style="font-size: 42px">秒</b></div>
     </div>
 
     <div id="game-Bingo-list">
@@ -232,7 +232,7 @@ html, body {
     <div class="game-dialog" id="game-dialog-success">
         <div class="sprites-success"></div>
 
-        <div class="text" style="font-size: 26px;width: 360px;">3枚芒果集齐啦!!<br><br><span id="J-flash-tips">这次游戏将会为雅安的孩子，<b
+        <div class="text" style="font-size: 26px;width: 360px;">5枚芒果集齐啦!!<br><br><span id="J-flash-tips">这次游戏将会为雅安的孩子，<b
                 style="color:yellow;">募得芒果V基金会提供的5元资金，谢谢您。</b></span><b
                 onclick="document.getElementById('J-flash-tips').style.display='none'" class="btn reset-game">再来一次</b>
         </div>
@@ -251,7 +251,7 @@ html, body {
         <div class="sprites-success"></div>
         <div class="text" style="font-size: 22px;top:54px;width: 360px;">光影童年，用我们的爱心为雅安的孩子创造一个快乐童年；每个用户玩一次游戏，<b
                 style="color:yellow;">芒果V基金即捐赠5元</b>。<br>
-            <strong style="font-size: 26px;">游戏目标：集齐<span style="font-size: 40px;color:yellow;">3枚</span>芒果！<br><b
+            <strong style="font-size: 26px;">游戏目标：集齐<span style="font-size: 40px;color:yellow;">5枚</span>芒果！<br><b
                     class="btn" id="game-start-btn" style="padding: 12px 12px;display: inline-block;">点击开始</b></strong>
         </div>
     </div>
@@ -281,12 +281,12 @@ html, body {
         var bingoContainer = DOM.get('#game-Bingo-list');
         var gameTimeLeft = DOM.get('#game-time-left');
         var bingoImg = document.getElementById('game-Bingo-list').getElementsByTagName('span');
-        var timerDefault = 15;
+        var timerDefault = 30;
         var timer = timerDefault;
         var timer_cl;
         var resetGame = DOM.query('b.reset-game');
         //集齐多少个芒果
-        var sum = 3;
+        var sum = 5;
 
         var obj = new switchThins();
 
@@ -317,7 +317,7 @@ html, body {
                 self.index++;
                 if (self.index > arr.length - 1) self.index = 0;
                 thins.className = "sprites_binggo_" + (self.index + 1);
-                cl = setTimeout(self.run, 420);
+                cl = setTimeout(self.run, 450);
             };
 
             this.getIndex = function () {
