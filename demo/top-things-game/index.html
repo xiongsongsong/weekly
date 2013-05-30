@@ -317,7 +317,7 @@ html, body {
                 self.index++;
                 if (self.index > arr.length - 1) self.index = 0;
                 thins.className = "sprites_binggo_" + (self.index + 1);
-                cl = setTimeout(self.run, 500);
+                cl = setTimeout(self.run, 450);
             };
 
             this.getIndex = function () {
@@ -381,9 +381,8 @@ html, body {
         function Bingo() {
             var index = obj.getIndex();
             if (arr[index].name === '芒果') addBingoList();
-            var a = 40;
             for (var i = 0; i < 5; i++) {
-                (function (i) {
+                (function () {
                     var img = document.createElement('span');
                     img.className = 'current_things sprites_binggo_' + (index + 1);
                     var id = 'Bingo' + parseInt(Math.random() * 1000000, 10);
@@ -404,7 +403,7 @@ html, body {
                             DOM.remove(img);
                         }).run();
                     }).run();
-                })(i);
+                })();
             }
         }
 
