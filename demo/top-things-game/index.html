@@ -449,12 +449,12 @@ html, body {
 
     alert('开始测试UA')
 
+    alert(navigator)
     if (/android/i.test(navigator.userAgent)){
         DOM.show('#android-share');
         DOM.hide('#ios-share');
     }
 
-    alert(navigator.userAgent)
 
     if (/ipad|iphone|mac/i.test(navigator.userAgent)){
         DOM.hide('#android-share');
