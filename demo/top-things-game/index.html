@@ -446,18 +446,15 @@ html, body {
         })
     });
 
-    alert('开始测试UA')
+    alert('android?' + /android/gmi.test(navigator.userAgent))
+    alert('ios?' + /ipad|iphone|ipod|mac|ios/gmi.test(navigator.userAgent))
 
-    alert(/android/gmi.test(navigator.userAgent))
-    if (/android/gmi.test(navigator.userAgent)){
-        DOM.show('#android-share');
-        DOM.hide('#ios-share');
+    if (/android/gmi.test(navigator.userAgent)) {
+        DOM.remove('#ios-share');
     }
 
-
-    if (/ipad|iphone|mac/i.test(navigator.userAgent)){
-        DOM.hide('#android-share');
-        DOM.show('#ios-share');
+    if (/ipad|iphone|ipod|mac/gmi.test(navigator.userAgent)) {
+        DOM.remove('#android-share');
     }
 
     KISSY.io({
