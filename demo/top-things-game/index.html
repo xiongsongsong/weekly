@@ -96,7 +96,7 @@ html, body {
 .game-dialog div.text {
     position: absolute;
     left: 146px;
-    top: 61px;
+    top: 41px;
     color: #fff;
     font-size: 44px;
     line-height: 180%;
@@ -104,12 +104,15 @@ html, body {
 
 .btn {
     background: yellow;
-    padding: 5px;
     color: #a00;
     cursor: pointer;
     border-radius: 4px;
     font-weight: bold;
     text-decoration: none;
+    padding: 19px 16px;
+    display: inline-block;
+    font-size: 32px;
+    display: inline-block;
 }
 
 .sprites_binggo_1,
@@ -210,10 +213,6 @@ html, body {
     width: 84px;
     height: 59px;
 }
-
-.share {
-    font-size: 38px
-}
 </style>
 </head>
 <body>
@@ -236,14 +235,9 @@ html, body {
     <div class="game-dialog" id="game-dialog-success">
         <div class="sprites-success"></div>
 
-        <div class="text" style="font-size: 26px;width: 360px;color: yellow">完成游戏啦！<br>您的努力完成了这次游戏，将会为雅安的孩子，募得芒果V基金提供的1元资金
+        <div class="text" style="font-size: 26px;width: 360px;top:38px;color: yellow">完成游戏啦！<br>您的努力完成了这次游戏，将会为雅安的孩子，募得芒果V基金提供的1元资金
             <br>
-            <a id="android-share" class="btn share"
-               href="http://service.weibo.com/share/share.php?url=http%3A%2F%2Fact.ju.taobao.com%2Fgo%2Fact%2Fjuhuasuan%2Fmobile-act-gyxd.php%20&appkey=&title=%E8%81%9A%E7%88%B1%E5%BF%83%E8%87%B4%E7%AB%A5%E5%B9%B4%23%E5%85%89%E5%BD%B1%E7%AB%A5%E8%A1%8C%23%20%E7%8E%A9%E7%8E%A9%E6%B8%B8%E6%88%8F%E5%B0%B1%E8%83%BD%E4%B8%BA%E4%B9%A1%E6%9D%91%E5%B0%8F%E5%AD%A6%E6%8D%90%E8%B5%A0%E7%94%B5%E5%BD%B1%E6%94%BE%E6%98%A0%E8%AE%BE%E5%A4%87%EF%BC%8C61%E8%8A%82%E5%88%AB%E5%BF%98%E4%BA%86%E4%B9%A1%E6%9D%91%E7%9A%84%E5%AD%A9%E5%AD%90%E4%BB%AC%EF%BC%81%40%E8%81%9A%E5%88%92%E7%AE%97%20%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%EF%BC%9A&pic=&ralateUid=&language=zh_cn">Android分享到新浪微博</a> </span>
-
-            <a id="ios-share" class="btn share"
-               href="jhsExSupport://share/?%7B%22type%22%3A1000%2C%22hideEditUI%22%3Afalse%2C%22text%22%3A%22%E8%81%9A%E7%88%B1%E5%BF%83%E8%87%B4%E7%AB%A5%E5%B9%B4%23%E5%85%89%E5%BD%B1%E7%AB%A5%E8%A1%8C%23%20%E7%8E%A9%E7%8E%A9%E6%B8%B8%E6%88%8F%E5%B0%B1%E8%83%BD%E4%B8%BA%E4%B9%A1%E6%9D%91%E5%B0%8F%E5%AD%A6%E6%8D%90%E8%B5%A0%E7%94%B5%E5%BD%B1%E6%94%BE%E6%98%A0%E8%AE%BE%E5%A4%87%EF%BC%8C61%E8%8A%82%E5%88%AB%E5%BF%98%E4%BA%86%E4%B9%A1%E6%9D%91%E7%9A%84%E5%AD%A9%E5%AD%90%E4%BB%AC%EF%BC%81%40%E8%81%9A%E5%88%92%E7%AE%97%20%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%EF%BC%9Ahttp%3A%2F%2Fact.ju.taobao.com%2Fgo%2Fact%2Fjuhuasuan%2Fmobile-act-gyxd.php%20%22%7D">IOS分享到新浪微博</a>
-
+            <a class="btn" id="share-sina-weibo" href=""><b>分享到新浪微博</b></a> </span>
         </div>
     </div>
 
@@ -252,17 +246,17 @@ html, body {
 
         <div class="text" style="font-size:26px;width:320px">时间到，<br>
             未能完成任务！<br><span style="color: yellow;">游戏玩法：点击屏幕，小人跳起顶中5个芒果！</span><br>
-            <b class="btn reset-game">重来</b>
+            <b class="btn reset-game" style="padding: 18px 48px;">重来</b>
         </div>
     </div>
 
     <div class="game-dialog" id="game-dialog-start" style="z-index: 3">
         <div class="sprites-success"></div>
-        <div class="text" style="font-size: 20px;top:54px;width: 360px;">光影童年，用我们的爱心为雅安的孩子创造一个快乐童年；每个用户玩一次游戏，<b
-                style="color:yellow;">芒果V基金即捐赠1元</b>。<br>
+        <div class="text" style="font-size: 20px;top:54px;width: 360px;">光影童年，用我们的爱心为雅安的孩子创造一个快乐童年! 每个用户玩一次游戏，<b
+                style="color:yellow;">芒果V基金即捐赠1元</b>！<br>
             <strong style="font-size: 26px;">游戏玩法：点击屏幕，小人跳起顶中<span
-                    style="font-size: 40px;color:yellow;">5个</span>芒果！<br><b
-                    class="btn" id="game-start-btn" style="padding: 12px 12px;display: inline-block;">开始游戏</b></strong>
+                    style="font-size: 40px;color:yellow;">5个</span>芒果!!<br><b
+                    class="btn" id="game-start-btn" style="padding: 13px 12px;display: inline-block;">开始游戏</b></strong>
         </div>
     </div>
 </div>
@@ -297,6 +291,11 @@ html, body {
         var resetGame = DOM.query('b.reset-game');
         //集齐多少个芒果
         var sum = 5;
+
+        setTimeout(function () {
+            DOM.get('#share-sina-weibo').href = 'http' + '://' + 'service.weibo' + '.com/share/share.php?' +
+                    'url=http%3A%2F%2Fact.ju.taobao.com%2Fgo%2Fact%2Fjuhuasuan%2Fmobile-act-gyxd.php%20&appkey=&title=%E8%81%9A%E7%88%B1%E5%BF%83%E8%87%B4%E7%AB%A5%E5%B9%B4%23%E5%85%89%E5%BD%B1%E7%AB%A5%E8%A1%8C%23%20%E7%8E%A9%E7%8E%A9%E6%B8%B8%E6%88%8F%E5%B0%B1%E8%83%BD%E4%B8%BA%E4%B9%A1%E6%9D%91%E5%B0%8F%E5%AD%A6%E6%8D%90%E8%B5%A0%E7%94%B5%E5%BD%B1%E6%94%BE%E6%98%A0%E8%AE%BE%E5%A4%87%EF%BC%8C61%E8%8A%82%E5%88%AB%E5%BF%98%E4%BA%86%E4%B9%A1%E6%9D%91%E7%9A%84%E5%AD%A9%E5%AD%90%E4%BB%AC%EF%BC%81%40%E8%81%9A%E5%88%92%E7%AE%97%20%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%EF%BC%9A&pic=&ralateUid=&language=zh_cn'
+        }, 5000);
 
         var obj = new switchThins();
 
@@ -391,7 +390,7 @@ html, body {
         function Bingo() {
             var index = obj.getIndex();
             if (arr[index].name === '芒果') addBingoList();
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < 3; i++) {
                 (function () {
                     var img = document.createElement('span');
                     img.className = 'current_things sprites_binggo_' + (index + 1);
@@ -407,8 +406,7 @@ html, body {
                     img = DOM.get('#' + id);
                     S.Anim(img, {top: '0', left: parseInt(Math.random() * 100, 10) % (b - a + 1) + a + '%'}, .4, 'easeOut',function () {
                         S.Anim(img, {
-                            top: '600',
-                            opacity: 0
+                            top: '600'
                         }, .6, 'easeInStrong',function () {
                             DOM.remove(img);
                         }).run();
@@ -445,17 +443,6 @@ html, body {
             setInterval(cloud, 2000)
         })
     });
-
-    alert('android?' + /android/gmi.test(navigator.userAgent))
-    alert('ios?' + /ipad|iphone|ipod|mac|ios/gmi.test(navigator.userAgent))
-
-    if (/android/gmi.test(navigator.userAgent)) {
-        DOM.remove('#ios-share');
-    }
-
-    if (/ipad|iphone|ipod|mac/gmi.test(navigator.userAgent)) {
-        DOM.remove('#android-share');
-    }
 
     KISSY.io({
         url: "http://count.tbcdn.cn/counter3",
