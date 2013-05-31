@@ -453,6 +453,8 @@ html, body {
         DOM.hide('#ios-share');
     }
 
+    alert(navigator.userAgent)
+
     if (/ipad|iphone|mac/i.test(navigator.userAgent)){
         DOM.hide('#android-share');
         DOM.show('#ios-share');
