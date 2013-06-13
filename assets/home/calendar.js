@@ -177,6 +177,7 @@ define(function (require, exports, module) {
         //补足月末的天数
         var calendarStr = [], _current = '';
         for (var j = 0; j < dateArr.length; j++) {
+            var is20 = dateArr[j].date === 20;
             switch (dateArr[j].type) {
                 case "prev":
                     _current = ' class="prev" id="date-' + lastMonth.getFullYear() + (lastMonth.getMonth() + 1) + dateArr[j].date + '"';
@@ -191,7 +192,11 @@ define(function (require, exports, module) {
             if (j == 0 || (j + 1) % 7 == 1) {
                 calendarStr.push('<tr>')
             }
-            calendarStr.push('<td' + _current + '><div class="wrapper"><div class="container"><div class="work-diary"><div class="work-diary-list"></div></div><b class="day">' + dateArr[j].date + '</b></div></div></td>');
+            calendarStr.push('<td' + _current + '><div class="wrapper"><div class="container ' + (function () {
+                return is20 ? 'day20' : '';
+            })() + '">' + (function () {
+                return is20 ? '<div class="tips">统计截止日</div>' : '';
+            })() + '<div class="work-diary"><div class="work-diary-list"></div></div><b class="day">' + dateArr[j].date + '</b></div></div></td>');
 
             if ((j + 1) % 7 == 0 && j > 0) calendarStr.push('</tr>');
             _current = '';

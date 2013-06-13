@@ -155,6 +155,11 @@ body {
     height: 100%;
 }
 
+#calendar-container td div.day20 {
+    border: solid 1px red;
+    background: #ffe2e2;
+}
+
 #calendar-container td div.wrapper b.day {
     position: absolute;
     right: .3em;
@@ -163,6 +168,16 @@ body {
     color: #ccc;
     font-weight: normal;
     font-family: verdana, serif;
+}
+
+#calendar-container td div.wrapper div.tips {
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: left;
+    text-indent: 5px;
+    background: red;
 }
 
 #calendar-container td.prev div.wrapper b.day,

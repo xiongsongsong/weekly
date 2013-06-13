@@ -5,7 +5,7 @@ html
         meta(name="robots",content="nofollow")
         title= title
         link(rel="stylesheet",href="/global/reset.css?t=201304.css")
-        link(rel="stylesheet",href="/global/global.css?t=20130515.css")
+        link(rel="stylesheet",href="/global/global.css?t=20130613.css")
     body
         #main-wrapper
             #calendar-header
@@ -89,6 +89,7 @@ html
                             th 页面完成时间
                                 b *
                             td
+                                p(style="margin:0;color:red") 如果已经过了20号，请务必不要记录在这之前
                                 input.year(name='year',value='#{date.getFullYear()}')
                                 | -
                                 input.month(name='month',value='#{date.getMonth()+1}')
@@ -123,4 +124,4 @@ html
                         li(style="display:none;") memory#{JSON.stringify(process.memoryUsage(),undefined,'    ')}
                     ul(style="margin-top:1em")
         script(src="/kissy-min.js")
-        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=20130515.js")
+        script#seajsnode(src="/sea.js",data-main="/home/init.js?time=20130613.js")
