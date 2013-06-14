@@ -9,6 +9,7 @@
 define(function (require, exports, module) {
     var S = KISSY, span = S.DOM.get('span', '#header');
     var link = [];
+    link.push('<li><a target="_blank" href="http://www.cnblogs.com/TankXiao/archive/2012/02/13/2342672.html#httpmeessagestructe">HTTP协议详解</a></li>');
     link.push('<li><a target="_blank" href="https://github.com/lifesinger/lifesinger.github.com/issues/105">最难的HTML+CSS</a></li>');
     link.push('<li><a target="_blank" href="http://msdn.microsoft.com/zh-cn/magazine/cc163419.aspx">JavaScript 基础</a></li>');
     link.push('<li><a target="_blank" href="https://github.com/TooooBug/javascript.patterns/blob/master/chapter4.markdown#-1">函数</a></li>');
