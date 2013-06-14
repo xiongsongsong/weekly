@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=600"/>
+<meta name="viewport" content="user-scalable=no,target-densitydpi=device-dpi">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>顶芒果</title>
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #ffcb51;
+}
+
+#game-wrapper {
+    width: 600px;
+    margin: 0 auto;
+    height: 760px;
+    position: relative;
+    background: url(http://img01.taobaocdn.com/tps/i1/T1McuWXpJcXXabVyYF-610-800.jpg) center 0 repeat-x;
+    overflow: hidden;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    tap-highlight-color: rgba(0, 0, 0, 0);
+    outline: none;
+}
+
+#game-hit-container {
+    margin: 0 auto;
+    background: url(http://img02.taobaocdn.com/tps/i2/T1vSiVXp4cXXXTa_6h-990-900.png) -667px -300px no-repeat;
+    width: 300px;
+    height: 103px;
+    position: relative;
+    top: 130px;
+    z-index: 3;
+}
+
+#game-guys {
+    position: absolute;
+    left: 50%;
+    margin-left: -82px;
+    top: 495px;
+    background: url(http://img02.taobaocdn.com/tps/i2/T1vSiVXp4cXXXTa_6h-990-900.png) -234px -253px no-repeat;
+    height: 216px;
+    width: 165px;
+}
+
+#game-thins-container {
+    margin-left: 100px;
+}
+
+.Bingo {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: 50%;
+    margin-left: -50px;
+    top: 129px;
+}
+
+#game-time-container {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    color: yellow;
+    font-family: verdana, "Microsoft Yahei", sans-serif;
+    font-size: 82px;
+    z-index: 3;
+}
+
+#game-Bingo-list {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    height: 100px;
+    white-space: nowrap;
+}
+
+#game-Bingo-list span {
+    float: left;
+}
+
+.game-dialog {
+    position: absolute;
+    left: 33%;
+    top: 50%;
+    margin-top: -171px;
+    margin-left: -172px;
+    background: url("http://img02.taobaocdn.com/tps/i2/T1vSiVXp4cXXXTa_6h-990-900.png") 0 -555px no-repeat;
+    width: 600px;
+    height: 347px;
+    z-index: -1;
+}
+
+.game-dialog div.text {
+    position: absolute;
+    left: 146px;
+    top: 41px;
+    color: #fff;
+    font-size: 44px;
+    line-height: 180%;
+}
+
+.btn {
+    background: yellow;
+    color: #a00;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 19px 16px;
+    display: inline-block;
+    font-size: 32px;
+    display: inline-block;
+}
+
+.sprites_binggo_1,
+.sprites_binggo_2,
+.sprites_binggo_3,
+.sprites_binggo_4,
+.sprites_binggo_5,
+.sprites_binggo_6 {
+    background: url(http://img02.taobaocdn.com/tps/i2/T1vSiVXp4cXXXTa_6h-990-900.png);
+    display: block;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+
+}
+
+.sprites_binggo_1 {
+    background-position: 0 0;
+}
+
+.sprites_binggo_2 {
+    background-position: -166px 0;
+}
+
+.sprites_binggo_3 {
+    background-position: -344px 0;
+}
+
+.sprites_binggo_4 {
+    background-position: -538px 0;
+}
+
+.sprites_binggo_5 {
+    background-position: -672px 0;
+}
+
+.sprites_binggo_6 {
+    background-position: -817px 0;
+}
+
+.current_things {
+    position: absolute;
+    left: 50%;
+    margin-left: -50px;
+    z-index: 4;
+}
+
+.sprites_fail,
+.sprites-success,
+.sprites_fail {
+    background: url(http://img02.taobaocdn.com/tps/i2/T1vSiVXp4cXXXTa_6h-990-900.png) 0 -253px no-repeat;
+    position: absolute;
+    left: -24px;
+    top: 65px;
+    width: 167px;
+    height: 218px;
+}
+
+.sprites-success {
+    background-position: -431px -253px;
+}
+
+@-webkit-keyframes cloud {
+    0% {
+        left: -200px;
+    }
+
+    50% {
+        left: 300px;
+    }
+
+    100% {
+        left: 800px;
+    }
+}
+
+@keyframes cloud {
+
+    0% {
+        left: -200px;
+    }
+
+    50% {
+        left: 300px;
+    }
+
+    100% {
+        left: 800px;
+    }
+}
+
+.cloud {
+    -webkit-animation: cloud 23s 1 linear;
+    animation: cloud 23s 1 linear;
+    position: absolute;
+    top: 0;
+    background: url(http://img03.taobaocdn.com/tps/i3/T1eZaUXEheXXXu792p-84-59.png);
+    width: 84px;
+    height: 59px;
+}
+</style>
+</head>
+<body>
+<div id="game-wrapper">
+
+    <div id="game-hit-container">
+        <span id="game-thins-container"></span>
+    </div>
+
+    <span id="game-guys"></span>
+
+    <div id="game-time-container">
+        <div id="game-time-tips"><span id="game-time-left">30</span><b style="font-size: 42px">秒</b></div>
+    </div>
+
+    <div id="game-Bingo-list">
+
+    </div>
+
+    <div class="game-dialog" id="game-dialog-success">
+        <div class="sprites-success"></div>
+
+        <div class="text" style="font-size: 26px;width: 360px;top:38px;color: yellow">完成游戏啦！<br>您的努力完成了这次游戏，将会为雅安的孩子，募得芒果V基金提供的1元资金
+            <br>
+            <a class="btn" id="share-sina-weibo" href=""><b>分享到新浪微博</b></a> </span>
+        </div>
+    </div>
+
+    <div class="game-dialog" id="game-dialog-fail">
+        <div class="sprites_fail"></div>
+
+        <div class="text" style="font-size:26px;width:320px">时间到，<br>
+            未能完成任务！<br><span style="color: yellow;">游戏玩法：点击屏幕，小人跳起顶中5个芒果！</span><br>
+            <b class="btn reset-game" style="padding: 18px 48px;">重来</b>
+        </div>
+    </div>
+
+    <div class="game-dialog" id="game-dialog-start" style="z-index: 3">
+        <div class="sprites-success"></div>
+        <div class="text" style="font-size: 20px;top:54px;width: 360px;">光影童年，用我们的爱心为雅安的孩子创造一个快乐童年! 每个用户玩一次游戏，<b
+                style="color:yellow;">芒果V基金即捐赠1元</b>！<br>
+            <strong style="font-size: 26px;">游戏玩法：点击屏幕，小人跳起顶中<span
+                    style="font-size: 40px;color:yellow;">5个</span>芒果!!<br><b
+                    class="btn" id="game-start-btn" style="padding: 13px 12px;display: inline-block;">开始游戏</b></strong>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script src="http://a.tbcdn.cn/s/kissy/1.3.0/kissy-min.js"></script>
+<script>
+
+    var arr = [
+        {"name": "芒果"},
+        {"name": "大白兔奶糖"},
+        {"name": "大大泡泡堂"},
+        {"name": "雪糕"},
+        {"name": "无花果"},
+        {"name": "小浣熊"}
+    ];
+
+    KISSY.ready(function (S) {
+        var DOM = S.DOM, Event = S.Event;
+        var wrapper = DOM.get('#game-wrapper');
+        var guys = DOM.get('#game-guys');
+        var hit = DOM.get('#game-hit-container');
+        var thins = DOM.get('#game-thins-container');
+        var bingo = DOM.get('#bingo');
+        var bingoContainer = DOM.get('#game-Bingo-list');
+        var gameTimeLeft = DOM.get('#game-time-left');
+        var bingoImg = document.getElementById('game-Bingo-list').getElementsByTagName('span');
+        var timerDefault = 30;
+        var timer = timerDefault;
+        var timer_cl;
+        var resetGame = DOM.query('b.reset-game');
+        //集齐多少个芒果
+        var sum = 5;
+
+        setTimeout(function () {
+            DOM.get('#share-sina-weibo').href = 'http' + '://' + 'service.weibo' + '.com/share/share.php?' +
+                    'url=http%3A%2F%2Fact.ju.taobao.com%2Fgo%2Fact%2Fjuhuasuan%2Fmobile-act-gyxd.php%20&appkey=&title=%E8%81%9A%E7%88%B1%E5%BF%83%E8%87%B4%E7%AB%A5%E5%B9%B4%23%E5%85%89%E5%BD%B1%E7%AB%A5%E8%A1%8C%23%20%E7%8E%A9%E7%8E%A9%E6%B8%B8%E6%88%8F%E5%B0%B1%E8%83%BD%E4%B8%BA%E4%B9%A1%E6%9D%91%E5%B0%8F%E5%AD%A6%E6%8D%90%E8%B5%A0%E7%94%B5%E5%BD%B1%E6%94%BE%E6%98%A0%E8%AE%BE%E5%A4%87%EF%BC%8C61%E8%8A%82%E5%88%AB%E5%BF%98%E4%BA%86%E4%B9%A1%E6%9D%91%E7%9A%84%E5%AD%A9%E5%AD%90%E4%BB%AC%EF%BC%81%40%E8%81%9A%E5%88%92%E7%AE%97%20%E9%93%BE%E6%8E%A5%E5%9C%B0%E5%9D%80%EF%BC%9A&pic=&ralateUid=&language=zh_cn'
+        }, 5000);
+
+        var obj = new switchThins();
+
+        var isRuning = false;
+
+        function switchBingo() {
+            if (isRuning) return;
+            isRuning = true;
+            S.Anim(guys, {top: 160}, .2, 'easeIn',function () {
+                Bingo();
+                S.Anim(hit, {marginTop: '-20px'}, .1, 'easeNone',function () {
+                    S.Anim(hit, {marginTop: '-0'}, .1, 'easeNone').run();
+                }).run();
+                S.Anim(guys, {top: 495}, .2, 'easeInStrong',function () {
+                    setTimeout(function () {
+                        isRuning = false;
+                    }, 860);
+                }).run()
+            }).run()
+        }
+
+        //切换各种道具，时间越快难度越大
+        function switchThins() {
+            this.index = 0;
+            var self = this;
+            var cl;
+            this.run = function () {
+                self.index++;
+                if (self.index > arr.length - 1) self.index = 0;
+                thins.className = "sprites_binggo_" + (self.index + 1);
+                cl = setTimeout(self.run, 420);
+            };
+
+            this.getIndex = function () {
+                return self.index;
+            };
+
+            this.stop = function () {
+                clearTimeout(cl);
+            }
+        }
+
+        //当点击开始游戏按钮时
+        Event.on('#game-start-btn', 'touchstart', function () {
+            //隐藏所有浮层
+            DOM.css('.game-dialog ', 'z-index', '-1');
+            obj.run();
+            Event.on(document.body, 'touchstart', switchBingo);
+            timeLeft();
+        });
+
+        //当点击重来的时候
+        Event.on(resetGame, 'touchstart', function () {
+            DOM.css('.game-dialog ', 'z-index', '-1');
+
+            //一些必要的清理
+            clear();
+            bingoContainer.innerHTML = '';
+
+            //重新开始切换道具
+            obj.run();
+
+            //重新绑定事件
+            Event.on(document.body, 'touchstart', switchBingo);
+
+            //重新设定倒计时
+            timer = timerDefault;
+            timeLeft();
+        });
+
+        //倒计时
+        function timeLeft() {
+            if (timer >= 0) timer_cl = setTimeout(timeLeft, 1000);
+            gameTimeLeft.innerHTML = timer.toString();
+            timer--;
+            if (timer < 0) {
+                clear();
+                if (bingoImg.length < sum) {
+                    DOM.css('#game-dialog-fail', 'z-index', '3');
+                }
+            }
+        }
+
+        function clear() {
+            obj.stop();
+            clearTimeout(timer_cl);
+            Event.detach(document.body, 'touchstart', switchBingo);
+        }
+
+
+        //显示当前中了什么奖励
+        function Bingo() {
+            var index = obj.getIndex();
+            if (arr[index].name === '芒果') addBingoList();
+            for (var i = 0; i < 3; i++) {
+                (function () {
+                    var img = document.createElement('span');
+                    img.className = 'current_things sprites_binggo_' + (index + 1);
+                    var id = 'Bingo' + parseInt(Math.random() * 1000000, 10);
+                    img.id = id;
+                    img.style.transform = "rotate(12deg,33deg)";
+
+                    var a = 20;
+                    var b = 80;
+
+                    DOM.css(img, {'-webkit-transform': 'rotate(' + parseInt(Math.random() * 360, 10) + 'deg) scale(1.1)'})
+                    wrapper.appendChild(img);
+                    img = DOM.get('#' + id);
+                    S.Anim(img, {top: '0', left: parseInt(Math.random() * 100, 10) % (b - a + 1) + a + '%'}, .4, 'easeOut',function () {
+                        S.Anim(img, {
+                            top: '600'
+                        }, .6, 'easeInStrong',function () {
+                            DOM.remove(img);
+                        }).run();
+                    }).run();
+                })();
+            }
+        }
+
+        function addBingoList() {
+            if (bingoImg.length < sum) {
+                bingoContainer.innerHTML += '<span class="sprites_binggo_1"></span>';
+                if (bingoImg.length >= sum) {
+                    clear();
+                    DOM.css('#game-dialog-success', 'z-index', '3');
+                }
+            }
+        }
+
+        Event.on(window, 'load', function () {
+            function cloud() {
+                var id = 'cloud' + Date.now();
+                var cloud = document.createElement('div');
+                cloud.id = id;
+                cloud.className = 'cloud';
+                cloud.style.zoom = (Math.random() > .3 ? 1 + '.' + parseInt(Math.random() * 10, 10) : 2);
+                cloud.style.top = parseInt(Math.random() * 50, 10) + 'px';
+                wrapper.appendChild(cloud)
+                setTimeout(function () {
+                    DOM.remove('#' + id);
+                }, 14000)
+            }
+
+            cloud();
+            setInterval(cloud, 2000)
+        })
+    });
+
+    KISSY.io({
+        url: "http://count.tbcdn.cn/counter3",
+        dataType: 'jsonp',
+        data: {
+            inc: "JUCENTER_779_juact528m",
+            sign: '99158e59d4b79d305e5ddd0c9ca019d926c',
+            keys: 'JUCENTER_779_juact528m'
+        }
+    })
+
+
+</script>
+</body>
+</html>

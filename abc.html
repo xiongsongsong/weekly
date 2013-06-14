@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>更新时间</title>
+    <script type="text/javascript" src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js"></script>
+</head>
+<body>
+<script type="text/tpl" id="tpl">
+    北京时间：{{hours}}点 {{minutes}}分 {{seconds}}秒
+</script>
+<h1 id="beijing-time"></h1>
+<script type="text/javascript">
+    KISSY.use('template', function (S, T) {
+
+        var cl;
+
+        function updateDate() {
+            KISSY.getScript('http://www.taobao.com/go/rgn/try/service-time.php?rand=' + (new Date()).getTime(), function () {
+                //清除定时器，以避免重复添加多个
+                clearTimeout(cl);
+                showTime();
+            });
+        }
+
+        //立即更新时间
+        updateDate();
+        //5分钟校准一下时间
+        setInterval(updateDate, 300000);
+
+        var tpl = S.one('#tpl').html();
+
+        function showTime() {
+            window.serverDate.setTime(window.serverDate.getTime() + 1000);
+            S.one('#beijing-time').html(T(tpl).render({
+                hours: window.serverDate.getHours(),
+                minutes: window.serverDate.getMinutes(),
+                seconds: window.serverDate.getSeconds()
+            }));
+            cl = setTimeout(showTime, 1000);
+        }
+
+    })
+</script>
+</body>
+</html>
