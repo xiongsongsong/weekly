@@ -122,7 +122,7 @@ exports.save_log = function (req, res) {
                     res.end(JSON.stringify({'status': true}, undefined, '    '));
                 }
                 //When adding a log, automatic backup of the database
-                require('../helper/dump').dump(req);
+                // require('../helper/dump').dump(req);
             });
     }
 };

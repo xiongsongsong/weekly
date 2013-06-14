@@ -165,6 +165,31 @@ body {
     font-family: verdana, serif;
 }
 
+#calendar-container td div.day20 {
+    border: solid 1px red;
+    background: #ffe2e2;
+}
+
+#calendar-container td div.wrapper div.tips {
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: left;
+    text-indent: 5px;
+    background: red;
+    z-index: 3;
+}
+
+#calendar-container td div.day20 b.day {
+    background: red;
+    color: #fff;
+    z-index: 4;
+    right: 0;
+    padding: 0 12px;
+    border-top-left-radius: 3px;
+}
+
 #calendar-container td.prev div.wrapper b.day,
 #calendar-container td.next div.wrapper b.day {
     color: #eee;
