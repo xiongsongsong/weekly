@@ -3,7 +3,10 @@
  * User: 松松
  * Date: 12-7-31
  * Time: 下午5:12
- * To change this template use File | Settings | File Templates.
+ * 关于CSV乱码的问题：
+ * http://www.phpv.net/html/1675.html
+ * http://www.docin.com/p-31710590.html
+ * http://gitlab.alibaba-inc.com/edp/show-me-the-code/blob/master/2012/0920/ziyin.md
  */
 
 'use strict';
